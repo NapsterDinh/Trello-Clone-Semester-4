@@ -1,0 +1,18 @@
+@import "/src/_setting.scss";
+
+.board-columns{
+    display: flex;
+    overflow-x: auto;
+    height: calc(100% - 2* 40.8px);
+    //custom scroll-bar
+    &::-webkit-scrollbar{
+      -webkit-appearance: none;
+    }
+    &::-webkit-scrollbar:horizontal{
+      width: $width-scrollbar-thumb;
+    }
+    &::-webkit-scrollbar-thumb{
+      background-color: darken($col-bg-color, 15);
+      border-radius: $border-radius;
+    }
+  }
