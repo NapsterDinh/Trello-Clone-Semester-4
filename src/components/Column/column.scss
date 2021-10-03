@@ -1,0 +1,59 @@
+@import "/src/_setting.scss";
+
+.column{
+    flex: 0 0 auto;
+    width: 300px;
+    height: calc(100% - #{$gap});
+    max-height: 100%;
+    &:not(:last-child)
+    {
+      margin-right: $gap;
+    }
+    &:first-child{
+      margin-left: $gap;
+    }
+
+    > * {
+      background-color: $col-bg-color;
+      color:$col-color;
+      padding: 0px 8px 0px 8px;
+    }
+    header{
+      padding-left: 15px;
+      height: $height-header;
+      line-height: 36px;
+      font-size: 16px;
+      font-weight: bold;
+      border-top-left-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+    }
+    footer{
+      padding-left: 10px;
+      height: $height-footer;
+      line-height: 36px;
+      font-size: 14px;
+      border-bottom-left-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+    }
+    ul{
+      list-style-type: none;
+      margin: 0;
+      max-height: calc(100% - #{$height-header} - #{$height-footer});
+      overflow-y: auto;
+      //custom scroll-bar
+      &::-webkit-scrollbar{
+        -webkit-appearance: none;
+      }
+      &::-webkit-scrollbar:vertical{
+        width: $width-scrollbar-thumb;
+      }
+      &::-webkit-scrollbar-thumb{
+        background-color: darken($col-bg-color, 15);
+        border-radius: $border-radius;
+      }
+      img{
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
