@@ -1,12 +1,17 @@
 // import { Date } from "joi";
 import { ColumnModel } from "../models/column.model";
+import { BoardModel } from "../models/board.model";
 
 const createNew = async (data) => {
   try {
-    const result = await ColumnModel.creatNew(data);
-    console.log("service", data);
-    console.log("service", result);
-    return result;
+    const newColumn = await ColumnModel.creatNew(data);
+
+    const updateBoard = await BoardModel.pushColumnOrder(
+      data.boardId,
+      newColumn.insertedId.toString()
+    );
+    console.log("updateBoard", updateBoard);
+    return newColumn;
   } catch (error) {
     throw new Error(error);
   }

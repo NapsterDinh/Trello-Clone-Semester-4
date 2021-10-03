@@ -4,6 +4,7 @@ import { HttpStatusCode } from "../utilties/constants";
 const creatNew = async (req, res) => {
   try {
     const result = await ColumnService.createNew(req.body);
+    console.log("result", result);
     res.status(HttpStatusCode.OK).json(result);
   } catch (error) {
     res.status(HttpStatusCode.INTERRAL_SREVER).json({

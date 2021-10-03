@@ -7,7 +7,8 @@ const columnCollectionName = "columns";
 const columnCollectionSchema = Joi.object({
   boardId: Joi.string().required(),
   title: Joi.string().required().min(3).max(30).trim(),
-  cover: Joi.string().default(null),
+  cardOrder: Joi.array().items(Joi.string()).default([]),
+
   createAt: Joi.date().timestamp().default(Date.now()),
   updateAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),
@@ -21,13 +22,39 @@ const validateSchema = async (data) => {
 
 const creatNew = async (data) => {
   try {
-    const value = await validateSchema(data);
+    const validatedValue = await validateSchema(data);
+
+    const insertValue = {
+      ...validatedValue,
+      boardId: ObjectId(validatedValue.boardId),
+    };
+    console.log("validatedValue", insertValue);
     const result = await getDB()
       .collection(columnCollectionName)
-      .insertOne(value);
-    console.log(result);
+      .insertOne(insertValue);
+
     return result;
   } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const pushCardOrder = async (columnId, cardId) => {
+  try {
+    const result = await getDB()
+      .collection(columnCollectionName)
+      .findOneAndUpdate(
+        { _id: ObjectId(columnId) },
+        {
+          $push: {
+            cardOrder: cardId,
+          },
+        },
+        { returnOriginal: false }
+      );
+    return result.value;
+  } catch (error) {
+    console.log(error);
     throw new Error(error);
   }
 };
@@ -50,4 +77,4 @@ const update = async (id, data) => {
   }
 };
 
-export const ColumnModel = { creatNew, update };
+export const ColumnModel = { creatNew, update, pushCardOrder };
