@@ -2,21 +2,24 @@ import React from 'react'
 
 import './column.scss'
 
-import Task from '../Task/task'
+import Card from '../Card/card'
 
-function Column()
+import { mapOrder } from '../../../src/utilities/sort'
+
+function Column(prop)
 {
+  const { column } = prop
+  const cards = mapOrder(column.cards, column.cardOrder, 'id')
+
     return(
         <div className="board-columns">
           <div className="column">
-            <header>Brain Storm</header>
-            <ul className ="task-list">
-              <Task/>
-              <li className="task-item">Add your task below</li>
-              <li className="task-item">Add your task below</li>
-              <li className="task-item">Add your task below</li>
-              <li className="task-item">Add your task below</li>
-              <li className="task-item">Add your task below</li>
+            <header>{column.title}</header>
+            <ul className ="card-list">
+              
+              {
+                cards.map((card,index) => <Card key={index} card={card} />)
+              }
             </ul>
             <footer>Add another card</footer>
           </div>
