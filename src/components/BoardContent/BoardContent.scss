@@ -1,9 +1,8 @@
 @import "/src/_setting.scss";
 
-.board-columns{
-    display: flex;
+.board-content{
     overflow-x: auto;
-    height: calc(100% - 2* 40.8px);
+    height: $board-content-height;
     //custom scroll-bar
     &::-webkit-scrollbar{
       -webkit-appearance: none;
@@ -14,5 +13,14 @@
     &::-webkit-scrollbar-thumb{
       background-color: darken($col-bg-color, 15);
       border-radius: $border-radius;
+    }
+    .column-drop-preview
+    {
+      background-color: rgba(150,150,200,0.1);
+      border: 1px dashed #abc;
+      margin: 5px 45px 5px 5px;
+    }
+    .board-columns{
+      height: 85vh;
     }
   }

@@ -4,7 +4,7 @@ import './AppBar.scss'
 
 function AppBar()
 {
-    return(
+    return (
         <nav className="navbar-app">App bar</nav>
     )
 }
