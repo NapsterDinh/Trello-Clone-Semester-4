@@ -4,14 +4,16 @@ import './card.scss'
 
 function Card(props)
 {
-    const { card } = props
+  const { card } = props
 
-    return(
-        <li className="card-item">
-            {card.cover && <img className="card-cover" src={card.cover} alt="trello-clone"></img>}
-            {card.title}
-        </li>
-    )
+  return (
+    <div className="card-item">
+      {
+        card.cover && <img className="card-cover" src={card.cover} alt="trello-clone" draggable="false"></img>
+      }
+      {card.title}
+    </div>
+)
 }
 
 export default Card

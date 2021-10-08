@@ -12,13 +12,12 @@
     &:first-child{
       margin-left: $gap;
     }
-
     > * {
       background-color: $col-bg-color;
       color:$col-color;
       padding: 0px 8px 0px 8px;
     }
-    header{
+    header.column-drag-handle{
       padding-left: 15px;
       height: $height-header;
       line-height: 36px;
@@ -26,6 +25,7 @@
       font-weight: bold;
       border-top-left-radius: $border-radius;
       border-top-right-radius: $border-radius;
+      cursor: pointer;
     }
     footer{
       padding-left: 10px;
@@ -35,8 +35,7 @@
       border-bottom-left-radius: $border-radius;
       border-bottom-right-radius: $border-radius;
     }
-    ul.card-list{
-      list-style-type: none;
+    .card-list{
       margin: 0;
       max-height: calc(100% - #{$height-header} - #{$height-footer});
       overflow-y: auto;
@@ -54,6 +53,28 @@
       img{
         width: 100%;
         height: auto;
+      }
+
+      .card-ghost{
+        transition: transform 0.18s ease;
+        transform: rotateZ(5deg);
+      }
+
+      .card-ghost-drop{
+        transition: transform 0.18s ease-in-out;
+        transform: rotateZ(0deg);
+      }
+
+      .card-drop-preview{
+          background-color: rgba(150,150,200,0.1);
+          border: 1px dashed #abc;
+          margin: 5px;
+      }
+      .smooth-dnd-container.vertical{
+        margin-bottom: $gap;
+        .smooth-dnd-draggable-wrapper{
+          margin-bottom: $gap;
+        }
       }
     }
   }
