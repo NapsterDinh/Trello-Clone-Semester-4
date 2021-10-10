@@ -1,5 +1,5 @@
 @import url('https://fonts.gooogleapis.com/css2?family=Source+Sans+Pro:wght:@400;600');
-
+@import '~bootstrap/scss/bootstrap';
 @import "/src/_setting.scss";
 
 *
@@ -20,4 +20,67 @@ body
   height: 100vh;
   background-color: $board-bg-color;
   overflow: hidden;
+  color: $col-color;
+  .icon{
+    font-size: 14px;
+    margin-right: 3px;
+    padding: 0 8px;
+  }
+  .add-new-column-container
+  {
+    margin: 0 15px;
+    padding: 0;
+    max-width: 300px;
+  }
+  textarea:focus, 
+  textarea.form-control:focus, 
+  input.form-control:focus, 
+  input[type=text]:focus, 
+  input[type=password]:focus, 
+  input[type=email]:focus, 
+  input[type=number]:focus, 
+  [type=text].form-control:focus, 
+  [type=password].form-control:focus, 
+  [type=email].form-control:focus, 
+  [type=tel].form-control:focus, 
+  [contenteditable].form-control:focus {
+    box-shadow: none;
+  }
+  .btn:focus, .btn:active{
+    box-shadow: none!important;
+    outline: none!important;
+  }
+  .title-editable{
+    background-color: inherit;
+    border: none;
+    font-size: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+    &:focus{
+      background-color: white;
+      cursor: text;
+      border: 1px solid $border-input-focus-color;
+    }
+  }
+  textarea{
+    margin-bottom: $gap;
+    min-height: 73px;
+    max-height: 162px;
+  }
+  .column-action{
+    display: flex;
+    justify-content: space-between;
+    i{
+      color: #abc;
+      font-size: 25px;
+      padding-top: 3px;
+      margin: 0;
+      cursor: pointer;
+      &:hover
+      {
+        color: #8b939b;
+      }
+    }
+  }
+
 }
