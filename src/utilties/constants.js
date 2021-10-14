@@ -5,3 +5,5 @@ export const HttpStatusCode = {
   NOT_FOUND: 404,
   INTERRAL_SREVER: 500,
 };
+
+export const whitelist = ["http://example1.com", "http://example2.com"];

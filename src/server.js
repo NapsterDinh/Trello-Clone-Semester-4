@@ -1,15 +1,14 @@
 import express from "express";
 import { connectDB, getDB } from "./config/mongodb";
-// import getDB from "./config/mongodb";
-// import { BoardModel } from "./models/board.model";
+import cors from "cors";
 import { api } from "./routes/index";
+import { corsOptions } from "./config/cors";
 
 require("dotenv").config();
 
 const hostname = "localhost";
 const port = 8017;
 
-const app = express();
 connectDB()
   .then(() => console.log("Connect success"))
   .then(() => bootServer())
@@ -19,6 +18,9 @@ connectDB()
   });
 
 const bootServer = () => {
+  const app = express();
+
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use("/v1", api);
 
