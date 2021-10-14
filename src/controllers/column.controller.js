@@ -19,7 +19,6 @@ const update = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await ColumnService.update(id, req.body);
-    console.log("controll", result);
     res.status(HttpStatusCode.OK).json(result);
   } catch (error) {
     res.status(HttpStatusCode.INTERRAL_SREVER).json({

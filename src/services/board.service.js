@@ -12,14 +12,16 @@ const createNew = async (data) => {
 
 const getFullBoard = async (boardId) => {
   try {
-    console.log("sever boardId", boardId);
     const board = await BoardModel.getFullBoard(boardId);
-    // board.columns.forEach((column) => {
-    //   column.cards = board.cards.filter((c) => {
-    //     c.columnId.toString() === column._id.toString();
-    //   });
-    // });
-    console.log("service", board);
+    //create cards in column
+    board.columns.forEach((column) => {
+      column.cards = board.cards.filter(
+        (c) => c.columnId.toString() === column._id.toString()
+      );
+    });
+    //delete card in board
+    delete board.cards;
+
     return board;
   } catch (error) {
     throw new Error(error);

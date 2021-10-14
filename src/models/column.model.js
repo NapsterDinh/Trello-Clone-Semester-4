@@ -8,7 +8,6 @@ const columnCollectionSchema = Joi.object({
   boardId: Joi.string().required(),
   title: Joi.string().required().min(3).max(30).trim(),
   cardOrder: Joi.array().items(Joi.string()).default([]),
-
   createAt: Joi.date().timestamp().default(Date.now()),
   updateAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),
@@ -54,7 +53,6 @@ const pushCardOrder = async (columnId, cardId) => {
       );
     return result.value;
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };
@@ -68,13 +66,23 @@ const update = async (id, data) => {
       .findOneAndUpdate(
         { _id: ObjectId(id) },
         { $set: data },
-        { returnOriginal: false }
+        { returnOriginal: false, returnNewDocument: true }
       );
 
-    return result.value;
+    const resultFind = await getDB()
+      .collection(columnCollectionName)
+      .findOne({}, { _id: ObjectId(id) });
+
+    console.log("result", resultFind);
+    return resultFind;
   } catch (error) {
     throw new Error(error);
   }
 };
 
-export const ColumnModel = { creatNew, update, pushCardOrder };
+export const ColumnModel = {
+  columnCollectionName,
+  creatNew,
+  update,
+  pushCardOrder,
+};

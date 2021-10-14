@@ -38,4 +38,4 @@ const creatNew = async (data) => {
   }
 };
 
-export const CardModel = { creatNew };
+export const CardModel = { cardCollectionName, creatNew };

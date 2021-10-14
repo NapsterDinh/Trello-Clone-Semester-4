@@ -1,6 +1,8 @@
 import Joi from "joi";
 import { getDB } from "../config/mongodb";
 import { ObjectId } from "mongodb";
+import { ColumnModel } from "./column.model";
+import { CardModel } from "./card.model";
 
 //define board
 const boardCollectionName = "boards";
@@ -51,46 +53,8 @@ const pushColumnOrder = async (boardId, columnId) => {
   }
 };
 
-// const getFullBoard = async (boardId) => {
-//   console.log("boardId", boardId);
-//   try {
-//     const result = await getDB()
-//       .collection(boardCollectionName)
-//       .aggregate([
-//         {
-//           $match: {
-//             _id: ObjectId(boardId),
-//           },
-//         },
-//         {
-//           $lookup: {
-//             from: "columns", //collection name
-//             localField: "_id",
-//             foreignField: "boardId",
-//             as: "columns",
-//           },
-//         },
-//         {
-//           $lookup: {
-//             from: "cards", //collection name
-//             localField: "_id",
-//             foreignField: "boardId",
-//             as: "cards",
-//           },
-//         },
-//       ])
-//       .toArray();
-
-//     console.log("result", result);
-
-//     return result || {};
-//   } catch (error) {
-//     console.log(error);
-//     throw new Error(error);
-//   }
-// };
-
 const getFullBoard = async (boardId) => {
+  console.log("boardId", boardId);
   try {
     const result = await getDB()
       .collection(boardCollectionName)
@@ -101,22 +65,27 @@ const getFullBoard = async (boardId) => {
           },
         },
         {
-          $addFields: {
-            _id: { $toString: "$_id" },
-          },
-        },
-        {
           $lookup: {
-            from: "columns", //collection name
+            from: ColumnModel.columnCollectionName, //collection name
             localField: "_id",
             foreignField: "boardId",
             as: "columns",
           },
         },
+        {
+          $lookup: {
+            from: CardModel.cardCollectionName, //collection name
+            localField: "_id",
+            foreignField: "boardId",
+            as: "cards",
+          },
+        },
       ])
       .toArray();
-    console.log("model", result);
-    return result;
+
+    // console.log("result", result);
+
+    return result[0] || {};
   } catch (error) {
     console.log(error);
     throw new Error(error);
