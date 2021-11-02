@@ -1,5 +1,3 @@
-// const cloudinary = require("cloudinary");
-const fs = require("fs");
 import { cloudinary } from "cloudinary";
 import { fs } from "fs";
 
@@ -9,7 +7,7 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-const uploadCtrl = {
+export const uploadCtrl = {
   uploadAvatar: (req, res) => {
     try {
       const file = req.files.file;
@@ -42,4 +40,4 @@ const removeTmp = (path) => {
   });
 };
 
-module.exports = uploadCtrl;
+// module.exports = uploadCtrl;

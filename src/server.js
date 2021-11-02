@@ -4,10 +4,12 @@ import cors from "cors";
 import { api } from "./routes/index";
 import { corsOptions } from "./config/cors";
 
-require("dotenv").config();
+// require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 const hostname = "localhost";
-const port = 8017;
+const port = 8011;
 
 connectDB()
   .then(() => console.log("Connect success"))
@@ -17,10 +19,11 @@ connectDB()
     process.exit(1);
   });
 
+console.log(process.env.PORT);
+
 const bootServer = () => {
   const app = express();
-
-  app.use(cors(corsOptions));
+  app.use(cors());
   app.use(express.json());
   app.use("/v1", api);
 

@@ -6,4 +6,4 @@ export const HttpStatusCode = {
   INTERRAL_SREVER: 500,
 };
 
-export const whitelist = ["http://example1.com", "http://example2.com"];
+export const whitelist = ["http://localhost:8011", "http://example2.com"];

@@ -12,7 +12,6 @@ const cardCollectionSchema = Joi.object({
   createAt: Joi.date().timestamp().default(Date.now()),
   updateAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),
-  decription: Joi.string().required().max(20),
 });
 
 const validateSchema = async (data) => {

@@ -83,8 +83,6 @@ const getFullBoard = async (boardId) => {
       ])
       .toArray();
 
-    // console.log("result", result);
-
     return result[0] || {};
   } catch (error) {
     console.log(error);
