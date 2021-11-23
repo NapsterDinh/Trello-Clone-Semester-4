@@ -1,0 +1,134 @@
+@import "scss/__setting.scss"; 
+
+.section-middle
+{
+  display: flex;
+  justify-content: end;
+  .form-container {
+    margin-right: 300px;
+    width: 430px;
+    border-radius: 10px;
+    background-color: white;
+    -webkit-box-shadow: 1px 1px 13px -1px rgba(203,206,209,1);
+    -moz-box-shadow: 1px 1px 13px -1px rgba(203,206,209,1);
+    box-shadow: 1px 1px 13px -1px rgba(203,206,209,1);    
+    .title {
+      text-align: center;
+      font-size: 28px;
+      padding: 24px 50px 24px 35px;
+      letter-spacing: 0.5px;
+      color: $text-color;
+    }
+    .fields {
+      padding: 0px 35px;
+      width: 100%; 
+      .input {
+        position: relative;
+        border-bottom: 1px solid black;
+        margin-bottom: 20px;
+        &::after
+        {
+          content: '';
+          position: absolute;
+          background-repeat: no-repeat;
+          background-position: 20px;
+          background-size: 16px;
+          width: 40px;
+          height: 30px;
+          top: 20%;
+          left: 0px;
+        }
+        i
+        {
+          display: none;
+        }
+        &.error > i
+        {
+          display: block;
+          position: absolute;
+          top: 36%;
+          right: 10px;
+          width: 20px;
+          height: 20px;
+          font-size: 18px;
+          color: red;
+          cursor: pointer;
+        }
+        input {
+          border: none;
+          outline: none;
+          background: none;
+          font-size: 16px;
+          color: #555;
+          width: 100%;
+          padding: 15px 50px 15px 50px;
+        }
+        &.input_pass
+        {
+          margin-bottom: 10px;
+          &::after
+          {
+            background-image: url('../../Images/features/lock.png');
+          }
+        }
+        &.error
+        {
+          border-color: red;
+        }
+      }
+      .link {
+        padding-top: 10px;
+        text-align: right;
+        width: 100%;
+        margin-right: 30px;
+        margin-bottom: 20px;
+        & a {
+          text-decoration: none;
+          color: #aaa;
+          font-size: 15px;
+          margin-right: 20px;
+          &:hover
+          {
+            color: $text-color;
+          }
+        }
+      }
+      .errorColor {
+        color: red;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .form-btn {
+        outline: none;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        padding: 10px 0px;
+        border-radius: 30px;
+        font-size: 20px;
+        font-family: "Lato", sans-serif;
+        color: #fff;
+        text-align: center;
+        background: #02c8db;
+        margin-bottom: 20px;
+        &:hover {
+          background-color: #50c5b9;
+        }
+        &:active {
+          background-color: #88ef9e;
+        }
+        &:disabled
+        {
+          background-color: $background-switch;
+          cursor: not-allowed;
+        }
+      }
+      .hr {
+        margin: 20px 0px;
+        text-align: center;
+        color: $text-color;
+      }
+    }
+  }
+}

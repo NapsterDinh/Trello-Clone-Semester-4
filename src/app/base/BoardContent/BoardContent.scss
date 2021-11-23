@@ -1,0 +1,66 @@
+@import "scss/__setting.scss";
+
+.board-content{
+    display: flex;
+    overflow-x: auto;
+    height: $board-content-height;
+    &::after
+    {
+      content: '';
+      flex: 0 0 $gap;
+    }
+    //custom scroll-bar
+    &::-webkit-scrollbar{
+      -webkit-appearance: none;
+    }
+    &::-webkit-scrollbar:horizontal{
+      width: $width-scrollbar-thumb;
+    }
+    &::-webkit-scrollbar-thumb{
+      background-color: darken($col-bg-color, 15);
+      border-radius: $border-radius;
+    }
+    .column-drop-preview
+    {
+      background-color: rgba(150,150,200,0.1);
+      border: 1px dashed #abc;
+      margin: 5px 45px 5px 5px;
+    }
+    .board-columns{
+      height: 85vh;
+    }
+    .add-new-column{
+      width: 300px;
+      height: 40px;
+      line-height: 32px;
+      padding: 4px 0 4px 15px;
+      cursor: pointer;
+      color: white;
+      margin-left: $gap;
+      font-size: 15px;
+      background-color: hsla(0, 0%, 100%, 0.24);
+      border-radius: $border-radius-card;
+      &:hover{
+        background-color: hsla(0, 0%, 100%, 0.34);
+      }
+    }
+    .enter-new-column
+    {
+      width: 300px;
+      line-height: 32px;
+      padding: 4px 10px;
+      color: white;
+      margin-left: $gap;
+      background-color: $col-bg-color;
+      border-radius: $border-radius-card;
+      input{
+        margin: 10px 0px;
+      }
+      button{
+        margin-bottom: 5px;
+      }
+    }
+    .add-new-card-area{
+      margin-top: 10px;
+    }
+  }

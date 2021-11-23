@@ -1,0 +1,90 @@
+@import "scss/__setting.scss";
+* {
+  box-sizing: border-box;
+}
+
+.login-div {
+    .fields {
+      .input{
+        &::after
+        {
+          background-image: url($img-user);
+        }
+      }
+      .social {
+        display: flex;
+        justify-content: center;
+        .btn-social
+        {
+          border-radius: 50%!important;
+          width: 50px!important;
+          height: 50px!important;
+          margin-right: 30px;
+          &.button-gg {
+            border-radius: 50%;
+            span
+            {
+              display: none;
+            }
+            div
+            {
+              border-radius: 50%!important;
+              margin-left: 5px;
+            }
+          }
+        }
+        span
+        {
+          button.kep-login-facebook.metro{
+            border-radius: 50%!important;
+            width: 50px!important;
+            height: 50px!important;
+            padding: 0!important;
+            font-size: 0px!important;
+            position: relative;
+            background-color: #3b5998;
+            &:before{
+              position: absolute;
+              content: '';
+              background-image: url($facebook);
+              background-size: 30px;
+              background-repeat: no-repeat;
+              background-position: 20px;
+              width: 50px;
+              height: 50px;
+              top: -4px;
+              left: -16px;
+            }
+          }
+        }
+      }
+      .register-container
+      {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        hr{
+          color: $text-color;
+        }
+        a
+        {
+          text-align: center;
+          button
+          {
+            outline: none;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 10px 0px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-family: "Lato", sans-serif;
+            color: #fff;
+            text-align: center;
+            background: #02c8db;
+            margin-bottom: 20px;
+          }
+        }
+      }
+    }
+  }

@@ -1,0 +1,58 @@
+footer 
+{
+    .container
+    {
+        .footer-first-row
+        {
+            .col-lg-5
+            {
+                a{
+                    margin-right: 10px;
+                }
+            }
+            .col-md-6
+            {
+                .list-posts
+                {
+                    li
+                    {
+                        .title
+                        {
+                            font-size: 14px;
+                            padding: 10px;
+                            text-align: left;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    #open-cart
+    {
+        background-color: transparent;
+        border: 0;
+        outline: none;
+        padding: 0;
+        text-align: left;
+        text-align: initial;
+        transition-property: all;
+        transition-duration: .25s;
+        transition-timing-function: ease-out;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        color: #fff;
+        width: 45px;
+        height: 45px;
+        background: #1c1e20;
+        font-size: 14px;
+        z-index: 650;
+        visibility: hidden;
+        opacity: 0;
+        &.visible
+        {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}

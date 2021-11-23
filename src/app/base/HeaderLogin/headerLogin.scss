@@ -1,0 +1,39 @@
+@import "scss/__setting.scss";
+#header.light.header-login
+{
+    height: 90px!important;
+    .header-container-inner
+    {
+        height: 100%;
+        .row
+        {
+            height: 100%;
+            .col-md-3
+            {
+                .module.module-logo.light
+                {
+                    background-color: white;
+                }
+            }
+            .col-md-9
+            {
+                display: flex;
+                justify-content: space-between;
+                .pagination-container, .help-container
+                {
+                    display: flex;
+                    align-items: end;
+                    a.link-to-help
+                    {
+                        margin-bottom: 25px;
+                    }
+                    h3
+                    {
+                        margin-bottom: 18px;
+                    }
+                }
+            }
+        }
+    }
+    
+}

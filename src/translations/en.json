@@ -1,0 +1,77 @@
+{
+  "home.welcomeText": "Hello.",
+  "header.login": "Login",
+  "header.signup": "SignUp",
+
+  "header.nav.home": "Home",
+  "header.nav.about": "About",
+  "header.nav.menu": "Menu",
+  "header.nav.offers": "Offers",
+  "header.nav.contact": "Contact",
+  "header.nav.more": "More",
+  "header.orderButton": "Order",
+
+  "footer.lastNews": "Latest News",
+  "footer.subcribeUs": "Subcribe Us!",
+  "footer.subcribe": "Subcribe",
+  "footer.socialMedia": "Social Media",
+  "footer.tryAgain": "Try Again...",
+  "footer.copyRight": "Copyright Soup 2020©. Made with love by TNC Teams.",
+
+  "section.video.title": "Check our promo video",
+  "section.video.content": "Taste it now with our online order!",
+
+  "section.steps.title_1": "Pick a dish",
+  "section.steps.content_1": "Pick a dish by your favorite and add this to cart",
+  "section.steps.title_2": "Make a payment",
+  "section.steps.content_2": "Pay your dish with your wallet or paypal or anything you have",
+  "section.steps.title_3": "Recieve your food!",
+  "section.steps.content_3": "Wait a moment and our shippers will brings foods to you quickly",
+
+  "login.loginText": "Login",
+  "login.userName": "UserName",
+  "login.passWord": "Password",
+  "login.forgotpass": "Forgot Password",
+  "login.signup": "SignUp",
+  "login.loginwith": "Or Login with",
+  "login.or": "or",
+  "login.inputname": "* Please input your Email",
+  "login.emailincorrect": " Your email is incorrect",
+  "login.inputpass": "* Please input your Password",
+
+
+
+  
+
+  "signup.userName": "UserName",
+  "signup.passWord": "Password",
+  "signup.email": "Email",
+  "signup.phone": "Phone",
+  "signup.confirm": "Confirm",
+  "signup.signup": "SignUp",
+  "signup.gotologin": "Are you already Account?",
+  "signup.inputname":"* Please input your Name",
+  "signup.inputemail": "* Please input your Email",
+  "signup.verifyemail":" Your email is incorrect",
+  "signup.inputphone": "* Please input your Phone",
+  "signup.verifyphone": " Your phone is incorrect",
+  "signup.inputpass":"* Please input your Password",
+  "signup.verifypass":"* Please input your Password  greater than 6 ",
+  "signup.inputconfirm": "* Please input your confirm",
+  "signup.verifyconfirm": "* Confirm incorrect ",
+
+  "forgot.forgotpass":"Forgot password",
+  "forgot.inputemail":"* Please input your Email",
+  "forgot.verifyemail":" Your email is incorrect",
+  "forgot.verify":" Verify",
+
+  "reset.resetpass":"Reset password",
+  "reset.inputpass":"* Please input your Password",
+  "reset.verifypass":"* Please input your Password greater than 6",
+  "reset.inputconfirm":"* Please input your confirm",
+  "reset.verifyconfirm": "* Confirm Incorrect",
+  "reset.verify":" verify",
+  "reset.confirm":"Confirm",
+  "reset.pass": "Password"
+}
+

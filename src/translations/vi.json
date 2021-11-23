@@ -1,0 +1,74 @@
+{
+  "home.welcomeText": "Xin chào.",
+  "header.nav.home": "Trang chủ",
+  "header.nav.about": "Giới thiệu",
+  "header.nav.menu": "Thực đơn",
+  "header.nav.offers": "Cung cấp",
+  "header.nav.contact": "Liên hệ",
+  "header.nav.more": "Nhiều hơn nữa",
+  "header.orderButton": "Đặt ngay thôi",
+
+  "footer.lastNews": "Tin tức mới nhất",
+  "footer.subcribeUs": "Tham gia với chúng tôi",
+  "footer.subcribe": "Tham gia ngay",
+  "footer.socialMedia": "Liên hệ",
+  "footer.tryAgain": "Thử lại....",
+  "footer.copyRight": "Copyright Soup 2020©. Made with love by TNC Teams.",
+
+  "section.video.title": "Tinh hoa của chúng tôi qua video",
+  "section.video.content": "Thưởng thức và đặt hàng ngay thôi nào!!!",
+
+  "section.steps.title_1": "Chọn món ăn bạn thích",
+  "section.steps.content_1": "Chọn những món ăn bạn thích và thêm nó vào giỏ hàng",
+  "section.steps.title_2": "Thanh toán",
+  "section.steps.content_2": "Bạn có thể thanh toán đơn hàng bằng ví điện tử, tiền mặt hay bất cứ thứ gì bạn có",
+  "section.steps.title_3": "Nhận hàng",
+  "section.steps.content_3": "Đợi một chút và nhân viên của chúng tôi sẽ đem đơn hàng đến cho bạn một cách nhanh chóng",
+
+
+
+
+
+
+  "login.loginText": "Đăng nhập",
+  "login.userName": "Tên đăng nhập",
+  "login.passWord": "Mật khẩu",
+  "login.forgotpass": "Quên mật khẩu",
+  "login.signup": "Đăng ký",
+  "login.loginwith": "Đăng nhập với",
+  "login.or": "Hoặc",
+  "login.inputname": "Vui lòng nhập email/phone",
+  "login.emailincorrect": "Định dạng chưa đúng",
+  "login.inputpass": "Vui lòng nhập mật khẩu",
+
+  "signup.userName": "Tên của bạn",
+  "signup.passWord": "Mật khẩu",
+  "signup.email": "Email",
+  "signup.phone": "Số điện thoại",
+  "signup.confirm": "Xác nhận",
+  "signup.signup": "Đăng ký",
+  "signup.gotologin": "Bạn đã có tài khoản?",
+  "signup.inputname":"Vui lòng nhập tên",
+  "signup.inputemail": "Vui lòng nhập Email",
+  "signup.verifyemail":"Định dạng Enail chưa đúng",
+  "signup.inputphone": "Vui lòng nhập số điện thoại",
+  "signup.verifyphone": "Số điện thoại chưa đúng",
+  "signup.inputpass":"Vui lòng nhập mật khẩu",
+  "signup.verifypass":"Vui lòng nhập tối thiểu 6 kí tự ",
+  "signup.inputconfirm": "Xác nhận",
+  "signup.verifyconfirm": "Xác nhận chưa chính xác ",
+
+  "forgot.forgotpass":"Quên mật khẩu",
+  "forgot.inputemail":"* Vui lòng nhập email",
+  "forgot.verifyemail":"Định dạng email chưa đúng",
+  "forgot.verify":" Xác nhận",
+
+  "reset.resetpass":"Thay đổi mật khẩu",
+  "reset.inputpass":"* Vui lòng nhập mật khẩu",
+  "reset.verifypass":"* Vui lòng nhập tối thiểu 6 kí tự",
+  "reset.verify":" Xác nhận",
+  "reset.inputconfirm":"* Vui lòng nhập xác nhận",
+  "reset.verifyconfirm": "* Xác nhận chưa chính xác",
+  "reset.confirm":"Xác nhận",
+  "reset.pass": "Mật khẩu"
+}
