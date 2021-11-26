@@ -6,8 +6,9 @@ import { workSpaceModel } from "../models/workSpace.model";
 import { getDB } from "../config/mongodb";
 import { workSpaceCollectionName } from "../models/workSpace.model";
 import { workSpaceCollectionSchema } from "../models/workSpace.model";
+import { workSpaceTypeCollectionName } from "../models/workSpaceType.model";
 import { userService } from "./user.service";
-import { sendEmailUser } from "./sendMail.service";
+import { sendEmailUser } from "../shares/sendMail";
 import { BoardService } from "./board.service";
 
 //coding
@@ -28,6 +29,16 @@ const createWorkSpace = async (data) => {
     result = { ...result, ...value };
     console.log("service", result);
     if (result) {
+      await getDB()
+        .collection(workSpaceTypeCollectionName)
+        .updateOne(
+          { _id: ObjectId(data?.body?.workspacetypeId) },
+          {
+            $push: {
+              workSpaceId: result?.insertedId.toString(),
+            },
+          }
+        );
       return { result: true, msg: "Create workspace success", data: result };
     } else {
       return { result: false, msg: "Create workspace fail", data: [] };
@@ -78,10 +89,20 @@ const updateWorkSpace = async (data) => {
 
 const deleteWorkSpace = async (data) => {
   try {
+    const { _id } = data;
+    const findWorkSpaceTypeId = await getDB()
+      .collection(columnCollectionName)
+      .findOne({ _id: ObjectId(_id) });
     const result = await getDB()
       .collection(workSpaceCollectionName)
       .findOneAndDelete({ _id: ObjectId(data._id) }, { returnOriginal: false });
     if (result) {
+      await getDB()
+        .collection(workSpaceTypeCollectionName)
+        .updateOne(
+          { _id: ObjectId(findWorkSpaceTypeId?.workspacetypeId) },
+          { $pull: { workSpaceId: { $in: [_id] } } }
+        );
       return { result: true, msg: "Delete workspace success", data: result };
     } else {
       return { result: false, msg: "Delete workspace fail", data: [] };

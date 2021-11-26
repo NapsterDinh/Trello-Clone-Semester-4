@@ -10,7 +10,7 @@ import { UserModel } from "../models/user.model";
 import { userCollectionName } from "../models/user.model";
 import { getDB } from "../config/mongodb";
 import { tokenService } from "./token.service";
-import { sendEmail } from "./sendMail.service";
+import { sendEmail } from "../shares/sendMail";
 
 //variable
 const { APP_SCHEMA, APP_HOST, APP_PORT, CLIENT_PORT } = process.env;

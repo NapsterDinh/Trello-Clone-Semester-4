@@ -7,6 +7,7 @@ import { columnRoutes } from "./column.route";
 import { cardRoutes } from "./card.route";
 import { userRoutes } from "./user.router";
 import { workSpaceRoutes } from "./workSpace.route";
+import { workSpaceTypeRoutes } from "./workSpaceType.route";
 
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.use("/columns", columnRoutes);
 router.use("/cards", cardRoutes);
 router.use("/user", userRoutes);
 router.use("/workSpace", workSpaceRoutes);
+router.use("/workSpaceType", workSpaceTypeRoutes);
 
 export const api = router;

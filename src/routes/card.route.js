@@ -4,7 +4,7 @@ import { CardValidation } from "../validations/card.validation";
 
 const router = express.Router();
 
-router.route("/").post(CardValidation.createnew, CardController.creatNew);
+router.route("/create").post(CardController.createNew);
 
 // router.route("/:id").put(CardValidation.update, CardController.update);
 

@@ -4,8 +4,11 @@ import { ColumnValidation } from "../validations/column.validation";
 
 const router = express.Router();
 
-router.route("/").post(ColumnValidation.createnew, ColumnController.creatNew);
+router
+  .route("/create")
+  .post(ColumnValidation.createnew, ColumnController.creatNew);
 
-router.route("/").put(ColumnValidation.update, ColumnController.update);
+router.route("/update").put(ColumnValidation.update, ColumnController.update);
+router.route("/detele").delete(ColumnController.deleteColumn);
 
 export const columnRoutes = router;

@@ -8,14 +8,13 @@ import { workSpaceCollectionName } from "../models/workSpace.model";
 import { columnCollectionName } from "../models/column.model";
 import { cardCollectionName } from "../models/card.model";
 import { userCollectionName } from "../models/user.model";
-import { sendEmailUser } from "./sendMail.service";
+import { sendEmailUser } from "../shares/sendMail";
 
 const createNew = async (data) => {
   try {
-    console.log("abc", data?.query);
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOne({ userCreate: data?.query.userCreate });
+      .findOne({ userCreate: data?.user.sub });
     console.log("====", isCheckUserCreateWP);
     if (!isCheckUserCreateWP) {
       return {
@@ -99,13 +98,14 @@ const refBoard = async (boardId) => {
 
 const getFullBoard = async (data) => {
   try {
-    console.log("aaaa", data);
     const isCheckUser = await getDB()
       .collection(boardCollectionName)
       .findOne({ _id: ObjectId(data?.boardId) });
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
+
+    console.log("aaaa", isCheckUser);
     if (
       isCheckUser?.userId.includes(data?.userId) ||
       isCheckUserCreateWP?.userCreate === data?.userCreate
@@ -151,8 +151,7 @@ const updateBoard = async (data) => {
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
 
-    console.log("=====", isCheckUserCreateWP?.userCreate, data?.query.userId);
-    if (isCheckUserCreateWP?.userCreate !== data?.query.userId) {
+    if (isCheckUserCreateWP?.userCreate !== data?.user.sub) {
       return {
         result: false,
         msg: "You is not permission update board ",
@@ -186,7 +185,7 @@ const deleteBoard = async (data) => {
   try {
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOne({ userCreate: data?.query.userCreate });
+      .findOne({ userCreate: data?.user.sub });
     console.log("====", isCheckUserCreateWP);
     if (!isCheckUserCreateWP) {
       return {
@@ -195,6 +194,10 @@ const deleteBoard = async (data) => {
         data: [],
       };
     } else {
+      const findWorkSpaceId = await getDB()
+        .collection(boardCollectionName)
+        .findOne({ _id: ObjectId(data?.body?._id) });
+
       const result = await getDB()
         .collection(boardCollectionName)
         .findOneAndDelete(
@@ -202,6 +205,12 @@ const deleteBoard = async (data) => {
           { returnOriginal: false }
         );
       if (result) {
+        await getDB()
+          .collection(workSpaceCollectionName)
+          .updateOne(
+            { _id: ObjectId(findWorkSpaceId?.workSpaceId) },
+            { $pull: { boardId: { $in: [data?.body?._id] } } }
+          );
         return { result: true, msg: "Delete board success", data: result };
       } else {
         return { result: false, msg: "Delete board fail", data: [] };
@@ -227,7 +236,7 @@ const addUserToBoard = async (data) => {
   try {
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOne({ userCreate: data?.query.userCreate });
+      .findOne({ userCreate: data?.user.sub });
     console.log("====", isCheckUserCreateWP);
     if (!isCheckUserCreateWP) {
       return {
@@ -273,7 +282,7 @@ const removeUserToBoard = async (data) => {
   try {
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOne({ userCreate: data?.query?.userCreate });
+      .findOne({ userCreate: data?.user?.sub });
 
     if (!isCheckUserCreateWP) {
       return {

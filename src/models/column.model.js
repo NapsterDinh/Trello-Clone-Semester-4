@@ -13,55 +13,8 @@ const columnCollectionSchema = Joi.object({
   _destroy: Joi.boolean().default(false),
 });
 
-const validateSchema = async (data) => {
+export const validateSchema = async (data) => {
   return await columnCollectionSchema.validateAsync(data, {
     abortEarly: false,
   });
-};
-
-const creatNew = async (data) => {
-  try {
-    const validatedValue = await validateSchema(data);
-
-    const insertValue = {
-      ...validatedValue,
-      boardId: ObjectId(validatedValue.boardId),
-    };
-    console.log("validatedValue", insertValue);
-    const result = await getDB()
-      .collection(columnCollectionName)
-      .insertOne(insertValue);
-
-    return result;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-const update = async (id, data) => {
-  console.log("data", data);
-  console.log("id", id);
-  try {
-    const result = await getDB()
-      .collection(columnCollectionName)
-      .findOneAndUpdate(
-        { _id: ObjectId(id) },
-        { $set: data },
-        { returnOriginal: false, returnNewDocument: true }
-      );
-
-    const resultFind = await getDB()
-      .collection(columnCollectionName)
-      .findOne({}, { _id: ObjectId(id) });
-
-    console.log("result", resultFind);
-    return resultFind;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-export const ColumnModel = {
-  creatNew,
-  update,
 };
