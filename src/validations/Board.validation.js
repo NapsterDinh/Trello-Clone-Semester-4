@@ -1,16 +1,16 @@
 import Joi from "joi";
-import { HttpStatusCode } from "../utilties/constants";
+
+const condition = Joi.object({
+  title: Joi.string().required().min(3).max(20),
+  workSpaceId: Joi.string(),
+});
 
 const createnew = async (req, res, next) => {
-  const condition = Joi.object({
-    title: Joi.string().required().min(3).max(20),
-  });
-
   try {
-    await condition.validateAsync(req.body, { abortEarly: false });
+    await condition.validateAsync(req?.body, { abortEarly: false });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }

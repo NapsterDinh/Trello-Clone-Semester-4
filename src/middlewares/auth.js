@@ -5,10 +5,12 @@ export const auth = (req, res, next) => {
     const token = req.header("Authorization");
 
     console.log("=====", token);
-    if (!token) return res.status(400).json({ msg: "Invalid Authentication." });
+    if (!token)
+      return res.status(401).json({ msg: "Invalid Authentication13." });
 
-    jwt.verify(token, process.env.PASSPORT_JWT, (err, user) => {
+    jwt.verify(token, process.env.JWT, (err, user) => {
       if (err) return res.status(400).json({ msg: "Invalid Authentication." });
+      console.log("user", user);
 
       req.user = user;
 

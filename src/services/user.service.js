@@ -1,20 +1,30 @@
-import { UserModel } from "../models/user.model";
-import { tokenService } from "./token.service";
-import jwt from "jsonwebtoken";
-import { getDB } from "../config/mongodb";
+//Library component
 import { ObjectId } from "mongodb";
-import { userCollectionName } from "../models/user.model";
-import { ApiError } from "../utilties/api-error";
-import httpStatus from "http-status";
 import bcrypt from "bcrypt";
-import { sendEmail } from "./sendMail.service";
-const { APP_SCHEMA, APP_HOST, APP_PORT, CLIENT_PORT } = process.env;
+import jwt from "jsonwebtoken";
+import { google } from "googleapis";
+import fetch from "node-fetch";
 
+//user component
+import { UserModel } from "../models/user.model";
+import { userCollectionName } from "../models/user.model";
+import { getDB } from "../config/mongodb";
+import { tokenService } from "./token.service";
+import { sendEmail } from "./sendMail.service";
+
+//variable
+const { APP_SCHEMA, APP_HOST, APP_PORT, CLIENT_PORT } = process.env;
+const { OAuth2 } = google.auth;
+const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID);
+
+//coding
 const createUser = async (userBody) => {
   const { email } = userBody;
   const result = await getDB()
     .collection(userCollectionName)
     .findOne({ email });
+
+  console.log("email", result);
   if (result) {
     return {
       result: false,
@@ -40,7 +50,7 @@ const createUser = async (userBody) => {
   return {
     result: true,
     msg: "Verify your email address",
-    data: { user, token },
+    data: { user },
   };
 };
 
@@ -60,30 +70,46 @@ const activateEmail = async (data) => {
     );
 };
 
+const getUserByEmail = async (data) => {
+  console.log("data", data);
+
+  const resultUser = await getDB()
+    .collection(userCollectionName)
+    .find({ email: { $in: data } })
+    .toArray();
+
+  return resultUser;
+};
+
 const login = async (data) => {
-  const { email, password } = data.body;
-  const _id = data.user.sub;
-  // const user = await userCollectionSchema.findOne({ _id });
+  const { email, password } = data;
 
-  console.log("user", user);
   const user = await getDB().collection(userCollectionName).findOne({ email });
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!user?.email || !isMatch) {
+  if (user === null) {
+    console.log("user123");
     return {
       result: false,
-      msg: "Email or password incorrect ",
+      msg: "Email is not taken ",
       data: "",
     };
-  } else if (!user.isEmailVerified) {
+  } else if (!user?.isEmailVerified) {
     return {
       result: false,
       msg: "Email is not verify ",
       data: "",
     };
   }
+  const isMatch = await bcrypt.compare(password, user?.password);
+  if (!isMatch) {
+    return {
+      result: false,
+      msg: "Password incorrect ",
+      data: "",
+    };
+  }
 
-  const token = await generateAuthTokens(user);
+  const token = await tokenService.generateAuthTokens(user);
+
   return {
     result: true,
     msg: "Verify your email address",
@@ -94,6 +120,7 @@ const login = async (data) => {
 const forgotPassword = async (data) => {
   const { email } = data;
   const user = await getDB().collection(userCollectionName).findOne({ email });
+  console.log("email", user);
 
   if (!user?.email) {
     return {
@@ -101,11 +128,12 @@ const forgotPassword = async (data) => {
       msg: "Email is not found ",
     };
   }
-  const token = await generateAuthTokens(user);
+
+  const token = await tokenService.generateAuthTokens(user);
   console.log("=====", token);
   const url = `${APP_SCHEMA}://${APP_HOST}:${CLIENT_PORT}/reset/${token.access.token}`;
+  sendEmail(email, url, "Verify your email address");
 
-  mailService(email, url, "Verify your email address");
   return {
     result: true,
   };
@@ -114,9 +142,8 @@ const forgotPassword = async (data) => {
 const resetPassword = async (data) => {
   const { password } = data.body;
 
-  console.log("data.user", data.user);
   const hashPassword = await bcrypt.hash(password, 10);
-
+  console.log("hash", hashPassword);
   await getDB()
     .collection(userCollectionName)
     .findOneAndUpdate(
@@ -151,9 +178,11 @@ const googleLogin = async (data) => {
     idToken: tokenId,
     audience: process.env.MAILING_SERVICE_CLIENT_ID,
   });
-  const { email_verified, email, name, picture } = verify.payload;
 
+  console.log("=======", verify.payload);
+  const { email_verified, email, name, picture } = verify.payload;
   const password = email + process.env.GOOGLE_SECRET;
+  const hashpassword = await bcrypt.hash(password, 12);
 
   if (!email_verified) {
     return {
@@ -163,7 +192,6 @@ const googleLogin = async (data) => {
   }
 
   let user = await getDB().collection(userCollectionName).findOne({ email });
-  console.log("verify.payload", user);
 
   if (user) {
     const isMatch = await bcrypt.compare(password, user.password);
@@ -173,25 +201,24 @@ const googleLogin = async (data) => {
         msg: "Password incorrect ",
       };
     }
-    const userId = { _id: verify.payload.sub };
-    const token = await generateAuthTokens(userId);
+    // const userId = { _id: verify.payload.sub };
+    const token = await tokenService.generateAuthTokens(user);
 
     return {
       result: true,
       data: { user, token },
     };
   } else {
-    console.log("12");
     const newUser = {
       name,
       email,
-      password: password,
+      password: hashpassword,
       avatar: picture,
       isEmailVerified: email_verified,
-      phone: 0,
     };
 
     user = await UserModel.creatNewUser(newUser);
+    console.log("newuser", user);
     const token = await generateAuthTokens(user);
     return {
       result: true,
@@ -211,22 +238,30 @@ const facebookLogin = async (body) => {
       return res;
     });
 
+  console.log("res", resFb);
+
   const { email, name, picture } = resFb;
   const password = email + process.env.FACEBOOK_SECRET;
+
+  const hashpassword = await bcrypt.hash(password, 12);
+
   let user = await getDB().collection(userCollectionName).findOne({ email });
+  console.log("user", user);
 
   if (user) {
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("isMatch", isMatch);
+
     if (!isMatch) {
       return {
         result: false,
         msg: "Password incorrect ",
       };
     }
-    const userId = { _id: user.id };
+    // const userId = { _id: user.id };
 
-    const token = await generateAuthTokens(userId);
-
+    const token = await tokenService.generateAuthTokens(user);
+    console.log("token", token);
     return {
       result: true,
       data: { user, token },
@@ -235,12 +270,13 @@ const facebookLogin = async (body) => {
     const newUser = {
       name,
       email,
-      password: password,
+      password: hashpassword,
       avatar: picture.data.url,
       isEmailVerified: true,
     };
     user = await UserModel.creatNewUser(newUser);
-    const token = await generateAuthTokens(user);
+    const token = await tokenService.generateAuthTokens(user);
+    console.log("token", token);
 
     return {
       result: true,
@@ -252,6 +288,7 @@ const facebookLogin = async (body) => {
 export const userService = {
   createUser,
   activateEmail,
+  getUserByEmail,
   login,
   forgotPassword,
   resetPassword,

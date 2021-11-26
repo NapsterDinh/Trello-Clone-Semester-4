@@ -3,7 +3,7 @@ import { getDB } from "../config/mongodb";
 import { ObjectId } from "mongodb";
 
 //define Coloumn
-const columnCollectionName = "columns";
+export const columnCollectionName = "columns";
 const columnCollectionSchema = Joi.object({
   boardId: Joi.string().required(),
   title: Joi.string().required().min(3).max(30).trim(),
@@ -38,25 +38,6 @@ const creatNew = async (data) => {
   }
 };
 
-const pushCardOrder = async (columnId, cardId) => {
-  try {
-    const result = await getDB()
-      .collection(columnCollectionName)
-      .findOneAndUpdate(
-        { _id: ObjectId(columnId) },
-        {
-          $push: {
-            cardOrder: cardId,
-          },
-        },
-        { returnOriginal: false }
-      );
-    return result.value;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
 const update = async (id, data) => {
   console.log("data", data);
   console.log("id", id);
@@ -81,8 +62,6 @@ const update = async (id, data) => {
 };
 
 export const ColumnModel = {
-  columnCollectionName,
   creatNew,
   update,
-  pushCardOrder,
 };

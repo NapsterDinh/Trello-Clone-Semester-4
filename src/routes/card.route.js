@@ -8,4 +8,4 @@ router.route("/").post(CardValidation.createnew, CardController.creatNew);
 
 // router.route("/:id").put(CardValidation.update, CardController.update);
 
-export const CardRoutes = router;
+export const cardRoutes = router;

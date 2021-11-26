@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.route("/").post(ColumnValidation.createnew, ColumnController.creatNew);
 
-router.route("/:id").put(ColumnValidation.update, ColumnController.update);
+router.route("/").put(ColumnValidation.update, ColumnController.update);
 
-export const ColumnRoutes = router;
+export const columnRoutes = router;

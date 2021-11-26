@@ -3,7 +3,7 @@ import { getDB } from "../config/mongodb";
 import { ObjectId } from "mongodb";
 
 //define card
-const cardCollectionName = "cards";
+export const cardCollectionName = "cards";
 const cardCollectionSchema = Joi.object({
   boardId: Joi.string().required(),
   columnId: Joi.string().required(),

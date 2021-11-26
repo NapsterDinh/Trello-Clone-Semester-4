@@ -22,8 +22,8 @@ router
   .post(UserValidation.updateUser, auth, UserController.updateUser);
 
 //social
-router.route("/login_google").post(UserController.googleLogin);
+router.route("/google_login").post(UserController.googleLogin);
 
-router.route("/login_facebook").post(UserController.facebookLogin);
+router.route("/facebook_login").post(UserController.facebookLogin);
 
-export const UserRoutes = router;
+export const userRoutes = router;

@@ -36,27 +36,26 @@ const creatNewUser = async (data) => {
   }
 };
 
-const activationUser = async (data) => {
-  try {
-    const value = await validateSchema(data);
-    console.log("value", value);
-    const result = await getDB().collection(userCollectionName);
-    findOneAndUpdate(
-      {
-        _id: sub,
-      },
-      {
-        isEmailVerified: true,
-      }
-    );
-    console.log("model", result);
-    return result;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+// const activationUser = async (data) => {
+//   try {
+//     const value = await validateSchema(data);
+//     console.log("value", value);
+//     const result = await getDB().collection(userCollectionName);
+//     findOneAndUpdate(
+//       {
+//         _id: sub,
+//       },
+//       {
+//         isEmailVerified: true,
+//       }
+//     );
+//     console.log("model", result);
+//     return result;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 
 export const UserModel = {
   creatNewUser,
-  activationUser,
 };

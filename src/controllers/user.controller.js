@@ -6,8 +6,8 @@ const register = async (req, res) => {
     const { result, msg, data } = await userService.createUser(req.body);
 
     res.json({
-      result: true,
-      msg: apiMessage.registerSuccess,
+      result: result,
+      msg: msg || apiMessage.registerSuccess,
       data: data,
     });
   } catch (err) {
@@ -28,6 +28,8 @@ const verifyEmail = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { result, msg, data } = await userService.login(req.body);
+    console.log("asd");
+    console.log("login", result, msg);
     res.json({
       result: result,
       msg: msg || apiMessage.loginSuccess,
@@ -43,7 +45,7 @@ const forgotPassword = async (req, res) => {
     const { result, msg } = await userService.forgotPassword(req.body);
     console.log("result", result);
     res.json({
-      result: result || true,
+      result: result,
       msg: msg || apiMessage.sendMailForgotPassword,
     });
   } catch (err) {
@@ -53,6 +55,8 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   try {
+    console.log("req", req.body);
+    console.log("req1", req.user);
     await userService.resetPassword(req);
     res.json({
       result: true,
@@ -80,7 +84,7 @@ const googleLogin = async (req, res) => {
   try {
     const { result, msg, data } = await userService.googleLogin(req.body);
 
-    console.log(result, msg, data);
+    console.log("sssssss", result, msg, data);
 
     res.json({
       result: result,
@@ -95,8 +99,6 @@ const googleLogin = async (req, res) => {
 const facebookLogin = async (req, res) => {
   try {
     const { result, msg, data } = await userService.facebookLogin(req.body);
-
-    console.log(result, msg, data);
 
     res.json({
       result: result,
