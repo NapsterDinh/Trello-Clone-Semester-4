@@ -11,7 +11,6 @@ export const auth = (req, res, next) => {
     jwt.verify(token, process.env.JWT, (err, user) => {
       if (err) return res.status(400).json({ msg: "Invalid Authentication." });
       console.log("user", user);
-
       req.user = user;
 
       next();
