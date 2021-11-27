@@ -1,0 +1,170 @@
+@import "scss/__setting.scss"; 
+
+.boards-page-layout-topbar {
+    background-color: #fff;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    ._21AuhdrdEh-HCV {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 20x 0 8px;
+        padding-top: 0px;
+        margin: 0 auto;
+        max-width: 1250px;
+        .form-group
+        {
+            label
+            {
+                color: #5e6c84;
+                display: block;
+                font-size: 12px;
+                font-weight: 700;
+                line-height: 16px;
+                margin-bottom: 4px;
+                margin-top: 12px;
+            }
+            .input-group
+            {
+                select, input
+                {
+                    width: 220px;
+                    color: $col-color;
+                    border: 2px solid $border-color-tab;
+                    &:hover
+                    {
+                        background-color: $background-item-hover;
+                    }
+                    &:focus-visible
+                    {
+                        background-color: white;
+                        border-color: $background-header;
+                    }
+                    &:placeholder-shown
+                    {
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
+}
+.boards-page-layout-list
+{
+    .boards-page-board-section {
+        margin: 0 auto;
+        max-width: 1266px;
+        padding: 20px 0 0;
+        .boards-page-board-section-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            .boards-page-board-section-list-item {
+                box-sizing: border-box;
+                cursor: pointer;
+                padding: 4px 8px;
+                position: relative;
+                width: 25%;
+                .board-tile {
+                    background-color: #97a0af;
+                    background-position: 50%;
+                    background-size: cover;
+                    color: #fff;
+                    line-height: 20px;
+                    padding: 8px;
+                    position: relative;
+                    text-decoration: none;
+                    &.mod-add
+                    {
+                        background-color: #091e420a;
+                        border: none;
+                        box-shadow: none;
+                        color: #172b4d;
+                        display: table-cell;
+                        font-weight: 400;
+                        height: 80px;
+                        text-align: center;
+                        transition-duration: 85ms;
+                        transition-property: background-color,border-color,box-shadow;
+                        transition-timing-function: ease;
+                        vertical-align: middle;
+                        width: inherit;
+                        &:hover
+                        {
+                            background-color: $background-item-hover;
+                        }
+                    }
+                    &.mod-show
+                    {
+                        display: flex!important;
+                        align-items: start;
+                        border: none;
+                        box-shadow: none;
+                        color: #172b4d;
+                        display: table-cell;
+                        font-weight: 400;
+                        height: 80px;
+                        text-align: center;
+                        transition-duration: 85ms;
+                        transition-property: background-color,border-color,box-shadow;
+                        transition-timing-function: ease;
+                        vertical-align: middle;
+                        background-color: transparent;
+                        width: 213px;
+                        
+                        p
+                        {
+                            span
+                            {
+                                color: white;
+                                text-align: left;
+                                display: block;
+                                text-overflow: ellipsis;
+                                overflow-x: hidden;
+                                white-space: nowrap;
+                                font-weight: 600;
+                                font-size: 16px;
+                            }
+                        }
+                        &:hover
+                        {
+                            background-color: #0006
+                        }
+                    }
+                    p
+                    {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-bottom: 0;
+                        span
+                        {
+                            color: $col-color;
+                            font-weight: 500;
+                        }
+                        
+                    }
+                    
+                }
+                .board-tile, .board-tile-fade {
+                    border-radius: 3px;
+                    display: block;
+                }
+                a
+                {
+                    padding: 0px!important;
+                    .board-tile
+                    {
+                        &.mod-add
+                        {
+                            padding: 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

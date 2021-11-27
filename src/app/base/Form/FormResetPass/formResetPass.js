@@ -98,7 +98,7 @@ const FormResetPass = (props) => {
                 placement="right"
                 overlay={<Tooltip id="button-tooltip-3">{validationMsg.password}</Tooltip>}
               >
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
               </OverlayTrigger>
           </div>
           <div className={ !validationMsg.confirm ? "confirm input" : "confirm input error"}>
@@ -114,7 +114,7 @@ const FormResetPass = (props) => {
                 placement="right"
                 overlay={<Tooltip id="button-tooltip-3">{validationMsg.confirm}</Tooltip>}
               >
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
               </OverlayTrigger>
           </div>
           

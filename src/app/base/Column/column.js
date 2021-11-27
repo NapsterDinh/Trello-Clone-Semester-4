@@ -129,8 +129,8 @@ function Column(prop)
             groupName='col'
             onDrop={dropResult => onCardDrop(column.id, dropResult)}
             getChildPayload={index => cards[index]}
-            dragClass='card-ghost'
-            dropClass='card-ghost-drop'
+            dragclassName='card-ghost'
+            dropclassName='card-ghost-drop'
             dropPlaceholder={{
               animationDuration: 150,
               showOnTop: true,

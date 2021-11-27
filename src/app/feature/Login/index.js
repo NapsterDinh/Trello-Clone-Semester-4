@@ -30,7 +30,7 @@ const LoginPage = () => {
             <Route path="/forgot_password" render={props => <HeaderLogin {...props} pagination="FORGOT PASSWORD" />} />
             <Route path="/reset/:token"render={props => <HeaderLogin {...props} pagination="RESET PASSWORD" />} />
           </Switch>
-            <section class="section section-lg dark bg-dark section-middle">
+            <section className="section section-lg dark bg-dark section-middle">
               {
                 isActive &&
                 <LoadingOverlay
@@ -41,7 +41,7 @@ const LoginPage = () => {
                   <p>Some content or children or something.</p>
                 </LoadingOverlay>
               }
-                <div class="bg-image bg-fixed">
+                <div className="bg-image bg-fixed">
                   <img src="" alt=""></img>
                 </div>
             <Switch> 

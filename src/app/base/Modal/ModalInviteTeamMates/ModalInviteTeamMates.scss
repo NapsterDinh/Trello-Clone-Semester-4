@@ -1,0 +1,65 @@
+@import "scss/__setting.scss"; 
+
+
+
+.modal-content
+{
+    .row
+    {
+        .col-left
+        {
+            padding-top: 40px;
+            padding-left: 100px;
+            padding-bottom: 30px;
+            .modal-header
+            {
+                button
+                {
+                    position: absolute;
+                    right: 10px;
+                    top: 20px;
+                    font-size: 23px;
+                    &:hover
+                    {
+                        background-color: transparent;
+                    }
+                }
+                span{
+                    &:first-child
+                    {
+                        font-size: 30px;
+                    }
+                }
+            }
+            .modal-body
+            {
+                h6, span
+                {
+                    color: $color-modal-description;
+                    font-size: 12px;
+                    font-weight: 500;
+                }
+            }
+            .modal-footer
+            {
+                justify-content: center;
+                button{
+                    width: 100%;
+                    text-align: center;
+                }
+                a
+                {
+                    margin-top: 10px;
+                }
+            }
+        }
+        .col-right
+        {
+            background-image: url(../../../Images/Background/wavy-border.df0d81969c6394b61c0d.svg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    
+}

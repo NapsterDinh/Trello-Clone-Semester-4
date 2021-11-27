@@ -1,10 +1,101 @@
 @import "scss/__setting.scss";
 
 .navbar-app{
-    background-color: $app-bar-bg-color;
-    font-size: 1.5rem;
-    padding: $gap;
-    display: flex;
-    align-items: center;
-    height: $app-bar-height;
+    background-color: $background-header;
+    .header-padding
+    {
+      font-size: 1.5rem;
+      padding: $gap;
+      display: flex;
+      align-items: center;
+      .header-logo
+      {
+        margin-right: 20px;
+        img
+        {
+          width: 100px;
+          height: 20px;
+          margin: 0;
+        }
+      }
+    }
+    .header-create
+    {
+      .dropdown-toggle
+      {
+        background-color: rgba(0, 0, 0, 0.24);
+        &::after
+        {
+          display: none;
+        }
+      }
+    }
+    .header-center
+    {
+      flex-shrink: 1;
+      min-width: 1px;
+      margin: 0;
+      width: 100%;
+      position: relative;
+    }
+    .search-container
+    {
+      position: relative;
+      input
+      {
+        background-color: rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 5px 40px;
+        padding-right: 20px;
+        border: 1px solid white;
+        &:hover
+        {
+          background-color: #709ab3;
+        }
+        &:focus
+        {
+          outline: none;
+        }
+        &::placeholder
+        {
+          color: white;
+        }
+        &:focus
+        {
+          background-color: white;
+          color: black;
+          &::placeholder
+          {
+            color: $text-gray;
+          }
+          &+i
+          {
+            color: $text-gray;
+          }
+        }
+      }
+      i
+      {
+        position: absolute;
+        top: 7px;
+        color: white;
+        font-size: 18px;
+        &.fa-search
+        {
+          left: 13px;
+        }
+      }
+    }
+    .profile
+    {
+      height: 33px;
+      button
+      {
+        width: 38px;
+        height: 100%;
+        position: relative;
+        background-image: url('/1.jpg');
+        background-size: cover;
+      }
+    }
   }

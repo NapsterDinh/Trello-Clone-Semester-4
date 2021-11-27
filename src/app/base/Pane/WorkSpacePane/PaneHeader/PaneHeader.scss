@@ -1,0 +1,140 @@
+@import "scss/__setting.scss";
+
+.tabbed-pane-header
+{
+    background-color: $background-pane-header;
+    .tabbed-pane-header-wrapper
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 auto;
+        max-width: 650px;
+        padding: 32px;
+        position: relative;
+        .tabbed-pane-header-content
+        {
+            display: flex;
+            .org-profile-avatar
+            {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .js-react-root
+                {
+                    position: relative;
+                    img
+                    {
+                        width: 85px;
+                        height: 85px;
+                        cursor: pointer;
+                        border-radius: 5px;
+                        box-shadow: $box-shadow;
+                        &:hover + span
+                        {
+                            display: block;
+                        }
+                    }
+                    span
+                    {
+                        display: none;
+                        position: absolute;
+                        bottom: 0;
+                        width: 100%;
+                        text-align: center;
+                        left: 0;
+                        padding: 5px 0px;
+                        cursor: pointer;
+                        color: white;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        border-bottom-left-radius: 5px;
+                        border-bottom-right-radius: 5px;
+                        &:hover
+                        {
+                            display: block;
+                        }
+                    }
+                }
+            }
+            .tabbed-pane-header-details
+            {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin: 0 0 0 20px;
+                .js-current-details
+                {
+                    .js-react-root
+                    {
+                        ._3Tv3BQB32z31NL {
+                            display: flex;
+                            h1
+                            {
+                                display: inline;
+                                margin-right: 4px;
+                                font-weight: 600;
+                            }
+                            span
+                            {
+                                font-size: 12px;
+                                color: #5e6c84;
+                                padding-left: 2px;
+                                font-weight: 500;
+                                span
+                                {
+                                    margin-right: 2px;
+                                    display: inline-block;
+                                    line-height: 28px;
+                                    vertical-align: bottom;
+                                    span
+                                    {
+                                        color: rgb(235, 90, 70);
+                                        display: inline-block;
+                                        fill: inherit;
+                                        flex-shrink: 0;
+                                        line-height: 1;
+                                        vertical-align: middle;
+                                        svg
+                                        {
+                                            height: 16px;
+                                            width: 16px;
+                                            line-height: 16px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .btn
+                        {
+                            color: $col-color;
+                            background-color: rgba(9, 30, 66, 0.04);;
+                            &:hover
+                            {
+                                background-color: $background-item-hover;
+                            }
+                            span
+                            {
+                                height: 20px;
+                                margin-right: 5px;
+                                span
+                                { 
+                                    color: rgb(66, 82, 110);
+                                    display: inline-block;
+                                    fill: inherit;
+                                    flex-shrink: 0;
+                                    line-height: 1;
+                                    svg
+                                    {
+                                        height: 16px;
+                                        width: 16px;
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

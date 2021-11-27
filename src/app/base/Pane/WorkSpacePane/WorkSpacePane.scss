@@ -1,0 +1,35 @@
+@import "scss/__setting.scss";
+
+.tabbed-pane
+{
+    box-shadow: $box-shadow-outset;
+    border: solid 1px $border-color-tab;
+    background-color: white;
+    .tabbed-pane-main-col-wrapper {
+        margin: 0 auto;
+        max-width: 850px;
+        padding: 32px;
+        position: relative;
+        &.is-full-width
+        {
+            max-width: none;
+        }
+        .js-react-root
+        {
+            
+        }
+    }
+    @media only screen and (min-width: 901px) and (max-width: 1280px), only screen and (min-width: 1281px)
+    {
+        .workspace-boards-page-layout {
+            display: flex;
+            flex-direction: column;
+        }
+        .boards-page-layout-list {
+            flex: 1 1;
+            margin-left: -8px;
+            margin-right: -8px;
+        }
+    }
+    
+}

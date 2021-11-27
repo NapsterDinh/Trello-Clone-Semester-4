@@ -114,7 +114,7 @@ const FormRegister = (props) => {
   return (
     <div className="signup-div form-container">
       <a href="/login" className="arrow-prev">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        <i className="fa fa-arrow-left" aria-hidden="true"></i>
       </a>
       <div className="title">{formatMessage(messages.signup)}</div>
       <div className="fields">
@@ -138,7 +138,7 @@ const FormRegister = (props) => {
                 <Tooltip id="button-tooltip-1">{validationMsg.name}</Tooltip>
               }
             >
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
             </OverlayTrigger>
           </div>
           <div
@@ -160,7 +160,7 @@ const FormRegister = (props) => {
                 <Tooltip id="button-tooltip-2">{validationMsg.email}</Tooltip>
               }
             >
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
             </OverlayTrigger>
           </div>
           <div
@@ -182,7 +182,7 @@ const FormRegister = (props) => {
                 <Tooltip id="button-tooltip-3">{validationMsg.phone}</Tooltip>
               }
             >
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
             </OverlayTrigger>
           </div>
           <div
@@ -208,7 +208,7 @@ const FormRegister = (props) => {
                 </Tooltip>
               }
             >
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
             </OverlayTrigger>
           </div>
           <div
@@ -230,7 +230,7 @@ const FormRegister = (props) => {
                 <Tooltip id="button-tooltip-3">{validationMsg.confirm}</Tooltip>
               }
             >
-              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
             </OverlayTrigger>
           </div>
           <button disabled={isDisabled} className="signin-button form-btn">

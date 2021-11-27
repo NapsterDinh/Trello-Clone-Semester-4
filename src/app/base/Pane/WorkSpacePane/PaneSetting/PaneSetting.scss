@@ -1,0 +1,85 @@
+@import "scss/__setting.scss";
+
+.pane-setting
+{
+    .window-module {
+        clear: both;
+        margin-bottom: 24px;
+        position: relative;
+        .window-module-panel, .window-module-title {
+            margin: 0 0 4px 40px;
+            padding: 8px 0;
+            position: relative;
+        }
+        .window-module-title {
+            border-bottom: 1px solid #091e4221;
+            h3{
+                display: inline-block;
+                margin: 0;
+                min-height: 18px;
+                min-width: 40px;
+                width: auto;
+                font-size: 16px;
+                font-weight: 600;
+            }
+        }
+        .setting-item {
+            display: flex;
+            margin-left: 38px;
+            .setting-item-detail {
+                flex: 1;
+                padding: 4px 8px 0 0;
+                margin-right: 20px;
+                p
+                {
+                    margin: 0 0 8px;
+                    display: inline-block;
+                    line-height: 28px;
+                    vertical-align: bottom;
+                    span
+                    {
+                        color: $col-color;
+                        &:last-child
+                        {
+                            font-weight: 400;
+                        }
+                        &:first-child
+                        {
+                            color: red;
+                            display: inline-block;
+                            fill: inherit;
+                            flex-shrink: 0;
+                            line-height: 1;
+                            vertical-align: text-top;
+                            svg
+                            {
+                                height: 16px;
+                                width: 16px;
+                                line-height: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+            .setting-item-action {
+                flex: 0 0 100px;
+                button
+                {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+    ._3DdUxqvSzSG8p0
+    {
+        margin-left: 40px;
+        a
+        {
+            color: red;
+            &:hover
+            {
+                color: $background-header;
+            }
+        }
+    }
+}

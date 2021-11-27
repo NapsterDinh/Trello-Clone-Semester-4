@@ -135,7 +135,7 @@ const FormLogin = (props) => {
                 placement="right"
                 overlay={<Tooltip id="button-tooltip-3">{err.email}</Tooltip>}
               >
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
               </OverlayTrigger>
             </div>
             <div className={ !err.password ? "input input_pass" : "input error input_pass"}>
@@ -152,7 +152,7 @@ const FormLogin = (props) => {
                 placement="right"
                 overlay={<Tooltip id="button-tooltip-4">{err.password}</Tooltip>}
               >
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
               </OverlayTrigger>
             </div>
             <div className="link">

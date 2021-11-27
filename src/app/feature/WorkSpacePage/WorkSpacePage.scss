@@ -1,0 +1,129 @@
+@import "scss/__setting.scss"; 
+
+.middle-workspace-page
+{
+    margin-top: 40px;
+    .col-md-3
+    {
+        .workspaces
+    {
+        display: flex;
+        justify-content: space-between;
+        i
+        {
+            margin-top: -1px;
+            padding: 5px;
+            cursor: pointer;
+            &:hover
+            {
+                background-color: $background-item-hover;
+            }
+        }
+    }
+    .accordion
+    {
+        .card
+        {
+            background-color: transparent;
+            border: none;
+            .card-header
+            {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem;
+                padding-bottom: 0rem;
+                i.fa-chevron-up
+                {
+                    display: none;
+                }
+                i
+                {
+                    padding-top: 10px;
+                    padding-right: 10px;
+                    color: #172b4d;
+                }
+                &.active
+                {
+                    i.fa-chevron-up
+                    {
+                        display: block;
+                    }
+                    i.fa-chevron-down
+                    {
+                        display: none;
+                    }
+                }
+                
+                &:hover
+                {
+                    background-color: $background-item-hover;
+                }
+                .workspace-item
+                {
+                    &:hover
+                    {
+                        background-color: transparent;
+                    }
+                }
+            }
+            .card-body
+            {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                .action-list
+                {
+                    padding: 0;
+                    margin-bottom: 0px;
+                    .action-list-item
+                    {
+                        user-select: none;
+                        cursor: pointer;
+                        padding: 10px 20px;
+                        &:hover
+                        {
+                            background-color: $background-item-hover;
+                        }
+                        span
+                        {
+                            font-weight: 500;
+                            letter-spacing: 1px;
+                        }
+                        &.active
+                        {
+                            background-color: $background-active;
+                            span,i
+                            {
+                                color: $text-active;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }
+    .col-md-9
+    {
+        height: 85vh;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 10px;
+          }
+          
+          /* Track */
+          &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+          }
+          
+          /* Handle */
+          &::-webkit-scrollbar-thumb {
+            background: #888;
+          }
+          
+          /* Handle on hover */
+          &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+          }
+    }
+    
+}

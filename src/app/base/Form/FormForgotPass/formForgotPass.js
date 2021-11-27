@@ -72,7 +72,7 @@ const FormForgotPass = (props) => {
   return (
     <div className="forgot form-container">
         <a href="/login" className="arrow-prev">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          <i className="fa fa-arrow-left" aria-hidden="true"></i>
         </a>
         <div className="title"> {formatMessage(messages.forgotpass)}</div>
         <div className="fields">
@@ -89,7 +89,7 @@ const FormForgotPass = (props) => {
                 placement="right"
                 overlay={<Tooltip id="button-tooltip-3">{validationMsg.email}</Tooltip>}
               >
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
               </OverlayTrigger>
           </div>
           

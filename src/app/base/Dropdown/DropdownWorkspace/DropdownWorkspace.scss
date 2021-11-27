@@ -1,0 +1,26 @@
+@import "scss/__setting.scss";
+
+.header-workspace
+{
+  .dropdown-menu
+  {
+    width: 304px;
+    .menu-padding
+    {
+      padding: 0px 10px;
+      .menu-body
+      {
+          .workspace
+          {
+              h6
+              {
+                  margin-bottom: 10px;
+              }
+              
+          }
+      }
+    }
+  }
+  
+  
+}

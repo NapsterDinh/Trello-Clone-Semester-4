@@ -7,6 +7,7 @@ import 'scss/App.scss'
 
 import LoginPage from "app/feature/Login";
 import BoardPage from "app/feature/BoardPage/BoardPage";
+import WorkSpacePage from "app/feature/WorkSpacePage/WorkSpacePage";
 
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
@@ -51,6 +52,7 @@ function App() {
         <PrivateRoute path="/forgot_password" component={LoginPage} />
         <PrivateRoute path="/reset/:token" component={LoginPage} />
         <Route path="/board" component={BoardPage} />
+        <Route path="/workspace" component={WorkSpacePage} />
       </Switch>
     </BrowserRouter>
   );
