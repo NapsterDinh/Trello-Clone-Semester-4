@@ -33,6 +33,24 @@ const getWorkSpace = async (req, res) => {
   }
 };
 
+const getWorkSpaceGuestOrOwer = async (req, res) => {
+  try {
+    const { result, msg, data } =
+      await workSpaceService.getWorkSpaceGuestOrOwer(req);
+    console.log("controller", result);
+
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 const updateWorkSpace = async (req, res) => {
   try {
     const { result, msg, data } = await workSpaceService.updateWorkSpace(
@@ -116,4 +134,5 @@ export const workSpaceController = {
   deleteWorkSpace,
   addUserToWorkSpace,
   removeUserToWorkSpace,
+  getWorkSpaceGuestOrOwer,
 };

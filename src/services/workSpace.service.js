@@ -210,9 +210,7 @@ export const getFullWorkSpace = async (res) => {
       .collection(workSpaceCollectionName)
       .find()
       .toArray();
-    console.log("====", result);
-    res.json({ result });
-    // return result;
+    return result;
   } catch (error) {
     throw new Error(error);
   }
@@ -220,15 +218,23 @@ export const getFullWorkSpace = async (res) => {
 
 const getWorkSpaceGuestOrOwer = async (data) => {
   try {
-    const result = await getDB()
-      .collection(workSpaceCollectionName)
-      .find(data)
-      .toArray();
-    if (result) {
-      return { result: true, msg: "Get workspace success", data: result };
-    } else {
-      return { result: false, msg: "Get workspace fail", data: [] };
-    }
+    console.log("====", data);
+    const userOwer = await getFullWorkSpace();
+    const resultOwer = userOwer.filter(
+      ({ userCreate }) => userCreate === data.user.sub
+    );
+    console.log("====123", resultOwer);
+    const resultGuest = userOwer.filter((u) =>
+      u.userId.includes(data.user.sub)
+    );
+
+    console.log("====1235645", resultGuest);
+
+    return {
+      result: true,
+      msg: "Get workspace success",
+      data: { resultOwer, resultGuest },
+    };
   } catch (error) {
     throw new Error(error);
   }
@@ -241,4 +247,5 @@ export const workSpaceService = {
   deleteWorkSpace,
   addUserToWorkSpace,
   removeUserToWorkSpace,
+  getWorkSpaceGuestOrOwer,
 };
