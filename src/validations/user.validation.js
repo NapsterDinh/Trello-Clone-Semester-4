@@ -1,5 +1,4 @@
 import Joi from "joi";
-import { HttpStatusCode } from "../utilties/constants";
 
 const createnewUser = async (req, res, next) => {
   const condition = Joi.object({
@@ -15,7 +14,7 @@ const createnewUser = async (req, res, next) => {
     await condition.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }
@@ -34,7 +33,7 @@ const login = async (req, res, next) => {
     await condition.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }
@@ -54,7 +53,7 @@ const forgotPassword = async (req, res, next) => {
     await condition.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }
@@ -69,7 +68,7 @@ const resetPassword = async (req, res, next) => {
     await condition.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }
@@ -84,7 +83,7 @@ const updateUser = async (req, res, next) => {
     await condition.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }

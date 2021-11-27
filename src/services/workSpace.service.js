@@ -204,6 +204,36 @@ const removeUserToWorkSpace = async (data) => {
   }
 };
 
+export const getFullWorkSpace = async (res) => {
+  try {
+    const result = await getDB()
+      .collection(workSpaceCollectionName)
+      .find()
+      .toArray();
+    console.log("====", result);
+    res.json({ result });
+    // return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getWorkSpaceGuestOrOwer = async (data) => {
+  try {
+    const result = await getDB()
+      .collection(workSpaceCollectionName)
+      .find(data)
+      .toArray();
+    if (result) {
+      return { result: true, msg: "Get workspace success", data: result };
+    } else {
+      return { result: false, msg: "Get workspace fail", data: [] };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const workSpaceService = {
   createWorkSpace,
   getWorkSpace,
