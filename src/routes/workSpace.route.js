@@ -5,12 +5,24 @@ import { auth } from "../middlewares/auth";
 const router = express.Router();
 
 router.route("/").get(workSpaceController.getWorkSpace);
-router.route("/getFull").get(auth, workSpaceController.getWorkSpaceGuestOrOwer);
-router.route("/create").post(workSpaceController.addWorkSpace);
-router.route("/update").put(workSpaceController.updateWorkSpace);
-router.route("/delete").delete(workSpaceController.deleteWorkSpace);
-router.route("/addUser").put(workSpaceController.addUserToWorkSpace);
-router.route("/removeUser").put(workSpaceController.removeUserToWorkSpace);
+router
+  .route("/getAllUserAndUserInWorkSpace")
+  .get(workSpaceController.getAllUserAndUserExistInWorkSpace);
+router
+  .route("/getWorkSpaceGuestOrOwer")
+  .get(auth, workSpaceController.getWorkSpaceGuestOrOwer);
+router
+  .route("/getWorkSpaceById")
+  .get(auth, workSpaceController.getWorkSpaceById);
+router.route("/create").post(auth, workSpaceController.addWorkSpace);
+router.route("/update").put(workSpaceController.updateWorkSpace); //auth
+router.route("/updatePrivacy").put(auth, workSpaceController.updatePrivacy);
+router.route("/delete").delete(auth, workSpaceController.deleteWorkSpace);
+router.route("/inviteUser").post(auth, workSpaceController.inviteUser); //auth
+router.route("/addUser").get(workSpaceController.addUserToWorkSpace);
+router
+  .route("/removeUser")
+  .put(auth, workSpaceController.removeUserToWorkSpace); //auth
 
 //test
 

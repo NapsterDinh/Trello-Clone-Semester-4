@@ -2,14 +2,17 @@
 import { ObjectId } from "mongodb";
 
 //user component
-import { workSpaceModel } from "../models/workSpace.model";
 import { getDB } from "../config/mongodb";
 import { workSpaceCollectionName } from "../models/workSpace.model";
 import { workSpaceCollectionSchema } from "../models/workSpace.model";
 import { workSpaceTypeCollectionName } from "../models/workSpaceType.model";
 import { userService } from "./user.service";
-import { sendEmailUser } from "../shares/sendMail";
+import { sendEmail } from "../shares/sendMail";
 import { BoardService } from "./board.service";
+import { boardCollectionName } from "../models/board.model";
+
+//variable
+const { APP_SCHEMA, APP_HOST, APP_PORT } = process.env;
 
 //coding
 const validateSchema = async (data) => {
@@ -20,7 +23,7 @@ const validateSchema = async (data) => {
 
 const createWorkSpace = async (data) => {
   try {
-    const { userCreate } = data.query;
+    const userCreate = data.user.sub;
     const wpBody = { ...data.body, ...{ userCreate } };
     const value = await validateSchema(wpBody);
     let result = await getDB()
@@ -66,21 +69,33 @@ const getWorkSpace = async (data) => {
 
 const updateWorkSpace = async (data) => {
   try {
-    const { _id, name, descsription } = data;
-    const result = await getDB()
+    const { _id, name, descsription } = data.body;
+    const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOneAndUpdate(
-        { _id: ObjectId(_id) },
-        {
-          $set: { name, descsription },
-        },
-        { returnOriginal: false }
-      );
-
-    if (result) {
-      return { result: true, msg: "Update workspace success", data: result };
+      .findOne({ _id: ObjectId(_id) });
+    console.log("findWP", findUserCreateWP);
+    if (findUserCreateWP?.userCreate !== data.user.sub) {
+      return {
+        result: false,
+        msg: "You is not permission update to workSpace",
+        data: [],
+      };
     } else {
-      return { result: false, msg: "Update workspace fail", data: [] };
+      const result = await getDB()
+        .collection(workSpaceCollectionName)
+        .findOneAndUpdate(
+          { _id: ObjectId(_id) },
+          {
+            $set: { name, descsription },
+          },
+          { returnOriginal: false }
+        );
+
+      if (result) {
+        return { result: true, msg: "Update workspace success", data: result };
+      } else {
+        return { result: false, msg: "Update workspace fail", data: [] };
+      }
     }
   } catch (error) {
     throw new Error(error);
@@ -89,23 +104,73 @@ const updateWorkSpace = async (data) => {
 
 const deleteWorkSpace = async (data) => {
   try {
-    const { _id } = data;
-    const findWorkSpaceTypeId = await getDB()
-      .collection(columnCollectionName)
-      .findOne({ _id: ObjectId(_id) });
-    const result = await getDB()
+    const { _id } = data.query;
+    const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOneAndDelete({ _id: ObjectId(data._id) }, { returnOriginal: false });
-    if (result) {
-      await getDB()
-        .collection(workSpaceTypeCollectionName)
-        .updateOne(
-          { _id: ObjectId(findWorkSpaceTypeId?.workspacetypeId) },
-          { $pull: { workSpaceId: { $in: [_id] } } }
-        );
-      return { result: true, msg: "Delete workspace success", data: result };
+      .findOne({ _id: ObjectId(_id) });
+    console.log("findWP", findUserCreateWP);
+    if (findUserCreateWP?.userCreate !== data.user.sub) {
+      return {
+        result: false,
+        msg: "You is not permission delete to workSpace",
+        data: [],
+      };
     } else {
-      return { result: false, msg: "Delete workspace fail", data: [] };
+      const result = await getDB()
+        .collection(workSpaceCollectionName)
+        .findOneAndDelete({ _id: ObjectId(_id) }, { returnOriginal: false });
+      console.log("resutlll", result);
+      if (result?.value) {
+        await getDB()
+          .collection(workSpaceTypeCollectionName)
+          .updateOne(
+            { _id: ObjectId(findUserCreateWP?.workspacetypeId) },
+            { $pull: { workSpaceId: { $in: [_id] } } }
+          );
+        const boarddelte = await getDB()
+          .collection(boardCollectionName)
+          .deleteMany({ workSpaceId: _id });
+        console.log("boarddelte", boarddelte);
+        return {
+          result: true,
+          msg: "Delete workspace success",
+          data: result?.value,
+        };
+      } else {
+        return { result: false, msg: "Delete workspace fail", data: [] };
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const inviteUser = async (data) => {
+  try {
+    const { _id, userMail } = data.body;
+    const findUserCreateWP = await getDB()
+      .collection(workSpaceCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    const wpName = findUserCreateWP?.name;
+    if (findUserCreateWP?.userCreate !== data.user.sub) {
+      return {
+        result: false,
+        msg: "You is not permission invite user to workSpace",
+        data: [],
+      };
+    } else {
+      userMail.map((email) =>
+        sendEmail(
+          email,
+          `${APP_SCHEMA}://${APP_HOST}:${APP_PORT}/v1/workSpace/addUser?userMail=${email}&wpId=${_id}`,
+          "Verify your email address"
+        )
+      );
+      return {
+        result: true,
+        msg: "Invite user to workSpace success",
+        data: wpName,
+      };
     }
   } catch (error) {
     throw new Error(error);
@@ -114,40 +179,23 @@ const deleteWorkSpace = async (data) => {
 
 const addUserToWorkSpace = async (data) => {
   try {
-    const findUserCreateWP = await getDB()
+    const { wpId, userMail } = data.query;
+    const getUser = await userService.getUserByEmail([userMail]);
+    console.log("anbc", getUser[0]?._id);
+    const result = await getDB()
       .collection(workSpaceCollectionName)
-      .findOne({ userCreate: data?.query?.userCreate });
-    console.log("----", findUserCreateWP);
-    if (!findUserCreateWP) {
+      .updateOne(
+        { _id: ObjectId(wpId) },
+        { $push: { userId: getUser[0]?._id.toString() } }
+      );
+    console.log("resu,kt", result);
+    if (result?.acknowledged) {
       return {
-        result: false,
-        msg: "You is not permission add user to workSpace",
-        data: [],
+        result: true,
+        msg: "You join workspace success!!!",
       };
     } else {
-      const { _id, userId } = data.body;
-      const getUser = await userService.getUserByEmail(userId);
-      const iduser = [];
-      getUser.map((u) => iduser.push(u._id.toString()));
-      const result = await getDB()
-        .collection(workSpaceCollectionName)
-        .findOneAndUpdate(
-          { _id: ObjectId(_id) },
-          { $push: { userId: { $each: iduser } } },
-          { returnOriginal: false }
-        );
-      console.log("resu,kt", result);
-      if (result?.value) {
-        const mess = `You have been add ${result?.value?.name}`;
-        userId.map((e) => sendEmailUser(e, mess));
-        return {
-          result: true,
-          msg: "Add user workspace success",
-          data: result?.value,
-        };
-      } else {
-        return { result: false, msg: "Add user  workspace fail", data: [] };
-      }
+      return { result: false, msg: "Add user  workspace fail" };
     }
   } catch (error) {
     throw new Error(error);
@@ -156,19 +204,19 @@ const addUserToWorkSpace = async (data) => {
 
 const removeUserToWorkSpace = async (data) => {
   try {
+    const { _id, userMail } = data.body;
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOne({ userCreate: data?.query?.userCreate });
-
-    if (!findUserCreateWP) {
+      .findOne({ _id: ObjectId(_id) });
+    console.log("----", findUserCreateWP);
+    if (findUserCreateWP?.userCreate !== data.user.sub) {
       return {
         result: false,
         msg: "You is not permission remove user to workSpace",
         data: [],
       };
     } else {
-      const { _id, userId } = data.body;
-      const getUser = await userService.getUserByEmail(userId);
+      const getUser = await userService.getUserByEmail(userMail);
       const iduser = [];
       getUser.map((u) => iduser.push(u._id.toString()));
       const result = await getDB()
@@ -240,6 +288,126 @@ const getWorkSpaceGuestOrOwer = async (data) => {
   }
 };
 
+const getAllUserAndUserExistInWorkSpace = async (data) => {
+  try {
+    const wp = await getWorkSpace({ _id: ObjectId(data.workSpaceId) });
+    const userOwer = await userService.getUserById([
+      ObjectId(wp?.data[0].userCreate),
+    ]);
+    const objectIdArray = wp?.data[0]?.userId.map((s) => ObjectId(s));
+    const userWP = await userService.getUserById(objectIdArray);
+    const getBoard = await BoardService.getBoardById(data.workSpaceId);
+
+    let userList = [];
+    const userBoard = await Promise.all(
+      getBoard.map(async (user) => {
+        let cal = await userService.getUserById(
+          user.userId.map((s) => ObjectId(s))
+        );
+        const boardName = user.title;
+        cal = { ...cal, ...{ boardName } };
+        return cal;
+      })
+    );
+    userList = userBoard;
+
+    return {
+      result: true,
+      msg: "Get workspace success",
+      data: { userOwer, userWP, userList },
+    };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const updatePrivacy = async (data) => {
+  try {
+    const { _id, priority } = data.body;
+    const findUserCreateWP = await getDB()
+      .collection(workSpaceCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    console.log("----", findUserCreateWP);
+    if (findUserCreateWP?.userCreate !== data.user.sub) {
+      //
+      return {
+        result: false,
+        msg: "You is not permission update privacy to workSpace",
+        data: [],
+      };
+    } else {
+      await getDB()
+        .collection(workSpaceCollectionName)
+        .updateOne(
+          { _id: ObjectId(_id) },
+          {
+            $set: { priority: priority },
+          }
+        );
+
+      const result = await getDB()
+        .collection(workSpaceCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+
+      if (result) {
+        return { result: true, msg: "Update priority success", data: result };
+      } else {
+        return { result: false, msg: "Update priority fail", data: [] };
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getWorkSpaceById = async (data) => {
+  try {
+    const { _id } = data.query;
+    const findeWP = await getDB()
+      .collection(workSpaceCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    if (!findeWP) {
+      return {
+        result: false,
+        msg: "Not found!",
+        data: [],
+      };
+    } else if (findeWP?.priority === "Public") {
+      const showBoard = await getDB()
+        .collection(workSpaceCollectionName)
+        .find({ workSpaceId: _id })
+        .toArray();
+
+      return {
+        result: true,
+        msg: "Get workSpace success",
+        data: showBoard,
+      };
+    } else {
+      const isCheckUser = await getDB()
+        .collection(workSpaceCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+      if (
+        isCheckUser?.userId.includes(data?.userId) ||
+        isCheckUserCreateWP?.userCreate === data?.userCreate
+      ) {
+        const show = await getDB()
+          .collection(workSpaceCollectionName)
+          .find({ workSpaceId: _id })
+          .toArray();
+
+        return {
+          result: true,
+          msg: "Get workSpace success",
+          data: show,
+        };
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const workSpaceService = {
   createWorkSpace,
   getWorkSpace,
@@ -248,4 +416,8 @@ export const workSpaceService = {
   addUserToWorkSpace,
   removeUserToWorkSpace,
   getWorkSpaceGuestOrOwer,
+  getAllUserAndUserExistInWorkSpace,
+  updatePrivacy,
+  inviteUser,
+  getWorkSpaceById,
 };

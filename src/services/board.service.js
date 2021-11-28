@@ -140,6 +140,19 @@ const getFullBoard = async (data) => {
   }
 };
 
+const getBoardById = async (data) => {
+  try {
+    const getBoard = await getDB()
+      .collection(boardCollectionName)
+      .find({ workSpaceId: data })
+      .toArray();
+
+    return getBoard;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const updateBoard = async (data) => {
   try {
     const { _id, title, userId } = data.body;
@@ -353,4 +366,5 @@ export const BoardService = {
   addUserToBoard,
   removeUserToBoard,
   pushColumnOrder,
+  getBoardById,
 };

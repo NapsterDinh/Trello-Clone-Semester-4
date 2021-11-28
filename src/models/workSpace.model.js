@@ -9,4 +9,5 @@ export const workSpaceCollectionSchema = Joi.object({
   userCreate: Joi.string().required(),
   name: Joi.string().required(),
   description: Joi.string(),
+  priority: Joi.string().default("private"),
 });

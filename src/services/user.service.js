@@ -81,6 +81,26 @@ const getUserByEmail = async (data) => {
   return resultUser;
 };
 
+const getUserById = async (data) => {
+  console.log("data", data);
+
+  const resultUser = await getDB()
+    .collection(userCollectionName)
+    .find({ _id: { $in: data } })
+    .toArray();
+
+  return resultUser;
+};
+
+const getAllUser = async () => {
+  const resultUser = await getDB()
+    .collection(userCollectionName)
+    .find()
+    .toArray();
+
+  return resultUser;
+};
+
 const login = async (data) => {
   const { email, password } = data;
 
@@ -295,4 +315,6 @@ export const userService = {
   updateUser,
   googleLogin,
   facebookLogin,
+  getAllUser,
+  getUserById,
 };
