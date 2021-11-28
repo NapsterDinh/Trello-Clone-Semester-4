@@ -12,7 +12,6 @@ const createNew = async (data) => {
     const result = await getDB()
       .collection(workSpaceTypeCollectionName)
       .insertOne(value);
-    console.log("validatedValue", result);
     if (result?.acknowledged) {
       return {
         result: true,
@@ -37,7 +36,6 @@ const getWPType = async () => {
       .collection(workSpaceTypeCollectionName)
       .find()
       .toArray();
-    console.log("validatedValue", result);
     if (result) {
       return {
         result: true,

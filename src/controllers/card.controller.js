@@ -3,7 +3,6 @@ import { CardService } from "../services/card.service";
 const createNew = async (req, res) => {
   try {
     const { result, msg, data } = await CardService.createNew(req.body);
-    console.log("controller", result);
     res.json({
       result: result,
       msg: msg,

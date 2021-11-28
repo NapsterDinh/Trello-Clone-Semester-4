@@ -18,7 +18,6 @@ const register = async (req, res) => {
 const verifyEmail = async (req, res) => {
   try {
     await userService.activateEmail(req.query.token);
-    console.log("querytoken", req.query.token);
     res.json({ msg: "Account has been activated!" });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -28,8 +27,6 @@ const verifyEmail = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { result, msg, data } = await userService.login(req.body);
-    console.log("asd");
-    console.log("login", result, msg);
     res.json({
       result: result,
       msg: msg || apiMessage.loginSuccess,
@@ -43,7 +40,6 @@ const login = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { result, msg } = await userService.forgotPassword(req.body);
-    console.log("result", result);
     res.json({
       result: result,
       msg: msg || apiMessage.sendMailForgotPassword,
@@ -55,8 +51,6 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   try {
-    console.log("req", req.body);
-    console.log("req1", req.user);
     await userService.resetPassword(req);
     res.json({
       result: true,
@@ -84,7 +78,6 @@ const googleLogin = async (req, res) => {
   try {
     const { result, msg, data } = await userService.googleLogin(req.body);
 
-    console.log("sssssss", result, msg, data);
 
     res.json({
       result: result,

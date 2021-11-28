@@ -20,7 +20,6 @@ const createNew = async (data) => {
     const result = await getDB()
       .collection(columnCollectionName)
       .insertOne(insertValue);
-    console.log("validatedValue", result);
     if (result?.acknowledged) {
       await BoardService.pushColumnOrder(
         data.boardId,
@@ -83,7 +82,6 @@ const deleteColumn = async (data) => {
     const result = await getDB()
       .collection(columnCollectionName)
       .findOneAndDelete({ _id: ObjectId(_id) }, { returnOriginal: false });
-    console.log("===", result);
     if (result?.value) {
       await getDB()
         .collection(boardCollectionName)

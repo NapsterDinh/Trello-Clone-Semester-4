@@ -25,11 +25,9 @@ const validateSchema = async (data) => {
 const creatNewUser = async (data) => {
   try {
     const value = await validateSchema(data);
-    console.log("value", value);
     const result = await getDB()
       .collection(userCollectionName)
       .insertOne(value);
-    console.log("model", result);
     return { ...result, ...value };
   } catch (error) {
     throw new Error(error);
@@ -39,7 +37,6 @@ const creatNewUser = async (data) => {
 // const activationUser = async (data) => {
 //   try {
 //     const value = await validateSchema(data);
-//     console.log("value", value);
 //     const result = await getDB().collection(userCollectionName);
 //     findOneAndUpdate(
 //       {
@@ -49,7 +46,6 @@ const creatNewUser = async (data) => {
 //         isEmailVerified: true,
 //       }
 //     );
-//     console.log("model", result);
 //     return result;
 //   } catch (error) {
 //     throw new Error(error);

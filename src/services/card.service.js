@@ -11,10 +11,8 @@ import { uploadFile, getFileStream } from "../shares/s3";
 const createNew = async (data) => {
   try {
     const { image, fileName } = data;
-    console.log("data", data);
     const s3Image = await uploadFile(image, fileName);
 
-    console.log("s3", s3Image?.Location);
     const validatedValue = await validateSchema(data);
     const insertValue = {
       ...validatedValue,
@@ -25,7 +23,6 @@ const createNew = async (data) => {
     const result = await getDB()
       .collection(cardCollectionName)
       .insertOne(insertValue);
-    console.log("result", result);
     if (result?.acknowledged) {
       await ColumnService.pushCardOrder(
         data.columnId,
@@ -51,7 +48,6 @@ const createNew = async (data) => {
 const update = async (data) => {
   try {
     const { _id, title, description, image } = data;
-    console.log("====", data);
     await getDB()
       .collection(cardCollectionName)
       .updateOne(
@@ -62,7 +58,6 @@ const update = async (data) => {
     const result = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("result", result);
     if (result) {
       return {
         result: true,
@@ -92,7 +87,6 @@ const deleteCart = async (data) => {
     const result = await getDB()
       .collection(cardCollectionName)
       .findOneAndDelete({ _id: ObjectId(_id) }, { returnOriginal: false });
-    console.log("===", result);
     if (result?.value) {
       const result = await getDB()
         .collection(columnCollectionName)

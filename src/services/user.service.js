@@ -24,7 +24,6 @@ const createUser = async (userBody) => {
     .collection(userCollectionName)
     .findOne({ email });
 
-  console.log("email", result);
   if (result) {
     return {
       result: false,
@@ -37,13 +36,9 @@ const createUser = async (userBody) => {
     ...userBody,
     password: hashpassword,
   };
-  console.log("userBogy", data);
   const user = await UserModel.creatNewUser(data);
-  console.log("user", user);
 
   const token = await tokenService.generateAuthTokens(user);
-
-  console.log("token", token);
   const url = `${APP_SCHEMA}://${APP_HOST}:${APP_PORT}/v1/user/verify-email?token=${token.access.token}`;
 
   sendEmail(userBody.email, url, "Verify your email address");
@@ -57,7 +52,6 @@ const createUser = async (userBody) => {
 const activateEmail = async (data) => {
   const userId = jwt.verify(data, process.env.JWT);
   const { sub } = userId;
-  console.log("sub", sub);
 
   await getDB()
     .collection(userCollectionName)
@@ -71,7 +65,6 @@ const activateEmail = async (data) => {
 };
 
 const getUserByEmail = async (data) => {
-  console.log("data", data);
 
   const resultUser = await getDB()
     .collection(userCollectionName)
@@ -82,7 +75,6 @@ const getUserByEmail = async (data) => {
 };
 
 const getUserById = async (data) => {
-  console.log("data", data);
 
   const resultUser = await getDB()
     .collection(userCollectionName)
@@ -106,7 +98,6 @@ const login = async (data) => {
 
   const user = await getDB().collection(userCollectionName).findOne({ email });
   if (user === null) {
-    console.log("user123");
     return {
       result: false,
       msg: "Email is not taken ",
@@ -140,7 +131,6 @@ const login = async (data) => {
 const forgotPassword = async (data) => {
   const { email } = data;
   const user = await getDB().collection(userCollectionName).findOne({ email });
-  console.log("email", user);
 
   if (!user?.email) {
     return {
@@ -150,7 +140,6 @@ const forgotPassword = async (data) => {
   }
 
   const token = await tokenService.generateAuthTokens(user);
-  console.log("=====", token);
   const url = `${APP_SCHEMA}://${APP_HOST}:${CLIENT_PORT}/reset/${token.access.token}`;
   sendEmail(email, url, "Verify your email address");
 
@@ -163,7 +152,6 @@ const resetPassword = async (data) => {
   const { password } = data.body;
 
   const hashPassword = await bcrypt.hash(password, 10);
-  console.log("hash", hashPassword);
   await getDB()
     .collection(userCollectionName)
     .findOneAndUpdate(
@@ -177,7 +165,6 @@ const resetPassword = async (data) => {
 
 const updateUser = async (data) => {
   const { name, avatar } = data.body;
-  console.log("update", data.user);
 
   const user = await getDB()
     .collection(userCollectionName)
@@ -199,7 +186,6 @@ const googleLogin = async (data) => {
     audience: process.env.MAILING_SERVICE_CLIENT_ID,
   });
 
-  console.log("=======", verify.payload);
   const { email_verified, email, name, picture } = verify.payload;
   const password = email + process.env.GOOGLE_SECRET;
   const hashpassword = await bcrypt.hash(password, 12);
@@ -238,7 +224,6 @@ const googleLogin = async (data) => {
     };
 
     user = await UserModel.creatNewUser(newUser);
-    console.log("newuser", user);
     const token = await generateAuthTokens(user);
     return {
       result: true,
@@ -251,14 +236,11 @@ const facebookLogin = async (body) => {
   const { accessToken, userID } = body;
 
   const URL = `https://graph.facebook.com/v2.9/${userID}/?fields=id,name,email,picture&access_token=${accessToken}`;
-  console.log("URL", URL);
   const resFb = await fetch(URL)
     .then((res) => res.json())
     .then((res) => {
       return res;
     });
-
-  console.log("res", resFb);
 
   const { email, name, picture } = resFb;
   const password = email + process.env.FACEBOOK_SECRET;
@@ -266,11 +248,9 @@ const facebookLogin = async (body) => {
   const hashpassword = await bcrypt.hash(password, 12);
 
   let user = await getDB().collection(userCollectionName).findOne({ email });
-  console.log("user", user);
 
   if (user) {
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("isMatch", isMatch);
 
     if (!isMatch) {
       return {
@@ -281,7 +261,6 @@ const facebookLogin = async (body) => {
     // const userId = { _id: user.id };
 
     const token = await tokenService.generateAuthTokens(user);
-    console.log("token", token);
     return {
       result: true,
       data: { user, token },
@@ -296,7 +275,6 @@ const facebookLogin = async (body) => {
     };
     user = await UserModel.creatNewUser(newUser);
     const token = await tokenService.generateAuthTokens(user);
-    console.log("token", token);
 
     return {
       result: true,

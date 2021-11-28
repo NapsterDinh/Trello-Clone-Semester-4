@@ -15,7 +15,6 @@ const createNew = async (data) => {
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ userCreate: data?.user.sub });
-    console.log("====", isCheckUserCreateWP);
     if (!isCheckUserCreateWP) {
       return {
         result: false,
@@ -24,11 +23,9 @@ const createNew = async (data) => {
       };
     } else {
       const value = await validateSchema(data?.body);
-      console.log("value", value);
       const result = await getDB()
         .collection(boardCollectionName)
         .insertOne(value);
-      console.log("model", result);
       if (result?.acknowledged) {
         await getDB()
           .collection(workSpaceCollectionName)
@@ -54,13 +51,11 @@ const createNew = async (data) => {
       }
     }
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };
 
 const refBoard = async (boardId) => {
-  console.log("boardId", boardId);
   try {
     const result = await getDB()
       .collection(boardCollectionName)
@@ -91,7 +86,6 @@ const refBoard = async (boardId) => {
 
     return result[0] || {};
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };
@@ -105,7 +99,6 @@ const getFullBoard = async (data) => {
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
 
-    console.log("aaaa", isCheckUser);
     if (
       isCheckUser?.userId.includes(data?.userId) ||
       isCheckUserCreateWP?.userCreate === data?.userCreate
@@ -199,7 +192,6 @@ const deleteBoard = async (data) => {
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ userCreate: data?.user.sub });
-    console.log("====", isCheckUserCreateWP);
     if (!isCheckUserCreateWP) {
       return {
         result: false,
@@ -235,7 +227,6 @@ const deleteBoard = async (data) => {
 };
 
 const getUserByEmail = async (data) => {
-  console.log("data", data);
 
   const resultUser = await getDB()
     .collection(userCollectionName)
@@ -250,7 +241,6 @@ const addUserToBoard = async (data) => {
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ userCreate: data?.user.sub });
-    console.log("====", isCheckUserCreateWP);
     if (!isCheckUserCreateWP) {
       return {
         result: false,
@@ -259,7 +249,6 @@ const addUserToBoard = async (data) => {
       };
     } else {
       const { _id, userId } = data?.body;
-      console.log("===", data);
       const getUser = await getUserByEmail(userId);
       const iduser = [];
       getUser.map((u) => iduser.push(u._id.toString()));
@@ -353,7 +342,6 @@ const pushColumnOrder = async (boardId, columnId) => {
       .findOne({ _id: ObjectId(boardId) });
     return result;
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };

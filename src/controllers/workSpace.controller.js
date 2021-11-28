@@ -19,7 +19,6 @@ const addWorkSpace = async (req, res) => {
 const getWorkSpace = async (req, res) => {
   try {
     const { result, msg, data } = await workSpaceService.getWorkSpace();
-    console.log("controller", result);
 
     res.json({
       result: result,
@@ -37,8 +36,6 @@ const getWorkSpaceGuestOrOwer = async (req, res) => {
   try {
     const { result, msg, data } =
       await workSpaceService.getWorkSpaceGuestOrOwer(req);
-    console.log("controller", result);
-
     res.json({
       result: result,
       msg: msg,
@@ -55,7 +52,6 @@ const getAllUserAndUserExistInWorkSpace = async (req, res) => {
   try {
     const { result, msg, data } =
       await workSpaceService.getAllUserAndUserExistInWorkSpace(req.query);
-    console.log("controller", result);
 
     res.json({
       result: result,
@@ -72,7 +68,6 @@ const getAllUserAndUserExistInWorkSpace = async (req, res) => {
 const updateWorkSpace = async (req, res) => {
   try {
     const { result, msg, data } = await workSpaceService.updateWorkSpace(req);
-    console.log("controller", result);
 
     res.json({
       result: result,
@@ -89,7 +84,6 @@ const updateWorkSpace = async (req, res) => {
 const deleteWorkSpace = async (req, res) => {
   try {
     const { result, msg, data } = await workSpaceService.deleteWorkSpace(req);
-    console.log("controller", result);
 
     res.json({
       result: result,
@@ -106,7 +100,6 @@ const deleteWorkSpace = async (req, res) => {
 const addUserToWorkSpace = async (req, res) => {
   try {
     const { result, msg } = await workSpaceService.addUserToWorkSpace(req);
-    console.log("controller", result);
 
     res.json({
       result: result,
@@ -124,7 +117,6 @@ const removeUserToWorkSpace = async (req, res) => {
     const { result, msg, data } = await workSpaceService.removeUserToWorkSpace(
       req
     );
-    console.log("controller", result);
 
     res.json({
       result: result,
@@ -141,7 +133,6 @@ const removeUserToWorkSpace = async (req, res) => {
 const updatePrivacy = async (req, res) => {
   try {
     const { result, msg, data } = await workSpaceService.updatePrivacy(req);
-    console.log("controller", result);
 
     res.json({
       result: result,
@@ -158,8 +149,6 @@ const updatePrivacy = async (req, res) => {
 const inviteUser = async (req, res) => {
   try {
     const result = await workSpaceService.inviteUser(req);
-    console.log("controller", result);
-
     res.json({
       msg: `You join work Space name: ${result[0]}`,
     });
@@ -173,8 +162,6 @@ const inviteUser = async (req, res) => {
 const getWorkSpaceById = async (req, res) => {
   try {
     const { result, msg, data } = await workSpaceService.getWorkSpaceById(req);
-    console.log("controller", result);
-
     res.json({
       result: result,
       msg: msg,

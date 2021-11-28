@@ -21,7 +21,6 @@ export const validateSchema = async (data) => {
 };
 
 // const getFullBoard = async (boardId) => {
-//   console.log("boardId", boardId);
 //   try {
 //     const result = await getDB()
 //       .collection(boardCollectionName)
@@ -52,7 +51,6 @@ export const validateSchema = async (data) => {
 
 //     return result[0] || {};
 //   } catch (error) {
-//     console.log(error);
 //     throw new Error(error);
 //   }
 // };

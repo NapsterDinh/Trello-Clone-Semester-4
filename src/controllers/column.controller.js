@@ -3,7 +3,6 @@ import { ColumnService } from "../services/column.service";
 const creatNew = async (req, res) => {
   try {
     const { result, msg, data } = await ColumnService.createNew(req.body);
-    console.log("controller", result);
     res.json({
       result: result,
       msg: msg,

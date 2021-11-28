@@ -30,7 +30,6 @@ const createWorkSpace = async (data) => {
       .collection(workSpaceCollectionName)
       .insertOne(value);
     result = { ...result, ...value };
-    console.log("service", result);
     if (result) {
       await getDB()
         .collection(workSpaceTypeCollectionName)
@@ -73,7 +72,6 @@ const updateWorkSpace = async (data) => {
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("findWP", findUserCreateWP);
     if (findUserCreateWP?.userCreate !== data.user.sub) {
       return {
         result: false,
@@ -108,7 +106,6 @@ const deleteWorkSpace = async (data) => {
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("findWP", findUserCreateWP);
     if (findUserCreateWP?.userCreate !== data.user.sub) {
       return {
         result: false,
@@ -119,7 +116,6 @@ const deleteWorkSpace = async (data) => {
       const result = await getDB()
         .collection(workSpaceCollectionName)
         .findOneAndDelete({ _id: ObjectId(_id) }, { returnOriginal: false });
-      console.log("resutlll", result);
       if (result?.value) {
         await getDB()
           .collection(workSpaceTypeCollectionName)
@@ -130,7 +126,6 @@ const deleteWorkSpace = async (data) => {
         const boarddelte = await getDB()
           .collection(boardCollectionName)
           .deleteMany({ workSpaceId: _id });
-        console.log("boarddelte", boarddelte);
         return {
           result: true,
           msg: "Delete workspace success",
@@ -181,14 +176,12 @@ const addUserToWorkSpace = async (data) => {
   try {
     const { wpId, userMail } = data.query;
     const getUser = await userService.getUserByEmail([userMail]);
-    console.log("anbc", getUser[0]?._id);
     const result = await getDB()
       .collection(workSpaceCollectionName)
       .updateOne(
         { _id: ObjectId(wpId) },
         { $push: { userId: getUser[0]?._id.toString() } }
       );
-    console.log("resu,kt", result);
     if (result?.acknowledged) {
       return {
         result: true,
@@ -208,7 +201,6 @@ const removeUserToWorkSpace = async (data) => {
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("----", findUserCreateWP);
     if (findUserCreateWP?.userCreate !== data.user.sub) {
       return {
         result: false,
@@ -228,7 +220,6 @@ const removeUserToWorkSpace = async (data) => {
         );
 
       const getWS = await getWorkSpace({ _id: ObjectId(_id) });
-      console.log("====", getWS);
 
       if (result?.value) {
         const mess = `You have been add ${result?.value?.name}`;
@@ -266,17 +257,13 @@ export const getFullWorkSpace = async (res) => {
 
 const getWorkSpaceGuestOrOwer = async (data) => {
   try {
-    console.log("====", data);
     const userOwer = await getFullWorkSpace();
     const resultOwer = userOwer.filter(
       ({ userCreate }) => userCreate === data.user.sub
     );
-    console.log("====123", resultOwer);
     const resultGuest = userOwer.filter((u) =>
       u.userId.includes(data.user.sub)
     );
-
-    console.log("====1235645", resultGuest);
 
     return {
       result: true,
@@ -327,7 +314,6 @@ const updatePrivacy = async (data) => {
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("----", findUserCreateWP);
     if (findUserCreateWP?.userCreate !== data.user.sub) {
       //
       return {
@@ -362,7 +348,9 @@ const updatePrivacy = async (data) => {
 
 const getWorkSpaceById = async (data) => {
   try {
+    const isCheckUserCreateWP = await getDB()
     const { _id } = data.query;
+    console.log(_id)
     const findeWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
