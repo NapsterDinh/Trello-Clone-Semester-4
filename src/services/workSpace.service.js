@@ -293,13 +293,13 @@ const getWorkSpaceGuestOrOwer = async (data) => {
 
 const getAllUserAndUserExistInWorkSpace = async (data) => {
   try {
-    const wp = await getWorkSpace({ _id: ObjectId(data.workSpaceId) });
+    const wp = await getWorkSpace({ _id: ObjectId(data._id) });
     const userOwer = await userService.getUserById([
       ObjectId(wp?.data[0].userCreate),
     ]);
     const objectIdArray = wp?.data[0]?.userId.map((s) => ObjectId(s));
     const userWP = await userService.getUserById(objectIdArray);
-    const getBoard = await BoardService.getBoardById(data.workSpaceId);
+    const getBoard = await BoardService.getBoardById(data._id);
 
     let userList = [];
     const userBoard = await Promise.all(
