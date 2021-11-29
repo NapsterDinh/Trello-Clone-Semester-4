@@ -65,7 +65,6 @@ const activateEmail = async (data) => {
 };
 
 const getUserByEmail = async (data) => {
-
   const resultUser = await getDB()
     .collection(userCollectionName)
     .find({ email: { $in: data } })
@@ -75,12 +74,11 @@ const getUserByEmail = async (data) => {
 };
 
 const getUserById = async (data) => {
-
   const resultUser = await getDB()
     .collection(userCollectionName)
     .find({ _id: { $in: data } })
     .toArray();
-
+  console.log("data", resultUser);
   return resultUser;
 };
 

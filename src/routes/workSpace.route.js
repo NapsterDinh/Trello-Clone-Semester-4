@@ -14,8 +14,8 @@ router
 router
   .route("/getWorkSpaceById")
   .get(auth, workSpaceController.getWorkSpaceById);
-router.route("/create").post(auth, workSpaceController.addWorkSpace);
-router.route("/update").put(workSpaceController.updateWorkSpace); //auth
+router.route("/create").post(auth, workSpaceController.addWorkSpace); //auth,
+router.route("/update").put(auth, workSpaceController.updateWorkSpace); //auth
 router.route("/updatePrivacy").put(auth, workSpaceController.updatePrivacy);
 router.route("/delete").delete(auth, workSpaceController.deleteWorkSpace);
 router.route("/inviteUser").post(auth, workSpaceController.inviteUser); //auth

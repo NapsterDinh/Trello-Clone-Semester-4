@@ -87,6 +87,21 @@ const removeUserToBoard = async (req, res) => {
   }
 };
 
+const listUserBoard = async (req, res) => {
+  try {
+    const { result, msg, data } = await BoardService.listUserBoard(req);
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const BoardController = {
   creatNew,
   getFullBoard,
@@ -94,4 +109,5 @@ export const BoardController = {
   deteleBoard,
   addUserToBoard,
   removeUserToBoard,
+  listUserBoard,
 };

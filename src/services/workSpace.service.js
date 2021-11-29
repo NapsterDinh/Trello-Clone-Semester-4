@@ -23,13 +23,23 @@ const validateSchema = async (data) => {
 
 const createWorkSpace = async (data) => {
   try {
-    const userCreate = data.user.sub;
+    const userCreate = data.user.sub; //data.user.sub;
     const wpBody = { ...data.body, ...{ userCreate } };
     const value = await validateSchema(wpBody);
     let result = await getDB()
       .collection(workSpaceCollectionName)
       .insertOne(value);
     result = { ...result, ...value };
+    await getDB()
+      .collection(workSpaceCollectionName)
+      .updateOne(
+        { _id: result?.insertedId },
+        {
+          $push: {
+            userId: userCreate,
+          },
+        }
+      );
     if (result) {
       await getDB()
         .collection(workSpaceTypeCollectionName)

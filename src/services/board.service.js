@@ -9,9 +9,11 @@ import { columnCollectionName } from "../models/column.model";
 import { cardCollectionName } from "../models/card.model";
 import { userCollectionName } from "../models/user.model";
 import { sendEmailUser } from "../shares/sendMail";
+import { userService } from "./user.service";
 
 const createNew = async (data) => {
   try {
+    const userCreate = data?.user?.sub;
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ userCreate: data?.user.sub });
@@ -26,6 +28,16 @@ const createNew = async (data) => {
       const result = await getDB()
         .collection(boardCollectionName)
         .insertOne(value);
+      await getDB()
+        .collection(boardCollectionName)
+        .updateOne(
+          { _id: result?.insertedId },
+          {
+            $push: {
+              userId: userCreate,
+            },
+          }
+        );
       if (result?.acknowledged) {
         await getDB()
           .collection(workSpaceCollectionName)
@@ -227,7 +239,6 @@ const deleteBoard = async (data) => {
 };
 
 const getUserByEmail = async (data) => {
-
   const resultUser = await getDB()
     .collection(userCollectionName)
     .find({ email: { $in: data } })
@@ -346,6 +357,49 @@ const pushColumnOrder = async (boardId, columnId) => {
   }
 };
 
+const listUserBoard = async (data) => {
+  try {
+    const { _id, userCreate } = data.query;
+    const isCheckUserCreateWP = await getDB()
+      .collection(workSpaceCollectionName)
+      .findOne({ userCreate: userCreate }); // data?.user?.sub
+
+    if (isCheckUserCreateWP?.userCreate !== userCreate) {
+      return {
+        result: false,
+        msg: "You is not permission seem user to board",
+        data: [],
+      };
+    } else {
+      const getBoard = await getDB()
+        .collection(boardCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+
+      const getUserWP = await getDB()
+        .collection(workSpaceCollectionName)
+        .findOne({ _id: ObjectId(getBoard?.workSpaceId) });
+
+      const listIdUserNotBoard = getUserWP?.userId.filter(
+        (item) => !getBoard?.userId.includes(item)
+      );
+
+      const itemObject = listIdUserNotBoard.map((s) => ObjectId(s));
+      const userObject = getBoard?.userId.map((s) => ObjectId(s));
+
+      const listNotUserBoard = await userService.getUserById(itemObject);
+      const listUserBoard = await userService.getUserById(userObject);
+
+      return {
+        result: true,
+        msg: "List user into board success",
+        data: { listUserBoard, listNotUserBoard },
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const BoardService = {
   createNew,
   getFullBoard,
@@ -355,4 +409,5 @@ export const BoardService = {
   removeUserToBoard,
   pushColumnOrder,
   getBoardById,
+  listUserBoard,
 };
