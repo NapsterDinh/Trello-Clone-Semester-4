@@ -10,7 +10,7 @@ router
   .get(workSpaceController.getAllUserAndUserExistInWorkSpace);
 router
   .route("/getWorkSpaceGuestOrOwer")
-  .get(auth, workSpaceController.getWorkSpaceGuestOrOwer);
+  .get(auth, workSpaceController.getWorkSpaceGuestOrOwer); //auth,
 router
   .route("/getWorkSpaceById")
   .get(auth, workSpaceController.getWorkSpaceById);

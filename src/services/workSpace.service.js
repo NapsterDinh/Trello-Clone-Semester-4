@@ -259,16 +259,32 @@ const getWorkSpaceGuestOrOwer = async (data) => {
   try {
     const userOwer = await getFullWorkSpace();
     const resultOwer = userOwer.filter(
-      ({ userCreate }) => userCreate === data.user.sub
+      ({ userCreate }) => userCreate === data.user.sub //data.user.sub
     );
-    const resultGuest = userOwer.filter((u) =>
-      u.userId.includes(data.user.sub)
+
+    const boardOwer = await Promise.all(
+      resultOwer.map(
+        async (u) => await BoardService.getBoardById(u?._id.toString())
+      )
     );
+    const workSpaceAndBoardOwer = { resultOwer, boardOwer };
+
+    const resultGuest = userOwer.filter(
+      (u) => u.userId.includes(data.user.sub) //data.user.sub
+    );
+
+    const boardGuest = await Promise.all(
+      resultGuest.map(
+        async (u) => await BoardService.getBoardById(u?._id.toString())
+      )
+    );
+
+    const workSpaceAndBoardGuest = { resultGuest, boardGuest };
 
     return {
       result: true,
       msg: "Get workspace success",
-      data: { resultOwer, resultGuest },
+      data: { workSpaceAndBoardOwer, workSpaceAndBoardGuest },
     };
   } catch (error) {
     throw new Error(error);
@@ -348,9 +364,9 @@ const updatePrivacy = async (data) => {
 
 const getWorkSpaceById = async (data) => {
   try {
-    const isCheckUserCreateWP = await getDB()
+    const isCheckUserCreateWP = await getDB();
     const { _id } = data.query;
-    console.log(_id)
+    console.log(_id);
     const findeWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
