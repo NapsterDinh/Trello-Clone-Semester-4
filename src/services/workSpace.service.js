@@ -295,11 +295,16 @@ const getAllUserAndUserExistInWorkSpace = async (data) => {
   try {
     const wp = await getWorkSpace({ _id: ObjectId(data._id) });
     const userOwer = await userService.getUserById([
-      ObjectId(wp?.data[0].userCreate),
+      ObjectId(wp?.data[0]?.userCreate),
     ]);
     const objectIdArray = wp?.data[0]?.userId.map((s) => ObjectId(s));
     const userWP = await userService.getUserById(objectIdArray);
     const getBoard = await BoardService.getBoardById(data._id);
+    const getAllUser = await userService.getAllUser();
+
+    const listUserNotWP = getAllUser.filter(
+      (item) => !wp?.data[0]?.userId.includes(item?._id.toString())
+    );
 
     let userList = [];
     const userBoard = await Promise.all(
@@ -317,7 +322,7 @@ const getAllUserAndUserExistInWorkSpace = async (data) => {
     return {
       result: true,
       msg: "Get workspace success",
-      data: { userOwer, userWP, userList },
+      data: { userOwer, userWP, userList, listUserNotWP },
     };
   } catch (error) {
     throw new Error(error);
