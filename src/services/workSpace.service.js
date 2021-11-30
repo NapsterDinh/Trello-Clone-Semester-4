@@ -153,10 +153,12 @@ const deleteWorkSpace = async (data) => {
 const inviteUser = async (data) => {
   try {
     const { _id, userMail } = data.body;
+    console.log('usermail:  ', userMail)
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
     const wpName = findUserCreateWP?.name;
+    console.log('workspace name: ', wpName)
     if (findUserCreateWP?.userCreate !== data.user.sub) {
       return {
         result: false,
@@ -280,7 +282,7 @@ const getWorkSpaceGuestOrOwer = async (data) => {
     const workSpaceAndBoardOwer = { resultOwer, boardOwer };
 
     const resultGuest = userOwer.filter(
-      (u) => u.userId.includes(data.user.sub) //data.user.sub
+      (u) => !u.userId.includes(data.user.sub) //data.user.sub
     );
 
     const boardGuest = await Promise.all(
@@ -381,7 +383,6 @@ const getWorkSpaceById = async (data) => {
   try {
     const isCheckUserCreateWP = await getDB();
     const { _id } = data.query;
-    console.log(_id);
     const findeWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });

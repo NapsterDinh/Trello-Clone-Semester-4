@@ -150,7 +150,7 @@ const inviteUser = async (req, res) => {
   try {
     const result = await workSpaceService.inviteUser(req);
     res.json({
-      msg: `You join work Space name: ${result[0]}`,
+      msg: `You join work Space name: ${result.data}`,
     });
   } catch (error) {
     res.status(500).json({
