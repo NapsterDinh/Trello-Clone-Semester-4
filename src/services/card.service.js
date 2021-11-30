@@ -20,9 +20,12 @@ const createNew = async (data) => {
       columnId: ObjectId(validatedValue.columnId),
       image: s3Image?.Location,
     };
+    console.log("++++123", insertValue);
     const result = await getDB()
       .collection(cardCollectionName)
       .insertOne(insertValue);
+
+    console.log("++++123", result);
     if (result?.acknowledged) {
       await ColumnService.pushCardOrder(
         data.columnId,

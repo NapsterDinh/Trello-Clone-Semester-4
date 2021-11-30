@@ -78,7 +78,8 @@ const getWorkSpace = async (data) => {
 
 const updateWorkSpace = async (data) => {
   try {
-    const { _id, name, descsription } = data.body;
+    const { _id, name, workspacetypeId, description } = data.body;
+
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
@@ -94,7 +95,7 @@ const updateWorkSpace = async (data) => {
         .findOneAndUpdate(
           { _id: ObjectId(_id) },
           {
-            $set: { name, descsription },
+            $set: { name, workspacetypeId, description },
           },
           { returnOriginal: false }
         );
@@ -153,12 +154,12 @@ const deleteWorkSpace = async (data) => {
 const inviteUser = async (data) => {
   try {
     const { _id, userMail } = data.body;
-    console.log('usermail:  ', userMail)
+    console.log("usermail:  ", userMail);
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
     const wpName = findUserCreateWP?.name;
-    console.log('workspace name: ', wpName)
+    console.log("workspace name: ", wpName);
     if (findUserCreateWP?.userCreate !== data.user.sub) {
       return {
         result: false,
@@ -271,7 +272,7 @@ const getWorkSpaceGuestOrOwer = async (data) => {
   try {
     const userOwer = await getFullWorkSpace();
     const resultOwer = userOwer.filter(
-      ({ userCreate }) => userCreate === data.user.sub //data.user.sub
+      ({ userCreate }) => userCreate === data.query.userCreate //data.user.sub
     );
 
     const boardOwer = await Promise.all(
@@ -282,8 +283,13 @@ const getWorkSpaceGuestOrOwer = async (data) => {
     const workSpaceAndBoardOwer = { resultOwer, boardOwer };
 
     const resultGuest = userOwer.filter(
-      (u) => !u.userId.includes(data.user.sub) //data.user.sub
+      (u) =>
+        u.userId.includes(data.query.userCreate) &&
+        u.userCreate !== data.query.userCreate
+      //data.user.sub
     );
+
+    console.log("resultGuest", resultGuest);
 
     const boardGuest = await Promise.all(
       resultGuest.map(

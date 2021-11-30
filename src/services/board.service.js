@@ -69,6 +69,7 @@ const createNew = async (data) => {
 
 const refBoard = async (boardId) => {
   try {
+    console.log("data", boardId);
     const result = await getDB()
       .collection(boardCollectionName)
       .aggregate([
@@ -96,6 +97,8 @@ const refBoard = async (boardId) => {
       ])
       .toArray();
 
+    console.log("result", result);
+
     return result[0] || {};
   } catch (error) {
     throw new Error(error);
@@ -106,16 +109,16 @@ const getFullBoard = async (data) => {
   try {
     const isCheckUser = await getDB()
       .collection(boardCollectionName)
-      .findOne({ _id: ObjectId(data?.boardId) });
+      .findOne({ _id: ObjectId(data?.query?.boardId) });
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
 
     if (
       isCheckUser?.userId.includes(data?.userId) ||
-      isCheckUserCreateWP?.userCreate === data?.userCreate
+      isCheckUserCreateWP?.userCreate === data?.user?.sub
     ) {
-      const board = await refBoard(data?.boardId);
+      const board = await refBoard(data?.query?.boardId);
       if (!board || !board.columns) {
         throw new Error("Board not found");
       }
