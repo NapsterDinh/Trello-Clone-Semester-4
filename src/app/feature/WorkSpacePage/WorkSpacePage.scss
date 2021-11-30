@@ -31,7 +31,6 @@
                 display: flex;
                 justify-content: space-between;
                 padding: 0.5rem;
-                padding-bottom: 0rem;
                 i.fa-chevron-up
                 {
                     display: none;
@@ -74,26 +73,40 @@
                 {
                     padding: 0;
                     margin-bottom: 0px;
-                    .action-list-item
+                    a
                     {
-                        user-select: none;
-                        cursor: pointer;
-                        padding: 10px 20px;
-                        &:hover
+                        text-decoration: none;
+                        .action-list-item
                         {
-                            background-color: $background-item-hover;
-                        }
-                        span
-                        {
-                            font-weight: 500;
-                            letter-spacing: 1px;
-                        }
-                        &.active
-                        {
-                            background-color: $background-active;
-                            span,i
+                            user-select: none;
+                            cursor: pointer;
+                            padding: 10px 20px;
+                            &:hover
                             {
-                                color: $text-active;
+                                background-color: $background-item-hover;
+                            }
+                            span
+                            {
+                                font-weight: 500;
+                                letter-spacing: 1px;
+                            }
+                            &.active
+                            {
+                                background-color: $background-active;
+                                span,i
+                                {
+                                    color: $text-active;
+                                }
+                            }
+                        }
+                        &.selected
+                        {
+                            .action-list-item{
+                                background-color: #E4F0F6;
+                                i, span
+                                {
+                                    color: #0079BF;
+                                }
                             }
                         }
                     }

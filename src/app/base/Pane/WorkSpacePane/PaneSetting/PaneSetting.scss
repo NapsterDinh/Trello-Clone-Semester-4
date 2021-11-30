@@ -63,6 +63,9 @@
             }
             .setting-item-action {
                 flex: 0 0 100px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 button
                 {
                     margin-top: 5px;

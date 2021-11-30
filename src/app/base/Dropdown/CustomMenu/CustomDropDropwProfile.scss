@@ -1,0 +1,38 @@
+@import "scss/__setting.scss";
+
+.profile.dropdown
+{
+    margin-left: 5px;
+    .profile-container
+    {
+        display: flex;
+        padding-top: 10px;
+        align-items: center;
+        img
+        {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .profile-content
+        {
+            padding-top: 5px;
+            h6
+            {
+                font-weight: 500;
+                font-size: 14px;
+                color: $col-color;
+                margin-bottom: 5px;
+                white-space: 1px;
+            }
+            span
+            {
+                font-weight: 500;
+                font-size: 12px;
+                color: $text-gray;
+                letter-spacing: 1px;
+            }
+        }
+    }
+}

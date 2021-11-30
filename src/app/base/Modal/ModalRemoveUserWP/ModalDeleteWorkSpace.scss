@@ -1,0 +1,48 @@
+@import "scss/__setting.scss"; 
+
+.modal-delete-wp {
+    .modal-dialog
+    {
+        max-width: 500px;
+        .modal-header
+        {
+            .modal-title
+            {
+                h5
+                {
+                    font-size: 16px;
+                    margin-bottom: 0px;
+                }
+            }
+        }
+        .modal-body
+        {
+            h5
+            {
+                font-weight: 600;
+                font-size: 14px;
+                color: $col-color;
+            }
+            span
+            {
+                font-size: 12px;
+                font-weight: 600;
+                color: $col-color;
+            }
+            ul
+            {
+                list-style-type: inherit;
+                margin-left: 30px;
+                li
+                {
+                    margin-bottom: 10px;
+                    color: $col-color;
+                    &:first-child
+                    {
+                        margin-top: 10px;
+                    }
+                }
+            }
+        }
+    }
+}

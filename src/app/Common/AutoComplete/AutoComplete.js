@@ -6,66 +6,26 @@ import { showNotification,type } from "utilities/component/notification/Notifica
 import './AutoComplete.scss'
 import { useSelector } from "react-redux";
 
-const listUser = [
-    {
-        _id: '123',
-        name: 'Tan Tu',
-        email: 'tantudinh1@gmail.com',
-        avatar: '1.jpg'
-    },
-    {
-        _id: '321',
-        name: 'Tan Tu',
-        email: 'tantudinh2@gmail.com',
-        avatar: '1.jpg'
-    },
-    {
-        _id: '455',
-        name: 'Tan Tu',
-        email: 'tandinhtu@gmail.com',
-        avatar: '1.jpg'
-    },
-    {
-        _id: '156',
-        name: 'Tan Tu',
-        email: 'dinhtantu2@gmail.com',
-        avatar: '1.jpg'
-    },
-    {
-        _id: '745',
-        name: 'Tan Tu',
-        email: 'phamtienthao@gmail.com',
-        avatar: '1.jpg'
-    },
-    {
-        _id: '985',
-        name: 'Tan Tu',
-        email: 'dinhtutan1@gmail.com',
-        avatar: '1.jpg'
-    },
-    
-]
-
 const AutoComplete = (props) => 
 {
     const [ users, setUsers ] = useState([])
     const [ text, setText ] = useState('')
     const [ suggestions, setSuggestions] = useState([])
-    const { inviteList, setInviteList } = props
+    const { inviteList, setInviteList, allUser, usersWP } = props
     const ref = useRef(null)
     const ownerUser = useSelector(state => state.user.user)
-
+    
     useEffect(() => {
-        setUsers(listUser)
+        setUsers(allUser)
     }, [])
 
     const onHandleChoosePerson = (e, item) => {
-        if(inviteList.filter(user => (user.email === item.email)).length !== 0)
+        if(inviteList.filter(user => (user === item.email)).length !== 0)
         {
             setText('')
             showNotification(
                 "Không thể mời người này",
-                "Người này đã có trong danh sách mời hoặc đang tham gia không gian làm việc này!!!",
+                "Người này đã có trong danh sách mời !!!",
                 type.danger,
                 3000
             )
@@ -80,10 +40,20 @@ const AutoComplete = (props) =>
                 3000
             )
         }
+        else if(usersWP.filter(user => (user.email === item.email)).length !== 0)
+        {
+            setText('')
+            showNotification(
+                "Không thể mời người này",
+                "Người nàyđang tham gia không gian làm việc này!!!",
+                type.danger,
+                3000
+            )
+        }
         else
         {
             const temp = users.filter(user => (user.email === item.email))
-            inviteList.push(temp[0])
+            inviteList.push(temp[0].email)
             setInviteList(inviteList)
             setText('')
         }
@@ -98,9 +68,6 @@ const AutoComplete = (props) =>
             array.splice(index,1)
             setInviteList(array)
         }
-        setTimeout(() => {
-            console.log('invite List',inviteList)
-        }, 1000);
     }
 
     const onHandleChange = (text) => {
@@ -126,7 +93,6 @@ const AutoComplete = (props) =>
 
     const onFocus = () =>
     {
-        console.log('focus')
         ref.current.classList.add('active')
     }
 

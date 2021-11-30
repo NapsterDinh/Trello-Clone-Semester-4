@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+
 import "./login.scss";
 import { Switch, Route } from "react-router-dom";
+import logo from 'app/Images/features/1.jpg'
 
 import  HeaderLogin  from 'app/base/HeaderLogin/headerLogin';
 import  Footer  from 'app/base/Footer/footer';
@@ -38,11 +40,11 @@ const LoginPage = () => {
                   spinner
                   text={content}
                   >
-                  <p>Some content or children or something.</p>
+                  
                 </LoadingOverlay>
               }
                 <div className="bg-image bg-fixed">
-                  <img src="" alt=""></img>
+                  <img src={logo} alt=""></img>
                 </div>
             <Switch> 
               <Route path="/login" render={props => <FormLogin {...props} modalLoading={configLoadingModal} />} />;
@@ -51,7 +53,6 @@ const LoginPage = () => {
               <Route path="/reset/:token" render={props => <ResetPass {...props} modalLoading={configLoadingModal} />} />
             </Switch>
             </section>
-            <Footer/>
     </>
   );
 };

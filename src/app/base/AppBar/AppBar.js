@@ -1,55 +1,22 @@
 import React from 'react'
 import logo from '../../Images/Logo/header-logo.gif'
 import { DropdownButton, Dropdown } from 'react-bootstrap'
+import { useDispatch, useSelector } from "react-redux";
 import { CustomToggle } from '../CustomToggle/IconToggle/IconToggle'
 import DropDownWorkspace from '../Dropdown/DropdownWorkspace/DropdownWorkspace'
+import CustomDropDropwProfile from '../Dropdown/CustomMenu/CustomDropDropwProfile'
 import './AppBar.scss'
-
-const WorkspaceData = {
-    current: {
-        _id: '123',
-        id_WorkspaceType: 'abc',
-        id_user: 'abc',
-        description: 'CNPM'
-    },
-    owner: [{
-        _id: '123',
-        id_WorkspaceType: 'abc',
-        id_user: 'abc',
-        description: 'CNPM'
-    },{
-        _id: '123',
-        id_WorkspaceType: 'abc',
-        id_user: 'abc',
-        description: 'CNPM'
-    },{
-        _id: '123',
-        id_WorkspaceType: 'abc',
-        id_user: 'abc',
-        description: 'CNPM'
-    }],
-    client: [{
-        _id: '123',
-        id_WorkspaceType: 'abc',
-        id_user: 'abc',
-        description: 'CNPM'
-    },{
-        _id: '123',
-        id_WorkspaceType: 'abc',
-        id_user: 'abc',
-        description: 'CNPM'
-    }] 
-}
 
 function AppBar()
 {
+    const user = useSelector(state => state.user.user)
     return (
         <header id="header" className="navbar-app">
             <div className="header-padding">
                 <div className="header-logo image-container">
                     <img className="image" src={logo} alt=""></img>
                 </div>
-                <DropDownWorkspace WorkspaceData={WorkspaceData}/>
+                <DropDownWorkspace/>
                 {/* <DropdownButton className="header-lastest" title="Gần đây">
                     <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
                     <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
@@ -77,11 +44,7 @@ function AppBar()
                         <i className="fa fa-bell-o" aria-hidden="true"></i>
                     </Dropdown.Toggle>
                 </Dropdown>
-
-                <Dropdown className="profile icon-toggle">
-                    <Dropdown.Toggle className="" variant="success">
-                    </Dropdown.Toggle>
-                </Dropdown>
+                <CustomDropDropwProfile user={user}/>
             
             </div>
         </header>

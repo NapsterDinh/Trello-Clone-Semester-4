@@ -3,11 +3,11 @@ import { Dropdown } from 'react-bootstrap'
 import ToggleWorkSpace from 'app/base/CustomToggle/ToggleWorkSpace/ToggleWorkSpace';
 
 import './DropdownWorkspace.scss'
+import { useSelector } from 'react-redux';
 
 function DropDownWorkspace(props)
 {
-    let { WorkspaceData } = props;
-
+    const ownerGuestWP = useSelector(state => state.workSpace)
     return (
         <Dropdown className="header-workspace">
                     <Dropdown.Toggle className="header-workspace-dropdown" variant="success">
@@ -22,45 +22,51 @@ function DropDownWorkspace(props)
                             <div className="menu-body">
                                 <div className="current-working-workspace workspace">
                                     <h6>Không gian làm việc hiện tại</h6>
-                                    <ToggleWorkSpace
-                                    className="current-working-workspace-item"
-                                    image="/1.jpg"
-                                    name={WorkspaceData.current.description}
-                                    />
+                                    <Dropdown.Item eventKey="0">
+                                        <ToggleWorkSpace
+                                        className="current-working-workspace-item"
+                                        image="/1.jpg"
+                                        name={ownerGuestWP.curWP.name}
+                                        />
+                                    </Dropdown.Item>
                                 </div>
                                 {
-                                    WorkspaceData.owner &&
+                                    ownerGuestWP.owerWP &&
                                     <>
                                         <Dropdown.Divider />
                                         <div className="owner-workspace workspace">
                                             <h6>Các không gian làm việc của bạn</h6>
                                             {
-                                                WorkspaceData.owner.map((item,index) => (
-                                                    <ToggleWorkSpace
-                                                    key={item._id}
-                                                    className="owner-workspace-item"
-                                                    image="/1.jpg"
-                                                    name={item.description}
-                                                    />
+                                                ownerGuestWP.owerWP.map((item,index) => (
+                                                    <Dropdown.Item key={`owner${index}`} eventKey={`owner${index}`}>
+                                                        <ToggleWorkSpace
+                                                            key={item._id}
+                                                            className="owner-workspace-item"
+                                                            image="/1.jpg"
+                                                            name={item.name}
+                                                            />
+                                                    </Dropdown.Item>
                                                 ))
                                             }
                                         </div>
                                     </>
                                 }
                                 {
-                                    WorkspaceData.client &&
+                                    ownerGuestWP.guestWP &&
                                     <>
                                         <Dropdown.Divider />
                                         <div className="client-workspace workspace">
                                             <h6>Các không gian làm việc khách</h6>
                                             {
-                                                WorkspaceData.client.map((item,index) => (
-                                                    <ToggleWorkSpace
-                                                    key={item._id}
-                                                    className="client-workspace-item"
-                                                    image="/1.jpg"
-                                                    name={item.description}
-                                                    />
+                                                ownerGuestWP.guestWP.map((item,index) => (
+                                                    <Dropdown.Item key={`guest${index}`} eventKey={`guest${index}`}>
+                                                        <ToggleWorkSpace
+                                                            key={item._id}
+                                                            className="client-workspace-item"
+                                                            image="/1.jpg"
+                                                            name={item.name}
+                                                            />
+                                                    </Dropdown.Item>
                                                 ))
                                             }
                                         </div>
@@ -68,7 +74,6 @@ function DropDownWorkspace(props)
                                 }
                             </div>
                         </div>
-                        
                     </Dropdown.Menu>
                 </Dropdown>
     )

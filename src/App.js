@@ -25,8 +25,9 @@ function App() {
     }
   }, [configuration]);
 
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
+  const PublicRoute = ({ component: Component, ...rest }) => {
+    return(
+      <Route
       {...rest}
       render={(props) =>
         reducerToken === "" ? (
@@ -34,25 +35,58 @@ function App() {
         ) : (
           <Redirect
             to={{
-              pathname: "/",
+              pathname: '/workspace',
               state: { from: props.location },
             }}
           />
         )
       }
     />
-  );
+  )};
+
+  const PrivateRoute = ({ component: Component, ...rest }) => {
+    if(reducerToken === "")
+    {
+      return(
+          <Route
+            {...rest}
+            render={(props) =>(
+              <Redirect
+                to={{
+                  pathname: '/login',
+                  state: { from: props.location }
+                }}/>
+              )
+            }
+        />
+      )
+        
+    }
+    else
+    {
+      return(
+        <Route
+            {...rest}
+            render={(props) =>
+              <Component {...props} />
+            }
+          />
+      )
+    }
+  };
+
   return (
       <BrowserRouter>
       <ReactNotification />
       <Switch>
         <Route path="/" exact />
-        <PrivateRoute path="/login" component={LoginPage} />;
-        <PrivateRoute path="/register" component={LoginPage} />
-        <PrivateRoute path="/forgot_password" component={LoginPage} />
-        <PrivateRoute path="/reset/:token" component={LoginPage} />
+        <PublicRoute path="/login" component={LoginPage} />;
+        <PublicRoute path="/register" component={LoginPage} />
+        <PublicRoute path="/forgot_password" component={LoginPage} />
+        <PublicRoute path="/reset/:token" component={LoginPage} />
+        <PrivateRoute path="/workspace" component={WorkSpacePage} />
         <Route path="/board" component={BoardPage} />
-        <Route path="/workspace" component={WorkSpacePage} />
+        {/* <Route path="/workspace" component={WorkSpacePage} /> */}
       </Switch>
     </BrowserRouter>
   );

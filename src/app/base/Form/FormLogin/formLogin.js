@@ -14,6 +14,7 @@ import isEmail from "validator/lib/isEmail";
 import { userReducer } from "store/userReducer";
 import { getTokenReducer } from "store/getTokenReducer";
 import { setApiRequestToken } from "utilities/apis/configuration";
+import { useLocation } from "react-router-dom";
 
 import { OverlayTrigger,Tooltip } from 'react-bootstrap'
 
@@ -27,6 +28,7 @@ const FormLogin = (props) => {
     password: "",
   });
   const refPass = useRef(null)
+  let location = useLocation()
 
   const { modalLoading } = props
 
@@ -71,11 +73,11 @@ const FormLogin = (props) => {
     else {
       modalLoading(true)
       const res = await loginApi(user);
-      if (res && res.data.result) {
+      if (res && res.data.result && res.status == 200) {
         dispatch(userReducer(res.data.data.user));
         dispatch(getTokenReducer(res.data.data.token));
         setApiRequestToken(res.data.data.token.access.token);
-        history.push('/')
+        history.push(location.state? location.state.from.pathname : "/workspace")
       } else {
         setErr({...err,
           email: res.data.msg})
@@ -88,10 +90,10 @@ const FormLogin = (props) => {
     const res = await loginGoogle({
       tokenId: response.tokenId,
     });
-    if (res && res.data.result) {
+    if (res && res.data.result && res.status == 200) {
       dispatch(userReducer(res.data.data.user));
       dispatch(getTokenReducer(res.data.data.token));
-      history.push("/");
+      history.push(location.state.from.pathname)
     } else {
       setErr(res.data.msg);
       modalLoading(false)
@@ -106,11 +108,10 @@ const FormLogin = (props) => {
       userID,
     });
 
-    console.log("resFB", res.data);
     if (res && res.data) {
       dispatch(userReducer(res.data.data.user));
       dispatch(getTokenReducer(res.data.data.token));
-      history.push("/");
+      history.push(location.state.from.pathname)
       modalLoading(false)
     } else {
       alert("Login fail");

@@ -14,25 +14,95 @@ body
     font-family: "Source Sans Pro", sans-serif;
     font-size: 14px;
 }
+.css-79elbk {
+  position: static !important;
+}
 
-.close
+.css-df17o1
+{
+  color: $col-color!important;
+  background: rgba(0,0,0,0.1)!important;
+  ._loading_overlay_content
   {
-    background-color: transparent;
-    border: none;
-    font-size: 14px;
-    &:hover, &:focus
+    ._loading_overlay_spinner
     {
-      background-color: $background-hover-btn;
-    }
-    &.dropdown-toggle::after
-    {
-      margin-left: 0.5rem;
-    }
-    span
-    {
-      font-size: 25px;
+      svg
+      {
+        circle
+        {
+          stroke: $col-color!important;
+        }
+      }
     }
   }
+}
+
+.close
+{
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  &:hover, &:focus
+  {
+    background-color: $background-hover-btn;
+  }
+  &.dropdown-toggle::after
+  {
+    margin-left: 0.5rem;
+  }
+  span
+  {
+    font-size: 25px;
+  }
+}
+
+.dropdown-menu
+{
+  width: 304px;
+  box-shadow: $box-shadow;
+  padding: 10px 0px;
+  .dropdown-header
+  {
+    padding: 2px 1rem;
+    text-align: center;
+    color: $text-header-menu-color;
+    .close
+    {
+      position: absolute;
+      top: 10px;
+      right: 5px;
+      height: auto;
+      background: none;
+      span
+      {
+        &:first-child
+        {
+          font-size: 24px;
+          color: $text-header-menu-color;
+        }
+      }
+    }
+  }
+  .dropdown-body
+  {
+    padding: 0px 20px;
+  }
+  .dropdown-item
+  {
+    font-size: 14px;
+    padding: 7px 20px;
+    color: $text-header-menu-color;
+    &:focus
+    {
+      background-color: #e4f0f6;
+    }
+    
+  }
+  .dropdown-divider
+  {
+    margin: 5px 15px;
+  }
+}
 
 .trello-app
 {
@@ -200,6 +270,13 @@ img
       }
     }
   }
+  &.show
+  {
+    .btn
+    {
+      background-color: rgba(255, 255, 255, 0.3)!important;
+    }
+  }
 }
 .card-header
 {
@@ -270,6 +347,15 @@ strong{
     {
         color: $color-modal-title;
         font-weight: 600;
+    }
+  }
+  .modal-body
+  {
+    h6, span
+    {
+        color: $color-modal-description;
+        font-size: 12px;
+        font-weight: 500;
     }
   }
 }

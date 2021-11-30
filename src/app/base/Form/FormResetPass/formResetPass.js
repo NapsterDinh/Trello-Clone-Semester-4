@@ -65,7 +65,7 @@ const FormResetPass = (props) => {
         modalLoading(true)
         setApiRequestToken(token);
         const res = await resetPass({ password });
-        if (res && res.data.result) {
+        if (res && res.data.result && res.status == 200) {
           modalLoading(false)
           showNotification("Reset Password Successfully",'Now you can log in with new password!!!',
           type.succsess, 5000 )

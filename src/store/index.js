@@ -7,6 +7,7 @@ import thunk from "redux-thunk";
 import loginReducer from "./loginReducer";
 import getTokenReducer from "./getTokenReducer";
 import userReducer from "./userReducer";
+import mainWorkSpaceReducer from "./mainWorkSpaceReducer";
 
 const persistConfig = {
   key: "root",
@@ -16,7 +17,8 @@ const persistConfig = {
 const reducers = combineReducers({
     login: loginReducer,
     getToken: getTokenReducer,
-    user: userReducer
+    user: userReducer,
+    workSpace: mainWorkSpaceReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

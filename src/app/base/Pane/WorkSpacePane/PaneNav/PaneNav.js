@@ -1,16 +1,42 @@
-import React from "react";
-
+import React, {useEffect, useState} from "react";
+import { NavLink, useLocation, useParams} from "react-router-dom";
 import './PaneNav.scss'
+import { useSelector } from "react-redux";
 
-const PanelNav =  () => 
+const PanelNav =  (props) => 
 {
+    let { id, type } = useParams()
+
+    let classNameMain = type ? "tabbed-pane-nav-item-button js-org-profile" : "tabbed-pane-nav-item-button js-org-profile active"
+    const typeWP = useSelector(state => state.workSpace.type)
     return(
         <div className="tabbed-pane-nav u-clearfix">
             <ul>
-                <li className="tabbed-pane-nav-item"><a className="tabbed-pane-nav-item-button js-org-profile" data-tab="boards" href="/cnpm41">Bảng</a></li>
-                <li className="tabbed-pane-nav-item"><a className="tabbed-pane-nav-item-button js-org-tables" data-tab="tables" href="/cnpm41/tables"><span className="icon-sm icon-business-class"></span>Điểm nổi bật</a></li>
-                <li className="tabbed-pane-nav-item"><a className="tabbed-pane-nav-item-button js-org-members active" data-tab="members" href="/cnpm41/members">Thành viên</a></li>
-                <li className="tabbed-pane-nav-item"><a className="tabbed-pane-nav-item-button js-org-account" data-tab="settings" href="/cnpm41/account">Cài đặt</a></li>
+                <li className="tabbed-pane-nav-item">
+                    <NavLink to={`/workspace/${id}/boards`} className={classNameMain} activeClassName="active">
+                        Bảng
+                    </NavLink>
+                </li>
+                {
+                    typeWP !== "GUEST" &&
+                    <>
+                        <li className="tabbed-pane-nav-item">
+                            <NavLink to={`/workspace/${id}/highlight`} className="tabbed-pane-nav-item-button js-org-profile" activeClassName="active">
+                                Điểm nổi bật
+                            </NavLink>
+                        </li>
+                        <li className="tabbed-pane-nav-item">
+                            <NavLink to={`/workspace/${id}/members`} className="tabbed-pane-nav-item-button js-org-profile" activeClassName="active">
+                                Thành viên
+                            </NavLink>
+                        </li>
+                    </>
+                }
+                <li className="tabbed-pane-nav-item">
+                    <NavLink to={`/workspace/${id}/setting`} className="tabbed-pane-nav-item-button js-org-profile" activeClassName="active">
+                        Cài đặt
+                    </NavLink>
+                </li>
             </ul>
         </div>
     )

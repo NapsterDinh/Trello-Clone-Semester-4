@@ -5,7 +5,7 @@
     .header-padding
     {
       font-size: 1.5rem;
-      padding: $gap;
+      padding: 0px 20px;
       display: flex;
       align-items: center;
       .header-logo
@@ -24,6 +24,10 @@
       .dropdown-toggle
       {
         background-color: rgba(0, 0, 0, 0.24);
+        &:hover, &:focus
+        {
+          background-color: $background-hover-btn;
+        }
         &::after
         {
           display: none;
@@ -40,6 +44,7 @@
     }
     .search-container
     {
+      margin-top: 10px;
       position: relative;
       input
       {
@@ -83,6 +88,17 @@
         &.fa-search
         {
           left: 13px;
+        }
+      }
+    }
+    .notification
+    {
+      button
+      {
+        i
+        {
+          margin-right: 0px;
+          color: white;
         }
       }
     }

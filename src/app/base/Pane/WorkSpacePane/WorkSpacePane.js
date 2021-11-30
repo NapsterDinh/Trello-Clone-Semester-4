@@ -1,22 +1,39 @@
-import React, { useState, } from "react";
+import React, { useEffect, useState, } from "react";
 
 import PaneHeader from "./PaneHeader/PaneHeader";
 import PanelNav from "./PaneNav/PaneNav";
 import PaneMain from "./PaneMainBoard/PaneMainBoard";
 import PaneMember from "./PaneMember/PaneMember";
 import PaneSetting from "./PaneSetting/PaneSetting";
+import { Switch, Route, useLocation, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { mainWorkSpaceReducer } from 'store/mainWorkSpaceReducer'
 
 import LoadingOverlay from 'react-loading-overlay';
 
 import './WorkSpacePane.scss'
 
-const WorkSpacePane =  () => 
+const WorkSpacePane =  (props) => 
 {
     const [ isActive, setIsActive ] = useState(false)
+    const dispatch = useDispatch()
+    let { id } = useParams()
+    const curWP = useSelector(state => state.workSpace.curWP)
+    const { fetchWorkSpaceOwerAndGuest} = props
+    useEffect(() => 
+    {
+        dispatch(mainWorkSpaceReducer({_id: id, type: 'fetchObject'}))
+    }, [id])
+
     return(
         <div className="tabbed-pane">
-            <PaneHeader/>
-            <PanelNav/>
+            {
+                curWP && 
+                <>
+                    <PaneHeader />
+                    <PanelNav />
+                </>
+            }
             <div className="tabbed-pane-main-col u-clearfix">
                 {
                     isActive &&
@@ -25,16 +42,30 @@ const WorkSpacePane =  () =>
                     spinner
                     text={'Đợi xíu'}
                     >
-                    <p>Some content or children or something.</p>
+                    
                     </LoadingOverlay>
                 }
                 <div className="tabbed-pane-main-col-wrapper js-content is-full-width">
                     <div>
                         <div className="js-react-root">
                             <div className="workspace-boards-page-layout">
-                                {/* <PaneMain/> */}
-                                <PaneMember/>
-                                {/* <PaneSetting /> */}
+                                <Switch>
+                                    <Route exact path="/workspace">
+
+                                    </Route>
+                                    <Route exact path={["/workspace/:id","/workspace/:id/boards"]}>
+                                        <PaneMain fetchWorkSpaceOwerAndGuest={fetchWorkSpaceOwerAndGuest} />
+                                    </Route>
+                                    <Route exact path="/workspace/:id/highlight">
+                                        <PaneMain />
+                                    </Route>
+                                    <Route exact path="/workspace/:id/members">
+                                        <PaneMember/>
+                                    </Route>
+                                    <Route exact path="/workspace/:id/setting">
+                                        <PaneSetting  fetchWorkSpaceOwerAndGuest={fetchWorkSpaceOwerAndGuest} />
+                                    </Route>
+                                </Switch>
                             </div>
                         </div>
                     </div>

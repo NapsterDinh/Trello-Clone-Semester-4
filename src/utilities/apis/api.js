@@ -14,11 +14,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   function (config) {
-    // console.log('from api.js', config.url);
-    console.log("API::REQUEST", config);
     const { ApiRequestToken } = configuration;
 
-    console.log("ApiRequestToken", ApiRequestToken);
     if (ApiRequestToken) {
       config.headers.Authorization = `${ApiRequestToken}`;
       return config;

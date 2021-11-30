@@ -79,7 +79,7 @@ const FormRegister = (props) => {
       modalLoading(true);
       setIsDisabled(true);
       const res = await signup({ name, email, phone, password });
-      if (res && res.data.result) {
+      if (res && res.data.result && res.status == 200) {
         // dispatch(getTokenReducer(res.data.data.token));
         // setApiRequestToken(res.data.data.token.access.token);
         modalLoading(false);

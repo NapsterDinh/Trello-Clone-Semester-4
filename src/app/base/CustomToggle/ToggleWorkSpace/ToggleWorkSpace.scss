@@ -3,7 +3,7 @@
 .workspace-item
 {
     display: flex;
-    margin-bottom: 10px;
+    padding: 0px!important;
     img
     {
         width: 40px;
@@ -18,18 +18,14 @@
         display: inline-block;
         vertical-align: middle;
         color: #172b4d;
+        width: 100px;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        white-space: pre;
+        overflow-wrap: break-word;
     }
     &.current-working-workspace-item
     {
         cursor: default;
-        &:hover
-        {
-            background-color: white;
-        }
-    }
-    &:hover
-    {
-        cursor: pointer;
-        background-color: $background-item-hover;
     }
 }

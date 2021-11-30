@@ -1,7 +1,7 @@
 import { store } from 'react-notifications-component';
 
 export const type = {
-  succsess: 'succsess',
+  succsess: 'success',
   danger: 'danger',
   info: 'info',
   default: 'default',
