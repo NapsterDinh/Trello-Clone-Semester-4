@@ -10,6 +10,7 @@ import { userService } from "./user.service";
 import { sendEmail } from "../shares/sendMail";
 import { BoardService } from "./board.service";
 import { boardCollectionName } from "../models/board.model";
+import { sendEmailUser } from "../shares/sendMail";
 
 //variable
 const { APP_SCHEMA, APP_HOST, APP_PORT } = process.env;
@@ -214,7 +215,9 @@ const removeUserToWorkSpace = async (data) => {
     const findUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ _id: ObjectId(_id) });
+
     if (findUserCreateWP?.userCreate !== data.user.sub) {
+      //data.user.sub
       return {
         result: false,
         msg: "You is not permission remove user to workSpace",
@@ -223,7 +226,9 @@ const removeUserToWorkSpace = async (data) => {
     } else {
       const getUser = await userService.getUserByEmail(userMail);
       const iduser = [];
+
       getUser.map((u) => iduser.push(u._id.toString()));
+
       const result = await getDB()
         .collection(workSpaceCollectionName)
         .findOneAndUpdate(
@@ -232,16 +237,18 @@ const removeUserToWorkSpace = async (data) => {
           { returnOriginal: false }
         );
 
-      const getWS = await getWorkSpace({ _id: ObjectId(_id) });
+      const data = await getDB()
+        .collection(workSpaceCollectionName)
+        .findOne({ _id: ObjectId(_id) });
 
       if (result?.value) {
-        const mess = `You have been add ${result?.value?.name}`;
-        userId.map((e) => sendEmailUser(e, mess));
+        const mess = `You have been remove ${result?.value?.name}`;
+        userMail.map((e) => sendEmailUser(e, mess));
         await BoardService.removeUserToBoard(data);
         return {
           result: true,
           msg: "Delete user into workspace success",
-          data: result?.value,
+          data: data,
         };
       } else {
         return {
