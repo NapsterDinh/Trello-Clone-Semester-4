@@ -12,7 +12,6 @@ import { mapOrder } from 'utilities/sort'
 import { initialData } from 'actions/initialData'
 import { getDateOFForm } from 'utilities/format'
 
-
 function BoardContent()
 {
   const [board, setBoard ] = useState({})
@@ -20,7 +19,7 @@ function BoardContent()
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
 
   const newColumnInputRef = useRef(null)
-
+  
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const onNewColumnTitleChange = (e) => setNewColumnTitle(e.target.value)
 

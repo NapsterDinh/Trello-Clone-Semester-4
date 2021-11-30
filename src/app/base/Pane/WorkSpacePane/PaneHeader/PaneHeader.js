@@ -1,12 +1,18 @@
-import React from "react";
+import React,{ useState} from "react";
 import logo  from 'app/Images/features/1.jpg'
 import { useSelector } from "react-redux";
+import ModalAddWorkSpace from "app/base/Modal/ModalAddWorkSpace/ModalAddWorkSpace";
 import './PaneHeader.scss'
 
 const PaneHeader =  () => 
 {
     const curWP = useSelector(state => state.workSpace.curWP)
     const type = useSelector(state => state.workSpace.type)
+    const [show, setShow] = useState(false);
+
+    const handleModal = (state) => {
+        state === 'SHOW' ? setShow(true) : setShow(false)
+    }
 
     return(
         <div className="tabbed-pane-header">
@@ -39,13 +45,16 @@ const PaneHeader =  () =>
                                 </div>
                                 {
                                     type !== "GUEST" &&
-                                    <button className="btn _3nslPxx5w1nLQy _3TTqkG5muwOzqZ _1Tu9wiuW4Te8Rx" type="button"><span className="nch-icon _3W-26fmi3tFfon j0fswhntKdStWa _1AxACHDBxA21Su"><span className="sc-bdVaJa jKipYA" role="img" aria-label="EditIcon"><svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M7.82034 14.4893L9.94134 16.6103L18.4303 8.12131L16.3093 6.00031H16.3073L7.82034 14.4893ZM17.7233 4.58531L19.8443 6.70731C20.6253 7.48831 20.6253 8.7543 19.8443 9.53531L10.0873 19.2933L5.13734 14.3433L14.8943 4.58531C15.2853 4.19531 15.7973 4.00031 16.3093 4.00031C16.8203 4.00031 17.3323 4.19531 17.7233 4.58531ZM5.20094 20.4097C4.49794 20.5537 3.87694 19.9327 4.02094 19.2297L4.80094 15.4207L9.00994 19.6297L5.20094 20.4097Z" fill="currentColor"></path></svg></span></span>Chỉnh sửa chi tiết Không gian làm việc</button>
+                                    <button 
+                                        onClick={() => handleModal('SHOW')}
+                                        className="btn _3nslPxx5w1nLQy _3TTqkG5muwOzqZ _1Tu9wiuW4Te8Rx" type="button"><span className="nch-icon _3W-26fmi3tFfon j0fswhntKdStWa _1AxACHDBxA21Su"><span className="sc-bdVaJa jKipYA" role="img" aria-label="EditIcon"><svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M7.82034 14.4893L9.94134 16.6103L18.4303 8.12131L16.3093 6.00031H16.3073L7.82034 14.4893ZM17.7233 4.58531L19.8443 6.70731C20.6253 7.48831 20.6253 8.7543 19.8443 9.53531L10.0873 19.2933L5.13734 14.3433L14.8943 4.58531C15.2853 4.19531 15.7973 4.00031 16.3093 4.00031C16.8203 4.00031 17.3323 4.19531 17.7233 4.58531ZM5.20094 20.4097C4.49794 20.5537 3.87694 19.9327 4.02094 19.2297L4.80094 15.4207L9.00994 19.6297L5.20094 20.4097Z" fill="currentColor"></path></svg></span></span>Chỉnh sửa chi tiết Không gian làm việc</button>
                                 }
                             </div>
                         </div>
                         <form className="js-profile-form hide"></form>
                     </div>
                 </div>
+                <ModalAddWorkSpace show={show} handleModal={handleModal} isAdd={false} initialValuesEdit={curWP}/>
             </div>
         </div>
     )

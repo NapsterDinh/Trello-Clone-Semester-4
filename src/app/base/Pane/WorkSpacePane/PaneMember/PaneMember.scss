@@ -2,6 +2,14 @@
 
 .org-members-page-layout-list
 {
+    &.active
+    {
+        min-height: 300px;
+    }
+    .css-df17o1
+    {
+        background: transparent!important;
+    }
     .org-members-section
     {
         .org-members-actions-container
@@ -167,26 +175,5 @@
             }
         }
     }
-    ._3C1ARRDXoDx7-m
-    {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        img
-        {
-            margin-bottom: 16px;
-            height: 50px;
-            width: 50px;
-        }
-        .N6pxYXUylS_c1r
-        {
-            font-size: 16px;
-            margin: 0 auto;
-            text-align: center;
-            max-width: 300px;
-            color: #5e6c84;
-            opacity: 0.5;
-        }
-    }
+    
 }

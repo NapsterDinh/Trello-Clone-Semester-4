@@ -18,12 +18,13 @@ const WorkSpacePane =  (props) =>
     const [ isActive, setIsActive ] = useState(false)
     const dispatch = useDispatch()
     let { id } = useParams()
+    const location = useLocation()
     const curWP = useSelector(state => state.workSpace.curWP)
     const { fetchWorkSpaceOwerAndGuest} = props
     useEffect(() => 
     {
         dispatch(mainWorkSpaceReducer({_id: id, type: 'fetchObject'}))
-    }, [id])
+    }, [location])
 
     return(
         <div className="tabbed-pane">
@@ -63,7 +64,7 @@ const WorkSpacePane =  (props) =>
                                         <PaneMember/>
                                     </Route>
                                     <Route exact path="/workspace/:id/setting">
-                                        <PaneSetting  fetchWorkSpaceOwerAndGuest={fetchWorkSpaceOwerAndGuest} />
+                                        <PaneSetting fetchWorkSpaceOwerAndGuest={fetchWorkSpaceOwerAndGuest} />
                                     </Route>
                                 </Switch>
                             </div>

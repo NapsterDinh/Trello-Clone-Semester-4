@@ -69,7 +69,7 @@ const WorkSpacePage = (props) => {
                             <span>Các không gian làm việc của bạn</span>
                             <i className="fa fa-plus" aria-hidden="true" onClick={() => handleModal('SHOW')}></i>
                         </Card.Header>
-                        <ModalAddWorkSpace show={show} handleModal={handleModal} handleModalInvite={handleModalInvite}/>
+                        <ModalAddWorkSpace show={show} handleModal={handleModal} handleModalInvite={handleModalInvite} isAdd={true}/>
                         <ModalInviteTeamMates showInvite={showInvite} handleModalInvite={handleModalInvite} />
                         <Accordion>
                             {
@@ -150,12 +150,12 @@ const WorkSpacePage = (props) => {
                                                         </li>
                                                     </NavLink>
 
-                                                    <NavLink to={generatePath(path,{id: item._id, type: "setting"})} exact className="link-container" activeClassName='selected'>
+                                                    {/* <NavLink to={generatePath(path,{id: item._id, type: "setting"})} exact className="link-container" activeClassName='selected'>
                                                         <li className="action-list-item">
                                                             <i className="fa fa-cog" aria-hidden="true"></i>
                                                             <span>Cài đặt</span>
                                                         </li>
-                                                    </NavLink>
+                                                    </NavLink> */}
                                                     </ul>
                                                 </Card.Body>
                                             </Accordion.Collapse>

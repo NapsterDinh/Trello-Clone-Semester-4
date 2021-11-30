@@ -86,7 +86,10 @@ const ModalInviteTeamMates = (props) => {
                             type="button"
                             onClick={() => handleSubmit()}
                         >Mời vào không gian làm việc</Button>
-                        <a href="">Tôi sẽ thực hiện sau</a>
+                        <a onClick={(e) => {
+                            e.preventDefault()
+                            handleModalInvite('HIDE')
+                        }}>Tôi sẽ thực hiện sau</a>
                     </Modal.Footer>
                 </Form>
                 </Col>

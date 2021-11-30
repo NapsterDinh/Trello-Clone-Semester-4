@@ -2,12 +2,14 @@ import React, {useEffect, useState} from "react";
 import { Modal,Button} from "react-bootstrap";
 import { Form, Col, Row, InputGroup } from 'react-bootstrap'
 import { Formik, Field } from "formik";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 
 import boardEmpty from 'app/Images/features/empty-board.svg'
 import { getWorkSpaceTypeList } from 'app/core/apis/workSpaceType'
-import { addNewWorkSpace } from "app/core/apis/workSpace";
+import { addNewWorkSpace, updateWP } from "app/core/apis/workSpace";
 import { showNotification, type } from 'utilities/component/notification/Notification'
+import { useDispatch, useSelector } from "react-redux";
+import { mainWorkSpaceReducer } from "store/mainWorkSpaceReducer";
 
 import FormSelectField from "app/Common/Form/FormSelect/FormSelect";
 import * as yup from 'yup'
@@ -15,46 +17,75 @@ import * as yup from 'yup'
 import './ModalAddWorkSpace.scss'
 
 let schema = yup.object().shape({
-    name: yup.string().trim().min(10).max(40).required('adadad').ensure().default(''),
-    workspacetypeId: yup.string().required().ensure().default(''),
-    description: yup.string().trim().min(0).max(60).ensure().default('')
+    name: yup.string().trim().min(10).max(40).required('adadad'),
+    workspacetypeId: yup.string().required(),
+    description: yup.string().trim().min(0).max(60).required()
   });
 
 const ModalAddWorkSpace = (props) => {
-    const { handleModal, show, handleModalInvite } = props
+    const { handleModal, show, handleModalInvite, isAdd, initialValuesEdit } = props
 
     const [ workSpaceTypeList, setWorkSpaceTypeList ] = useState([])
 
+    const curWP = useSelector(state => state.workSpace.curWP)
+
     const history = useHistory()
+    const dispatch = useDispatch()
+    let { id } = useParams()
+
+    const fetchWorkSpaceTypeList = async () => 
+    {
+        const res = await getWorkSpaceTypeList()
+        if (res && res.data.result && res.status == 200) {
+            setWorkSpaceTypeList(res.data.data)
+        } else {
+            showNotification('Loading workspace type list failed', res.data.msg, type.danger ,3000)
+        }
+    } 
 
     useEffect(() => {
-        const fetchWorkSpaceTypeList = async () => 
-        {
-            const res = await getWorkSpaceTypeList()
-            if (res && res.data.result && res.status == 200) {
-                setWorkSpaceTypeList(res.data.data)
-            } else {
-                showNotification('Loading workspace type list failed', res.data.msg, type.danger ,3000)
-            }
-        } 
         fetchWorkSpaceTypeList()
     },[])
 
     const submitForm = async (values) => 
     {
-        const res = await addNewWorkSpace({...values})
-        handleModal('HIDE')
-        if(res && res.data.result && res.status == 200)
+        if(isAdd)
         {
-            //cho nay call API de them moi workspacee
-            history.push('/workspace')
-            handleModalInvite('SHOW')
+            const res = await addNewWorkSpace({...values})
+            handleModal('HIDE')
+            if(res && res.data.result && res.status == 200)
+            {
+                //cho nay call API de them moi workspacee
+                showNotification('Tạo mới không gian làm việc thành công', 'Thành công', type.succsess ,3000)
+                history.push('/workspace')
+                handleModalInvite('SHOW')
+            }
+            else
+            {
+                showNotification('Tạo mới không gian làm việc thất bại', res.data.msg, type.danger ,3000)
+            }
         }
         else
         {
-            showNotification('Create a new workspace failed', res.data.msg, type.danger ,3000)
+            const res = await updateWP({...values})
+            handleModal('HIDE')
+            if(res && res.data.result && res.status == 200)
+            {
+                //cho nay call API de them moi workspacee
+                dispatch(mainWorkSpaceReducer({
+                    ...curWP,
+                    name: values.name,
+                    description: values.description,
+                    workspacetypeId: values.workspacetypeId,
+                    type: 'updateCur'
+                }))
+                showNotification('Cập nhật không gian làm việc thành công', "thành công", type.succsess ,3000)
+            }
+            else
+            {
+                showNotification('Cập nhật không gian làm việ thất bại', res.data.msg, type.danger ,3000)
+            }
         }
-        
     }
     return (
         <Modal show={show} 
@@ -63,16 +94,22 @@ const ModalAddWorkSpace = (props) => {
             <Row>
                 <Col className="col-left" md={6}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Tạo mới một không gian làm việc</Modal.Title>
+                    {
+                        isAdd && <Modal.Title>Tạo mới một không gian làm việc</Modal.Title>
+                    }
+                    {
+                        !isAdd && <Modal.Title>Chỉnh sửa thông tin không gian làm việc</Modal.Title>
+                    }
                 </Modal.Header>
                 <Formik
                     validationSchema={schema}
                     onSubmit={(values) => submitForm(values) }
-                    initialValues={{
+                    initialValues={ isAdd ?{
                         name: '',
                         workspacetypeId: undefined,
                         description: '',
-                    }}
+                    } : initialValuesEdit
+                    }
                     >
                     {({
                         handleSubmit,

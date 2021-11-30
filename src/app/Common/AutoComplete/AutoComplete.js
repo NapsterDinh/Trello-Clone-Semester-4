@@ -105,10 +105,10 @@ const AutoComplete = (props) =>
                     {
                         inviteList.length > 0 && 
                         inviteList.map((item,index) => (
-                            <div key={"invite"+item._id} className="autocomplete-option">
+                            <div key={"invite"+item} className="autocomplete-option">
                                 <div className="member-container">
                                     <div className="member-info">
-                                        <div className="full-name">{item.email}</div>
+                                        <div className="full-name">{item}</div>
                                     </div>
                                     <i  className="fa fa-times" aria-hidden="true" onClick={() => removePersonFromInviteList(item)}></i>
                                 </div>

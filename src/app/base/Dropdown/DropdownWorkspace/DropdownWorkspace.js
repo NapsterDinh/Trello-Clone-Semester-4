@@ -38,7 +38,7 @@ function DropDownWorkspace(props)
                                             <h6>Các không gian làm việc của bạn</h6>
                                             {
                                                 ownerGuestWP.owerWP.map((item,index) => (
-                                                    <Dropdown.Item key={`owner${index}`} eventKey={`owner${index}`}>
+                                                    <Dropdown.Item key={`owner${index}`} eventKey={`owner${index}`} href={`/workspace/${item._id}`}>
                                                         <ToggleWorkSpace
                                                             key={item._id}
                                                             className="owner-workspace-item"
@@ -59,7 +59,7 @@ function DropDownWorkspace(props)
                                             <h6>Các không gian làm việc khách</h6>
                                             {
                                                 ownerGuestWP.guestWP.map((item,index) => (
-                                                    <Dropdown.Item key={`guest${index}`} eventKey={`guest${index}`}>
+                                                    <Dropdown.Item key={`guest${index}`} eventKey={`guest${index}`} href={`/workspace/${item._id}`}>
                                                         <ToggleWorkSpace
                                                             key={item._id}
                                                             className="client-workspace-item"

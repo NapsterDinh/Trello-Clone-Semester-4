@@ -15,6 +15,7 @@ const PaneSetting =  (props) =>
     const curWP = useSelector(state => state.workSpace.curWP)
     const type1 = useSelector(state => state.workSpace.type)
     const [ show, setShow ] = useState(false)
+    const { typeSetting } = props
     let { id } = useParams()
     const dispatch = useDispatch()
     
@@ -53,7 +54,7 @@ const PaneSetting =  (props) =>
             <div>
                 <div className="window-module u-clearfix">
                     <div className="window-module-title">
-                        <h3 className="u-inline">Khả năng hiển thị trong Không gian làm việc</h3>
+                        <h3 className="u-inline">{ type1 === 'OWNER' ? "Khả năng hiển thị trong Không gian làm việc" : "Cài đặt với không gian làm việc"}</h3>
                     </div>
                     <div className="setting-item">
                         
@@ -102,7 +103,7 @@ const PaneSetting =  (props) =>
                                 >Rời khỏi không gian làm việc này?</a>
                         </div>
                     }
-                    <ModalDeleteWorkSpace show={show} setShow={setShow}/>
+                    <ModalDeleteWorkSpace show={show} setShow={setShow} isDeleteWP={true}/>
                 </div>
             </div>
         </div>

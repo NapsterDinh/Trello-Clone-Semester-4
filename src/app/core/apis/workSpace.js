@@ -23,11 +23,16 @@ export const getAllUserAndUserInWorkSpace = (data) => {
 };
 
 export const updatePrivacy = (data) => {
-  return _put("/v1/workSpace/updatePrivacy", {
+  return _put("/v1/workSpace/updatePrivacy",{
     _id: data._id,
     priority: data.priority
   });
 };
+
+export const updateWP = (data) => {
+  return _put("/v1/workSpace/update", data);
+};
+
 
 export const inviteUser = (data) => {
   return _post("/v1/workSpace/inviteUser", {
@@ -37,6 +42,13 @@ export const inviteUser = (data) => {
 };
 
 export const removeUser = (data) => {
-  return _put("/v1/workSpace/removeUser", data);
+  console.log(_put("/v1/workSpace/removeUser", {
+    _id: data._id,
+    userMail: data.userMail
+  }))
+  return _put("/v1/workSpace/removeUser", {
+    _id: data._id,
+    userMail: data.userMail
+  });
 };
 

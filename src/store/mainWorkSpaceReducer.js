@@ -47,6 +47,11 @@ export const counterSlice = createSlice({
               
             }
             break;
+        case 'updateCur':
+            state.curWP = action.payload 
+            let index = state.owerWP.findIndex((item) => item._id === action.payload._id)
+            state.owerWP[index] = action.payload 
+            break;
         default:
           break;
       }

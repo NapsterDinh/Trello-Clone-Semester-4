@@ -30,13 +30,13 @@ const PanelNav =  (props) =>
                                 Thành viên
                             </NavLink>
                         </li>
+                        <li className="tabbed-pane-nav-item">
+                            <NavLink to={`/workspace/${id}/setting`} className="tabbed-pane-nav-item-button js-org-profile" activeClassName="active">
+                                Cài đặt
+                            </NavLink>
+                        </li>
                     </>
                 }
-                <li className="tabbed-pane-nav-item">
-                    <NavLink to={`/workspace/${id}/setting`} className="tabbed-pane-nav-item-button js-org-profile" activeClassName="active">
-                        Cài đặt
-                    </NavLink>
-                </li>
             </ul>
         </div>
     )

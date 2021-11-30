@@ -10,6 +10,7 @@ const PaneMainBoard =  (props) =>
     const curWP = useSelector(state => state.workSpace.curWP)
     const ownerWP = useSelector(state => state.workSpace.owerWP)
     const guest = useSelector(state => state.workSpace.guestWP)
+    const type = useSelector(state => state.workSpace.type)
     const { fetchWorkSpaceOwerAndGuest } = props
     const [ showAddNewBoard, setShowAddNewBoard ] = useState(false)
     return(
@@ -54,11 +55,15 @@ const PaneMainBoard =  (props) =>
                 <div className="boards-page-board-section">
                     <div>
                         <ul className="boards-page-board-section-list">
-                            <li data-test-id="create-board-tile" className="boards-page-board-section-list-item boards-page-board-section-list-item--workspace-nav-expanded">
-                                <div className="board-tile mod-add" onClick={() => setShowAddNewBoard(true)}>
-                                    <p><span>Tạo bảng mới</span></p>
-                                </div>
-                            </li>
+                            {
+                                type === 'OWNER' && 
+                                <li data-test-id="create-board-tile" className="boards-page-board-section-list-item boards-page-board-section-list-item--workspace-nav-expanded">
+                                    <div className="board-tile mod-add" onClick={() => setShowAddNewBoard(true)}>
+                                        <p><span>Tạo bảng mới</span></p>
+                                    </div>
+                                </li>
+                            }
+                            
                             {
                                 curWP &&
                                 curWP.boardId.map(item => (
@@ -72,6 +77,15 @@ const PaneMainBoard =  (props) =>
                                         </a>
                                     </li>
                                 ))
+                            }
+                            {
+                                curWP.boardId.length === 0 && 
+                                <div className="_3C1ARRDXoDx7-m">
+                                    <img alt="Uh, không có ai ở đây có cái tên đó." className="_15AZHaZB4zq2Gi" src="https://a.trellocdn.com/prgb/dist/images/organization/missing.76c64abe1db1ea0f92df.svg"></img>
+                                    <div className="N6pxYXUylS_c1r">
+                                        Uh, bạn chưa tham gia vào bảng nào cả. Liên hệ quản trị viên để được thêm vào nhé
+                                    </div>
+                                </div>
                             }
                         </ul>
                     </div>

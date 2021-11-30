@@ -21,14 +21,13 @@ const FormRegister = (props) => {
   const [user, setData] = useState({
     name: "",
     email: "",
-    phone: "",
     password: "",
     confirm: "",
   });
 
   const { modalLoading } = props;
 
-  const { name, email, phone, password } = user;
+  const { name, email, password } = user;
 
   const onHandleChange = (e) => {
     const target = e.target;
@@ -47,12 +46,6 @@ const FormRegister = (props) => {
     }
     if (isEmpty(user.name)) {
       msg.name = formatMessage(messages.inputname);
-    }
-
-    if (isEmpty(user.phone)) {
-      msg.phone = formatMessage(messages.inputphone);
-    } else if (!isMobilePhone(user.phone)) {
-      msg.phone = formatMessage(messages.verifyphone);
     }
 
     if (isEmpty(user.password)) {
@@ -78,7 +71,7 @@ const FormRegister = (props) => {
     } else {
       modalLoading(true);
       setIsDisabled(true);
-      const res = await signup({ name, email, phone, password });
+      const res = await signup({ name, email, password });
       if (res && res.data.result && res.status == 200) {
         // dispatch(getTokenReducer(res.data.data.token));
         // setApiRequestToken(res.data.data.token.access.token);
@@ -158,28 +151,6 @@ const FormRegister = (props) => {
               placement="right"
               overlay={
                 <Tooltip id="button-tooltip-2">{validationMsg.email}</Tooltip>
-              }
-            >
-              <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
-            </OverlayTrigger>
-          </div>
-          <div
-            className={
-              !validationMsg.phone ? "phone input" : "phone input error"
-            }
-          >
-            <input
-              type="phone"
-              className="user-input"
-              placeholder={formatMessage(messages.phone)}
-              value={user.phone}
-              name="phone"
-              onChange={onHandleChange}
-            />
-            <OverlayTrigger
-              placement="right"
-              overlay={
-                <Tooltip id="button-tooltip-3">{validationMsg.phone}</Tooltip>
               }
             >
               <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
