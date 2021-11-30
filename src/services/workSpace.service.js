@@ -272,7 +272,7 @@ const getWorkSpaceGuestOrOwer = async (data) => {
   try {
     const userOwer = await getFullWorkSpace();
     const resultOwer = userOwer.filter(
-      ({ userCreate }) => userCreate === data.query.userCreate //data.user.sub
+      ({ userCreate }) => userCreate === data.data.user.sub //data.user.sub
     );
 
     const boardOwer = await Promise.all(
@@ -283,9 +283,7 @@ const getWorkSpaceGuestOrOwer = async (data) => {
     const workSpaceAndBoardOwer = { resultOwer, boardOwer };
 
     const resultGuest = userOwer.filter(
-      (u) =>
-        u.userId.includes(data.query.userCreate) &&
-        u.userCreate !== data.query.userCreate
+      (u) => u.userId.includes(data.user.sub) && u.userCreate !== data.user.sub
       //data.user.sub
     );
 
