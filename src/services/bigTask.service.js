@@ -3,62 +3,49 @@ import { ObjectId } from "mongodb";
 
 //user component
 import { getDB } from "../config/mongodb";
-import { bigTaskCollectionName } from "../models/bigTast.model";
-import { columnCollectionName } from "../models/column.model";
-import { boardCollectionName } from "../models/board.model";
-import { ColumnService } from "./column.service";
-import { BoardService } from "./board.service";
-import { uploadFile, getFileStream } from "../shares/s3";
-import { validateSchema } from "../models/card.model";
+import { bigTaskCollectionName, validateSchema } from "../models/bigTast.model";
+import { cardCollectionName } from "../models/card.model";
 
 const createBigTask = async (data) => {
   try {
     const isCheckUser = await getDB()
-      .collection(boardCollectionName)
-      .findOne({ _id: ObjectId(data?.body?.boardId) });
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(data?.body?.cardId) });
 
-    if (isCheckUser?.userId.includes(data?.user?.sub)) {
-      const userCreate = data.user.sub;
-      const addData = { ...data.body, ...{ userCreate } };
-      const value = await validateSchema(addData);
+    if (isCheckUser?.userId.includes(data.user?.sub)) {
+      //data?.user?.sub
 
-      const insertValue = {
-        ...value,
-        boardId: ObjectId(value.boardId),
-        columnId: ObjectId(value.columnId),
-      };
-
-      // const insertValue = {
-      //   ...validatedValue,
-      //   boardId: ObjectId(validatedValue.boardId),
-      //   columnId: ObjectId(validatedValue.columnId),
-      //   image: s3Image?.Location,
-      // };
-      // console.log("++++123", insertValue);
+      console.log("data", data.body);
+      const dataa = data?.body;
+      const value = await validateSchema(dataa);
+      console.log("data", value);
       const result = await getDB()
-        .collection(cardCollectionName)
-        .insertOne(insertValue);
+        .collection(bigTaskCollectionName)
+        .insertOne(value);
       if (result?.acknowledged) {
-        await ColumnService.pushCardOrder(
-          data.body.columnId,
-          result.insertedId.toString()
-        );
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne(
+            { _id: ObjectId(data?.body?.cardId) },
+            { $push: { bigTaskOrder: result.insertedId.toString() } }
+          );
+
         return {
           result: true,
-          msg: "Create cart success",
-          data: { ...result, ...addData },
+          msg: "Create task success",
+          data: { ...result, ...value },
         };
       } else {
         return {
           result: false,
-          msg: "Create cart fail",
+          msg: "Create task fail",
           data: [],
         };
       }
     } else {
       return {
         result: false,
-        msg: "You is not permission create card ",
+        msg: "You is not permission create task ",
         data: [],
       };
     }
@@ -67,333 +54,133 @@ const createBigTask = async (data) => {
   }
 };
 
-// const updateTitle = async (data) => {
-//   try {
-//     const { _id, title } = data.body;
+const getBigTaskById = async (data) => {
+  const resultUser = await getDB()
+    .collection(bigTaskCollectionName)
+    .find({ _id: { $in: data } })
+    .toArray();
 
-//     const isCheckUser = await getDB()
-//       .collection(cardCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
+  return resultUser;
+};
 
-//     if (isCheckUser?.userCreate !== data.user.sub) {
-//       return {
-//         result: false,
-//         msg: "You is not permission update card ",
-//         data: [],
-//       };
-//     } else {
-//       await getDB()
-//         .collection(cardCollectionName)
-//         .updateOne({ _id: ObjectId(_id) }, { $set: { title: title } });
+const updateTitle = async (data) => {
+  try {
+    const { _id, title } = data.body;
 
-//       const result = await getDB()
-//         .collection(cardCollectionName)
-//         .findOne({ _id: ObjectId(_id) });
-//       if (result) {
-//         return {
-//           result: true,
-//           msg: "Update cart success",
-//           data: result,
-//         };
-//       } else {
-//         return {
-//           result: false,
-//           msg: "Update cart fail",
-//           data: [],
-//         };
-//       }
-//     }
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
+    const card = await getDB()
+      .collection(bigTaskCollectionName)
+      .findOne({ _id: ObjectId(_id) });
 
-// const updateDescription = async (data) => {
-//   try {
-//     const { _id, description } = data.body;
+    const isCheckUser = await getDB()
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(card?.cardId) });
 
-//     const isCheckUser = await getDB()
-//       .collection(cardCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
+    if (isCheckUser?.userId.includes(data.user?.sub)) {
+      await getDB()
+        .collection(bigTaskCollectionName)
+        .updateOne({ _id: ObjectId(_id) }, { $set: { title: title } });
 
-//     if (isCheckUser?.userCreate !== data.user.sub) {
-//       return {
-//         result: false,
-//         msg: "You is not permission update card ",
-//         data: [],
-//       };
-//     } else {
-//       await getDB()
-//         .collection(cardCollectionName)
-//         .updateOne(
-//           { _id: ObjectId(_id) },
-//           { $set: { description: description } }
-//         );
+      const result = await getDB()
+        .collection(bigTaskCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+      if (result) {
+        return {
+          result: true,
+          msg: "Update task success",
+          data: result,
+        };
+      } else {
+        return {
+          result: false,
+          msg: "Update task fail",
+          data: [],
+        };
+      }
+    } else {
+      return {
+        result: false,
+        msg: "You is not permission update task ",
+        data: [],
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
-//       const result = await getDB()
-//         .collection(cardCollectionName)
-//         .findOne({ _id: ObjectId(_id) });
-//       if (result) {
-//         return {
-//           result: true,
-//           msg: "Update cart success",
-//           data: result,
-//         };
-//       } else {
-//         return {
-//           result: false,
-//           msg: "Update cart fail",
-//           data: [],
-//         };
-//       }
-//     }
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
+const deleteBigTask = async (data) => {
+  try {
+    const { _id } = data.query;
 
-// const updateImage = async (data) => {
-//   try {
-//     const { _id, image } = data.body;
+    const card = await getDB()
+      .collection(bigTaskCollectionName)
+      .findOne({ _id: ObjectId(_id) });
 
-//     const isCheckUser = await getDB()
-//       .collection(cardCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
+    const isCheckUser = await getDB()
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(card?.cardId) });
 
-//     if (isCheckUser?.userCreate !== data.user.sub) {
-//       return {
-//         result: false,
-//         msg: "You is not permission update card ",
-//         data: [],
-//       };
-//     } else {
-//       await getDB()
-//         .collection(cardCollectionName)
-//         .updateOne({ _id: ObjectId(_id) }, { $set: { image: image } });
+    if (isCheckUser?.userId.includes(data.user?.sub)) {
+      const deleteTask = await getDB()
+        .collection(bigTaskCollectionName)
+        .deleteOne({ _id: ObjectId(_id) });
 
-//       const result = await getDB()
-//         .collection(cardCollectionName)
-//         .findOne({ _id: ObjectId(_id) });
-//       if (result) {
-//         return {
-//           result: true,
-//           msg: "Update cart success",
-//           data: result,
-//         };
-//       } else {
-//         return {
-//           result: false,
-//           msg: "Update cart fail",
-//           data: [],
-//         };
-//       }
-//     }
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
+      await getDB()
+        .collection(cardCollectionName)
+        .updateOne(
+          { _id: ObjectId(card?.cardId) },
+          { $pull: { bigTaskOrder: { $in: [_id] } } }
+        );
+      if (deleteTask?.acknowledged) {
+        return {
+          result: true,
+          msg: "Delete cart success",
+          data: deleteTask,
+        };
+      } else {
+        return { result: false, msg: "Delete cart fail", data: [] };
+      }
+    } else {
+      return {
+        result: false,
+        msg: "You is not permission delete task ",
+        data: [],
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
-// const updateAttachment = async (data) => {
-//   try {
-//     const { _id, attachment } = data.body;
+const getSmallTaskIntoBigTask = async (id) => {
+  try {
+    const task = await getDB()
+      .collection(bigTaskCollectionName)
+      .findOne({ _id: ObjectId(_id) });
 
-//     const isCheckUser = await getDB()
-//       .collection(cardCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
+    const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
+    console.log("abc", objectIdArray);
+    const listBigTAsk = await bigTaskService.getBigTaskById(objectIdArray);
+    console.log("====", listBigTAsk);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
-//     if (isCheckUser?.userCreate !== data.user.sub) {
-//       return {
-//         result: false,
-//         msg: "You is not permission update card ",
-//         data: [],
-//       };
-//     } else {
-//       const removeItem = await getDB()
-//         .collection(cardCollectionName)
-//         .findOne({ _id: ObjectId(_id) });
-
-//       const removeAttachment = removeItem?.attachment.splice(
-//         0,
-//         removeItem?.attachment.length
-//       );
-
-//       await getDB()
-//         .collection(cardCollectionName)
-//         .updateOne(
-//           { _id: ObjectId(_id) },
-//           { $pull: { attachment: { $in: removeAttachment } } }
-//         );
-//       await getDB()
-//         .collection(cardCollectionName)
-//         .updateOne(
-//           { _id: ObjectId(_id) },
-//           { $push: { attachment: { $each: attachment } } }
-//         );
-
-//       const result = await getDB()
-//         .collection(cardCollectionName)
-//         .findOne({ _id: ObjectId(_id) });
-//       if (result) {
-//         return {
-//           result: true,
-//           msg: "Update cart success",
-//           data: result,
-//         };
-//       } else {
-//         return {
-//           result: false,
-//           msg: "Update cart fail",
-//           data: [],
-//         };
-//       }
-//     }
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
-// const updateDate = async (data) => {
-//   try {
-//     const { _id, dateTime } = data.body;
-
-//     const isCheckUser = await getDB()
-//       .collection(cardCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
-
-//     if (isCheckUser?.userCreate !== data.user.sub) {
-//       return {
-//         result: false,
-//         msg: "You is not permission update card ",
-//         data: [],
-//       };
-//     } else {
-//       await getDB()
-//         .collection(cardCollectionName)
-//         .updateOne(
-//           { _id: ObjectId(_id) },
-//           { $set: { deadline: Date.parse(dateTime) } }
-//         );
-
-//       const result = await getDB()
-//         .collection(cardCollectionName)
-//         .findOne({ _id: ObjectId(_id) });
-//       if (result) {
-//         return {
-//           result: true,
-//           msg: "Update cart success",
-//           data: result,
-//         };
-//       } else {
-//         return {
-//           result: false,
-//           msg: "Update cart fail",
-//           data: [],
-//         };
-//       }
-//     }
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
-// const updateExpire = async (_id) => {
-//   try {
-//     console.log("_id", _id);
-//     await getDB()
-//       .collection(cardCollectionName)
-//       .updateOne({ _id: _id }, { $set: { _isExpired: true } });
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
-// const updateColor = async (data) => {
-//   try {
-//     const { _id, color } = data.body;
-
-//     const isCheckUser = await getDB()
-//       .collection(cardCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
-
-//     if (isCheckUser?.userCreate !== data?.user?.sub) {
-//       return {
-//         result: false,
-//         msg: "You is not permission update card ",
-//         data: [],
-//       };
-//     } else {
-//       await getDB()
-//         .collection(cardCollectionName)
-//         .updateOne({ _id: ObjectId(_id) }, { $set: { color: color } });
-
-//       const result = await getDB()
-//         .collection(cardCollectionName)
-//         .findOne({ _id: ObjectId(_id) });
-//       if (result) {
-//         return {
-//           result: true,
-//           msg: "Update cart success",
-//           data: result,
-//         };
-//       } else {
-//         return {
-//           result: false,
-//           msg: "Update cart fail",
-//           data: [],
-//         };
-//       }
-//     }
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
-// const updateStatus = async (_id, status) => {
-//   try {
-//     console.log("_id", _id);
-//     await getDB()
-//       .collection(cardCollectionName)
-//       .updateOne({ _id: _id }, { $set: { status: status } });
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
-// const deleteCart = async (data) => {
-//   try {
-//     const { _id } = data;
-
-//     const findColumnId = await getDB()
-//       .collection(cardCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
-
-//     const result = await getDB()
-//       .collection(cardCollectionName)
-//       .findOneAndDelete({ _id: ObjectId(_id) }, { returnOriginal: false });
-//     if (result?.value) {
-//       const result = await getDB()
-//         .collection(columnCollectionName)
-//         .updateOne(
-//           { _id: ObjectId(findColumnId?.columnId) },
-//           { $pull: { cardOrder: { $in: [_id] } } }
-//         );
-//       return {
-//         result: true,
-//         msg: "Delete cart success",
-//         data: result,
-//       };
-//     } else {
-//       return {
-//         result: false,
-//         msg: "Delete cart fail",
-//         data: [],
-//       };
-//     }
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
+const updatePercentage = async (_id, data) => {
+  try {
+    await getDB()
+      .collection(bigTaskCollectionName)
+      .updateOne({ _id: _id }, { $set: { percentage: data } });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 export const bigTaskService = {
   createBigTask,
+  updateTitle,
+  deleteBigTask,
+  getBigTaskById,
+  updatePercentage,
 };

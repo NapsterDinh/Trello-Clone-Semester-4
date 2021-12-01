@@ -17,24 +17,12 @@ const cardCollectionSchema = Joi.object({
   color: Joi.string().default(""),
   userId: Joi.array().items(Joi.string()).default([]),
   tagOrder: Joi.array().items(Joi.string()).default([]),
+  bigTaskOrder: Joi.array().items(Joi.string()).default([]),
   percentage: Joi.string().default(""),
   status: Joi.string().default("undone"),
   _isExpired: Joi.boolean().default(false),
   createAt: Joi.date().timestamp().default(Date.now()),
-  // updateAt: Joi.date().timestamp().default(null),
 });
-
-// export const validateSchema = async (data) => {
-//   console.log(
-//     "dasta",
-//     await cardCollectionSchema.validateAsync(data, {
-//       abortEarly: false,
-//     })
-//   );
-//   return await cardCollectionSchema.validateAsync(data, {
-//     abortEarly: false,
-//   });
-// };
 
 export const validateSchema = async (data) => {
   return await cardCollectionSchema.validateAsync(data, { abortEarly: false });

@@ -152,6 +152,22 @@ const removeUserToCart = async (req, res) => {
     });
   }
 };
+
+const getCardById = async (req, res) => {
+  try {
+    const { result, msg, data } = await CardService.getCardById(req);
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const CardController = {
   createNew,
   updateTitle,
@@ -163,4 +179,5 @@ export const CardController = {
   deleteCart,
   addUserToCart,
   removeUserToCart,
+  getCardById,
 };

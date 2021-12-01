@@ -1,8 +1,8 @@
-import { CardService } from "../services/card.service";
+import { bigTaskService } from "../services/bigTask.service";
 
-const createNew = async (req, res) => {
+const createBigTask = async (req, res) => {
   try {
-    const { result, msg, data } = await CardService.createNew(req);
+    const { result, msg, data } = await bigTaskService.createBigTask(req);
 
     res.json({
       result: result,
@@ -18,7 +18,7 @@ const createNew = async (req, res) => {
 
 const updateTitle = async (req, res) => {
   try {
-    const { result, msg, data } = await CardService.updateTitle(req);
+    const { result, msg, data } = await bigTaskService.updateTitle(req);
 
     res.json({
       result: result,
@@ -32,9 +32,9 @@ const updateTitle = async (req, res) => {
   }
 };
 
-const updateDescription = async (req, res) => {
+const deleteBigTask = async (req, res) => {
   try {
-    const { result, msg, data } = await CardService.updateDescription(req);
+    const { result, msg, data } = await bigTaskService.deleteBigTask(req);
 
     res.json({
       result: result,
@@ -48,72 +48,8 @@ const updateDescription = async (req, res) => {
   }
 };
 
-const updateImage = async (req, res) => {
-  try {
-    const { result, msg, data } = await CardService.updateImage(req);
-    res.json({
-      result: result,
-      msg: msg,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-};
-
-const updateAttachment = async (req, res) => {
-  try {
-    const { result, msg, data } = await CardService.updateAttachment(req);
-    res.json({
-      result: result,
-      msg: msg,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-};
-
-const updateDate = async (req, res) => {
-  try {
-    const { result, msg, data } = await CardService.updateDate(req);
-    res.json({
-      result: result,
-      msg: msg,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-};
-
-const updateColor = async (req, res) => {
-  try {
-    const { result, msg, data } = await CardService.updateColor(req);
-    res.json({
-      result: result,
-      msg: msg,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-};
-
-export const CardController = {
-  createNew,
+export const bigTaskController = {
+  createBigTask,
   updateTitle,
-  updateDescription,
-  updateAttachment,
-  updateDate,
-  updateImage,
-  updateColor,
+  deleteBigTask,
 };

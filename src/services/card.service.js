@@ -11,6 +11,8 @@ import { ColumnService } from "./column.service";
 import { BoardService } from "./board.service";
 import { sendEmailUser } from "../shares/sendMail";
 import { uploadFile, getFileStream } from "../shares/s3";
+import { bigTaskService } from "./bigTask.service";
+import { smallTaskService } from "./smallTask.service";
 
 const createNew = async (data) => {
   try {
@@ -520,6 +522,78 @@ const removeUserToCart = async (data) => {
   }
 };
 
+const getCardById = async (data) => {
+  try {
+    const { _id } = data.query;
+
+    const isCheckUser = await getDB()
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+
+    if (isCheckUser?.userId.includes(data?.query?.userCreate)) {
+      let smallTask1 = [];
+      const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
+      const listBigTAsk = await bigTaskService.getBigTaskById(objectIdArray);
+
+      const abc = await Promise.all(
+        listBigTAsk.map(async (small) => {
+          console.log("----", small.smallStaskOrder);
+          let cal = await smallTaskService.getSmallTaskById(
+            small.smallStaskOrder.map((s) => ObjectId(s))
+          );
+
+          let length = cal.length;
+          let C = cal.map(function (e) {
+            let count = 0;
+            if (e.isDone) {
+              count++;
+              let total = count / length;
+              return (total += total);
+              // console.log("(total += total);", (total += total));
+            }
+          });
+          console.log("e.sdad", C);
+          console.log("e._id", small._id);
+          await bigTaskService.updatePercentage(small?._id, C[0]);
+
+          return cal;
+        })
+      );
+      smallTask1 = abc;
+
+      const result = await getDB()
+        .collection(cardCollectionName)
+        .findOneAndUpdate(
+          { _id: ObjectId(_id) },
+          {
+            $pull: { userId: { $in: iduser } },
+          },
+          { returnOriginal: false }
+        );
+      console.log("result", result);
+      if (result?.value) {
+        const mess = `You have been remove ${result.value.title}`;
+        listUser.map((e) => sendEmailUser(e, mess));
+        return {
+          result: true,
+          msg: "Remove user into cart success",
+          data: result?.value,
+        };
+      } else {
+        return { result: false, msg: "Remove user into cart fail", data: [] };
+      }
+    } else {
+      return {
+        result: false,
+        msg: "You is not permission remove user card ",
+        data: [],
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const CardService = {
   createNew,
   updateTitle,
@@ -533,4 +607,5 @@ export const CardService = {
   deleteCart,
   addUserToCart,
   removeUserToCart,
+  getCardById,
 };

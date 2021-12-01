@@ -138,7 +138,7 @@ const getFullBoard = async (data) => {
 
       return {
         result: true,
-        msg: "Create board success",
+        msg: "Get board success",
         data: board1,
       };
     } else {

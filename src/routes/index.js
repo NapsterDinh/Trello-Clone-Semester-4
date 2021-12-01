@@ -8,6 +8,9 @@ import { cardRoutes } from "./card.route";
 import { userRoutes } from "./user.router";
 import { workSpaceRoutes } from "./workSpace.route";
 import { workSpaceTypeRoutes } from "./workSpaceType.route";
+import { bigTaskRoutes } from "./bigTask.route";
+import { smallTaskRoutes } from "./smallTask.route";
+import { tagRoutes } from "./tag.route";
 
 const router = express.Router();
 
@@ -23,5 +26,8 @@ router.use("/cards", cardRoutes);
 router.use("/user", userRoutes);
 router.use("/workSpace", workSpaceRoutes);
 router.use("/workSpaceType", workSpaceTypeRoutes);
+router.use("/bigTask", bigTaskRoutes);
+router.use("/smallTask", smallTaskRoutes);
+router.use("/tag", tagRoutes);
 
 export const api = router;

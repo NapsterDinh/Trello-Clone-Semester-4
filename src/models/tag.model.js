@@ -3,6 +3,7 @@ import Joi from "joi";
 //define tag
 export const tagCollectionName = "tags";
 const tagCollectionSchema = Joi.object({
+  cardId: Joi.string(),
   name: Joi.string(),
   color: Joi.string(),
   createAt: Joi.date().timestamp().default(Date.now()),
