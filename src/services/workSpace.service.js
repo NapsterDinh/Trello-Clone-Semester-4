@@ -279,7 +279,7 @@ const getWorkSpaceGuestOrOwer = async (data) => {
   try {
     const userOwer = await getFullWorkSpace();
     const resultOwer = userOwer.filter(
-      ({ userCreate }) => userCreate === data.data.user.sub //data.user.sub
+      ({ userCreate }) => userCreate === data.user.sub //data.user.sub
     );
 
     const boardOwer = await Promise.all(

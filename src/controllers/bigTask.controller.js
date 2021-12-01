@@ -108,50 +108,6 @@ const updateColor = async (req, res) => {
   }
 };
 
-const deleteCart = async (req, res) => {
-  try {
-    const { result, msg, data } = await CardService.deleteCart(req);
-    res.json({
-      result: result,
-      msg: msg,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-};
-
-const addUserToCart = async (req, res) => {
-  try {
-    const { result, msg, data } = await CardService.addUserToCart(req);
-    res.json({
-      result: result,
-      msg: msg,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-};
-
-const removeUserToCart = async (req, res) => {
-  try {
-    const { result, msg, data } = await CardService.removeUserToCart(req);
-    res.json({
-      result: result,
-      msg: msg,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      errors: error.message,
-    });
-  }
-};
 export const CardController = {
   createNew,
   updateTitle,
@@ -160,7 +116,4 @@ export const CardController = {
   updateDate,
   updateImage,
   updateColor,
-  deleteCart,
-  addUserToCart,
-  removeUserToCart,
 };

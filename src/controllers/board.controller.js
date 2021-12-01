@@ -17,7 +17,6 @@ const creatNew = async (req, res) => {
 
 const getFullBoard = async (req, res) => {
   try {
-    const { id } = req.query;
     const result = await BoardService.getFullBoard(req);
     res.json(result);
   } catch (error) {

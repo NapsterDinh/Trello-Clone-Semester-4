@@ -1627,6 +1627,11 @@ debug@^3.2.7:
   dependencies:
     ms "^2.1.1"
 
+decimal.js@^10.2.0:
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.3.1.tgz#d8c3a444a9c6774ba60ca6ad7261c3a94fd5e783"
+  integrity sha512-V0pfhfr8suzyPGOx3nmq4aHqabehUZn6Ch9kyFpV79TGDTWFmHqUqXdabR7QHqxzrYolF4+tVmJhUG4OURg5dQ==
+
 decompress-response@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/decompress-response/-/decompress-response-3.3.0.tgz#80a4dd323748384bfa248083622aedec982adff3"
@@ -2641,6 +2646,13 @@ jmespath@0.15.0:
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
   integrity sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=
+
+joi-decimal@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/joi-decimal/-/joi-decimal-1.1.2.tgz#fd1ad6ae69eb065d1f2bd2661670f1a4c84dab94"
+  integrity sha512-FBYx6WSODjY2jEbCM2WB+2pRnzu4ze4zBihzSnsTNXJdJYPxui0haDDfG6JIUqlUrVMcDy6PXBI3Hb6TggzTQQ==
+  dependencies:
+    decimal.js "^10.2.0"
 
 joi@^17.4.2:
   version "17.4.2"

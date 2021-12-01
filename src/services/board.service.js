@@ -10,6 +10,7 @@ import { cardCollectionName } from "../models/card.model";
 import { userCollectionName } from "../models/user.model";
 import { sendEmailUser } from "../shares/sendMail";
 import { userService } from "./user.service";
+import { CardService } from "./card.service";
 
 const createNew = async (data) => {
   try {
@@ -69,7 +70,6 @@ const createNew = async (data) => {
 
 const refBoard = async (boardId) => {
   try {
-    console.log("data", boardId);
     const result = await getDB()
       .collection(boardCollectionName)
       .aggregate([
@@ -97,8 +97,6 @@ const refBoard = async (boardId) => {
       ])
       .toArray();
 
-    console.log("result", result);
-
     return result[0] || {};
   } catch (error) {
     throw new Error(error);
@@ -115,26 +113,33 @@ const getFullBoard = async (data) => {
       .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
 
     if (
-      isCheckUser?.userId.includes(data?.userId) ||
-      isCheckUserCreateWP?.userCreate === data?.user?.sub
+      isCheckUser?.userId.includes(data?.user?.sub) ||
+      isCheckUserCreateWP?.userCreate === data?.user?.sub // data?.user?.sub
     ) {
       const board = await refBoard(data?.query?.boardId);
-      if (!board || !board.columns) {
-        throw new Error("Board not found");
-      }
+      await Promise.all(
+        board.cards.map(async function (u) {
+          if (Date.now() > u.deadline) {
+            await CardService.updateExpire(u._id);
+          }
+        })
+      );
+
+      const board1 = await refBoard(data?.query?.boardId);
+
       //create cards in column
-      board.columns.forEach((column) => {
-        column.cards = board.cards.filter(
-          (c) => c.columnId.toString() === column._id.toString()
-        );
-      });
-      //delete card in board
-      delete board.cards;
+      // board.columns.forEach((column) => {
+      //   column.cards = board.cards.filter(
+      //     (c) => c.columnId.toString() === column._id.toString()
+      //   );
+      // });
+      // //delete card in board
+      // delete board.cards;
 
       return {
         result: true,
         msg: "Create board success",
-        data: board,
+        data: board1,
       };
     } else {
       return {
@@ -413,4 +418,5 @@ export const BoardService = {
   pushColumnOrder,
   getBoardById,
   listUserBoard,
+  getUserByEmail,
 };
