@@ -540,8 +540,8 @@ const getCardById = async (data) => {
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
 
-    if (isCheckUser?.userId.includes("61a1a97933d4478e2b2d3092")) {
-      //data?.query?.userCreate
+    if (isCheckUser?.userId.includes(data?.user?.sub)) {
+      //data?.query?.userCreate "61a1a97933d4478e2b2d3092"
       let smallTask1;
 
       const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));

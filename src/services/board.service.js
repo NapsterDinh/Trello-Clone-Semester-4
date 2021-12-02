@@ -114,7 +114,7 @@ const getFullBoard = async (data) => {
 
     if (
       isCheckUser?.userId.includes(data?.user?.sub) ||
-      isCheckUserCreateWP?.userCreate === data?.query?.userId // data?.user?.sub
+      isCheckUserCreateWP?.userCreate === data?.user?.sub // data?.user?.sub
     ) {
       const board = await refBoard(data?.query?.boardId);
       await Promise.all(
