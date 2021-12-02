@@ -45,8 +45,24 @@ const deleteColumn = async (req, res) => {
   }
 };
 
+const updateCardOrder = async (req, res) => {
+  try {
+    const { result, msg, data } = await ColumnService.updateCardOrder(req);
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const ColumnController = {
   creatNew,
   update,
   deleteColumn,
+  updateCardOrder,
 };

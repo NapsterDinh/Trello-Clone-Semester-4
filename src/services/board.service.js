@@ -114,7 +114,7 @@ const getFullBoard = async (data) => {
 
     if (
       isCheckUser?.userId.includes(data?.user?.sub) ||
-      isCheckUserCreateWP?.userCreate === data?.user?.sub // data?.user?.sub
+      isCheckUserCreateWP?.userCreate === data?.query?.userId // data?.user?.sub
     ) {
       const board = await refBoard(data?.query?.boardId);
       await Promise.all(
@@ -126,15 +126,16 @@ const getFullBoard = async (data) => {
       );
 
       const board1 = await refBoard(data?.query?.boardId);
+      console.log("board1", board1);
 
-      //create cards in column
-      // board.columns.forEach((column) => {
-      //   column.cards = board.cards.filter(
-      //     (c) => c.columnId.toString() === column._id.toString()
-      //   );
-      // });
-      // //delete card in board
-      // delete board.cards;
+      // create cards in column
+      board1.columns.forEach((column) => {
+        column.cards = board1.cards.filter(
+          (c) => c.columnId.toString() === column._id.toString()
+        );
+      });
+      //delete card in board
+      delete board1.cards;
 
       return {
         result: true,
@@ -312,8 +313,8 @@ const removeUserToBoard = async (data) => {
         data: [],
       };
     } else {
-      const { _id, email } = data;
-      const getUser = await getUserByEmail(email);
+      const { _id, userId } = data.body;
+      const getUser = await getUserByEmail(userId);
       const iduser = [];
       getUser.map((u) => iduser.push(u._id.toString()));
 

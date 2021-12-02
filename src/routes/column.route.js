@@ -1,6 +1,7 @@
 import express from "express";
 import { ColumnController } from "../controllers/column.controller";
 import { ColumnValidation } from "../validations/column.validation";
+import { auth } from "../middlewares/auth";
 
 const router = express.Router();
 
@@ -10,5 +11,6 @@ router
 
 router.route("/update").put(ColumnValidation.update, ColumnController.update);
 router.route("/detele").delete(ColumnController.deleteColumn);
+router.route("/updateCardOrder").delete(auth, ColumnController.updateCardOrder);
 
 export const columnRoutes = router;

@@ -142,9 +142,46 @@ const pushCardOrder = async (columnId, cardId) => {
   }
 };
 
+const updateCardOrder = async (data) => {
+  try {
+    const { _id, cardOrder } = data.body;
+
+    const board = await getDB()
+      .collection(columnCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    const isCheckUserBoard = await getDB()
+      .collection(workSpaceCollectionName)
+      .findOne({ _id: board?.boardId });
+
+    if (isCheckUserBoard?.userId.includes(data?.user.sub)) {
+      await getDB()
+        .collection(columnCollectionName)
+        .update({ _id: ObjectId(_id) }, { $set: { cardOrder: cardOrder } });
+      const result = await getDB()
+        .collection(columnCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+
+      if (result) {
+        return { result: true, msg: "Update column success", data: result };
+      } else {
+        return { result: false, msg: "Update column fail", data: [] };
+      }
+    } else {
+      return {
+        result: false,
+        msg: "You is not permission update column ",
+        data: [],
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const ColumnService = {
   createNew,
   update,
   deleteColumn,
   pushCardOrder,
+  updateCardOrder,
 };

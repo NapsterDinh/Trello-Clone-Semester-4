@@ -535,31 +535,40 @@ const getCardById = async (data) => {
       const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
       const listBigTAsk = await bigTaskService.getBigTaskById(objectIdArray);
 
+      let totallength = [];
+      let total = [];
       const abc = await Promise.all(
         listBigTAsk.map(async (small) => {
           console.log("----", small.smallStaskOrder);
           let cal = await smallTaskService.getSmallTaskById(
             small.smallStaskOrder.map((s) => ObjectId(s))
           );
+          let totalDone = 0;
 
-          let length = cal.length;
           let C = cal.map(function (e) {
-            let count = 0;
             if (e.isDone) {
-              count++;
-              let total = count / length;
-              return (total += total);
-              // console.log("(total += total);", (total += total));
+              totalDone++;
             }
           });
-          console.log("e.sdad", C);
-          console.log("e._id", small._id);
-          await bigTaskService.updatePercentage(small?._id, C[0]);
 
+          await bigTaskService.updatePercentage(
+            small?._id,
+            totalDone / C.length
+          );
+          totallength.push(C.length);
+          total.push(totalDone);
+          console.log("length", C.length);
+          console.log("totalDone", totalDone);
+          console.log("e.sdad", totalDone / C.length);
+          console.log("e._id", small._id);
+          console.log("cal", cal);
           return cal;
         })
       );
       smallTask1 = abc;
+
+      console.log("length123", totallength);
+      console.log("done", total);
 
       const result = await getDB()
         .collection(cardCollectionName)
