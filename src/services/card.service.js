@@ -387,6 +387,16 @@ const updateStatus = async (_id, status) => {
   }
 };
 
+const updatePercentageCard = async (_id, percentage) => {
+  try {
+    await getDB()
+      .collection(cardCollectionName)
+      .updateOne({ _id: _id }, { $set: { percentage: percentage } });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const deleteCart = async (data) => {
   try {
     const { _id } = data.query;
@@ -530,11 +540,12 @@ const getCardById = async (data) => {
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
 
-    if (isCheckUser?.userId.includes(data?.query?.userCreate)) {
-      let smallTask1 = [];
+    if (isCheckUser?.userId.includes("61a1a97933d4478e2b2d3092")) {
+      //data?.query?.userCreate
+      let smallTask1;
+
       const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
       const listBigTAsk = await bigTaskService.getBigTaskById(objectIdArray);
-
       let totallength = [];
       let total = [];
       const abc = await Promise.all(
@@ -557,45 +568,18 @@ const getCardById = async (data) => {
           );
           totallength.push(C.length);
           total.push(totalDone);
-          console.log("length", C.length);
-          console.log("totalDone", totalDone);
-          console.log("e.sdad", totalDone / C.length);
-          console.log("e._id", small._id);
-          console.log("cal", cal);
           return cal;
         })
       );
       smallTask1 = abc;
 
-      console.log("length123", totallength);
-      console.log("done", total);
+      const lengthTask = totallength.reduce((a, b) => a + b, 0);
+      const taskDone = total.reduce((a, b) => a + b, 0);
 
-      const result = await getDB()
-        .collection(cardCollectionName)
-        .findOneAndUpdate(
-          { _id: ObjectId(_id) },
-          {
-            $pull: { userId: { $in: iduser } },
-          },
-          { returnOriginal: false }
-        );
-      console.log("result", result);
-      if (result?.value) {
-        const mess = `You have been remove ${result.value.title}`;
-        listUser.map((e) => sendEmailUser(e, mess));
-        return {
-          result: true,
-          msg: "Remove user into cart success",
-          data: result?.value,
-        };
-      } else {
-        return { result: false, msg: "Remove user into cart fail", data: [] };
-      }
-    } else {
       return {
-        result: false,
-        msg: "You is not permission remove user card ",
-        data: [],
+        result: true,
+        msg: "Get task into cart ",
+        data: { smallTask1, lengthTask, taskDone },
       };
     }
   } catch (error) {
@@ -617,4 +601,5 @@ export const CardService = {
   addUserToCart,
   removeUserToCart,
   getCardById,
+  updatePercentageCard,
 };
