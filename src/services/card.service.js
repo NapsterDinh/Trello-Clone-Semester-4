@@ -534,13 +534,13 @@ const removeUserToCart = async (data) => {
 
 const getCardById = async (data) => {
   try {
-    const { _id } = data.query;
-
+    const { _id, user } = data?.query;
+    console.log("user", data?.query);
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
 
-    if (isCheckUser?.userId.includes(data?.user?.sub)) {
+    if (isCheckUser?.userId.includes(data?.user?.sub) || user) {
       //data?.query?.userCreate "61a1a97933d4478e2b2d3092"
       let smallTask1;
 

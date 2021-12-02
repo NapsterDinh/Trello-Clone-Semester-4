@@ -128,7 +128,7 @@ const getFullBoard = async (data) => {
       const card = await Promise.all(
         board?.cards.map(async (c) => {
           let cal = await CardService.getCardById({
-            query: { _id: c._id.toString() },
+            query: { _id: c._id.toString(), user: data?.user?.sub },
           });
           if (cal?.data?.lengthTask > 0) {
             if (cal?.data?.lengthTask === cal?.data.taskDone) {
