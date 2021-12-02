@@ -101,6 +101,21 @@ const listUserBoard = async (req, res) => {
   }
 };
 
+const updateColumnOrder = async (req, res) => {
+  try {
+    const { result, msg, data } = await BoardService.updateColumnOrder(req);
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const BoardController = {
   creatNew,
   getFullBoard,
@@ -109,4 +124,5 @@ export const BoardController = {
   addUserToBoard,
   removeUserToBoard,
   listUserBoard,
+  updateColumnOrder,
 };

@@ -1,5 +1,4 @@
 import Joi from "joi";
-import { HttpStatusCode } from "../utilties/constants";
 
 const createnew = async (req, res, next) => {
   const condition = Joi.object({
@@ -11,7 +10,7 @@ const createnew = async (req, res, next) => {
     await condition.validateAsync(req.body, { abortEarly: false });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }
@@ -29,7 +28,7 @@ const update = async (req, res, next) => {
     });
     next();
   } catch (error) {
-    res.status(HttpStatusCode.BaD_REQUEST).json({
+    res.status(500).json({
       errors: new Error(error).message,
     });
   }

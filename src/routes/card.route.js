@@ -60,14 +60,14 @@ router.route("/deleteCart").delete(auth, CardController.deleteCart);
 // params: _id:13421243
 
 router.route("/addUserToCart").put(auth, CardController.addUserToCart);
-// //          /v1/cards/deleteCart
+// //          /v1/cards/addUserToCart
 // body {
 //     "_id":"61a6e35a4648825573b324c4",
 //     "listUser":["18110087@student.hcmute.edu.vn","phancaocuong0000@gmail.com"]
 // }
 
 router.route("/removeUserToCart").put(auth, CardController.removeUserToCart);
-// //          /v1/cards/deleteCart
+// //          /v1/cards/removeUserToCart
 // body {
 //     "_id":"61a6e35a4648825573b324c4",
 //     "listUser":["18110087@student.hcmute.edu.vn","phancaocuong0000@gmail.com"]

@@ -32,7 +32,7 @@ const update = async (req, res) => {
 
 const deleteColumn = async (req, res) => {
   try {
-    const { result, msg, data } = await ColumnService.deleteColumn(req.body);
+    const { result, msg, data } = await ColumnService.deleteColumn(req);
     res.json({
       result: result,
       msg: msg,

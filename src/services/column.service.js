@@ -25,10 +25,19 @@ const createNew = async (data) => {
         data.boardId,
         result.insertedId.toString()
       );
+
+      const data1 = {
+        ...result,
+        ...value,
+      };
+
+      data1._id = data1.insertedId;
+      delete data1.insertedId;
+
       return {
         result: true,
         msg: "Create column success",
-        data: { ...result, ...value },
+        data: data1,
       };
     } else {
       return {
@@ -44,10 +53,18 @@ const createNew = async (data) => {
 
 const update = async (data) => {
   try {
-    const { _id, title } = data;
+    const { _id, title, cardOrder } = data;
     await getDB()
       .collection(columnCollectionName)
-      .updateOne({ _id: ObjectId(_id) }, { $set: { title: title } });
+      .updateOne(
+        { _id: ObjectId(_id) },
+        {
+          $set: {
+            title: title,
+            cardOrder: cardOrder,
+          },
+        }
+      );
 
     const result = await getDB()
       .collection(columnCollectionName)
@@ -73,7 +90,7 @@ const update = async (data) => {
 
 const deleteColumn = async (data) => {
   try {
-    const { _id } = data;
+    const { _id } = data.query;
 
     const findBoardId = await getDB()
       .collection(columnCollectionName)

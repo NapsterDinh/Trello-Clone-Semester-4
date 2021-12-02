@@ -11,6 +11,7 @@ router
 router.route("/").get(auth, BoardController.getFullBoard);
 router.route("/listUserBoard").get(BoardController.listUserBoard); //auth,
 router.route("/update").put(auth, BoardController.updateBoard);
+router.route("/updateColumnOrder").put(auth, BoardController.updateColumnOrder);
 router.route("/delete").delete(auth, BoardController.deteleBoard);
 router.route("/addUserToBoard").put(auth, BoardController.addUserToBoard);
 router.route("/removeUserToBoard").put(auth, BoardController.removeUserToBoard);

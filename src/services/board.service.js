@@ -312,8 +312,8 @@ const removeUserToBoard = async (data) => {
         data: [],
       };
     } else {
-      const { _id, userId } = data;
-      const getUser = await getUserByEmail(userId);
+      const { _id, email } = data;
+      const getUser = await getUserByEmail(email);
       const iduser = [];
       getUser.map((u) => iduser.push(u._id.toString()));
 
@@ -367,7 +367,8 @@ const pushColumnOrder = async (boardId, columnId) => {
 
 const listUserBoard = async (data) => {
   try {
-    const { _id, userCreate } = data.query;
+    const { _id } = data.query;
+    const userCreate = data?.user?.sub;
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
       .findOne({ userCreate: userCreate }); // data?.user?.sub
@@ -408,6 +409,42 @@ const listUserBoard = async (data) => {
   }
 };
 
+const updateColumnOrder = async (data) => {
+  try {
+    const { _id, columnOrder } = data.body;
+
+    const isCheckUser = await getDB()
+      .collection(boardCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    const isCheckUserCreateWP = await getDB()
+      .collection(workSpaceCollectionName)
+      .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
+
+    if (isCheckUserCreateWP?.userCreate !== data?.user.sub) {
+      return {
+        result: false,
+        msg: "You is not permission update board ",
+        data: [],
+      };
+    } else {
+      await getDB()
+        .collection(boardCollectionName)
+        .update({ _id: ObjectId(_id) }, { $set: { columnOrder: columnOrder } });
+      const result = await getDB()
+        .collection(boardCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+
+      if (result) {
+        return { result: true, msg: "Update board success", data: result };
+      } else {
+        return { result: false, msg: "Update board fail", data: [] };
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const BoardService = {
   createNew,
   getFullBoard,
@@ -419,4 +456,5 @@ export const BoardService = {
   getBoardById,
   listUserBoard,
   getUserByEmail,
+  updateColumnOrder,
 };
