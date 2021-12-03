@@ -11,6 +11,6 @@ router
 
 router.route("/update").put(ColumnValidation.update, ColumnController.update);
 router.route("/delete").delete(ColumnController.deleteColumn);
-router.route("/updateCardOrder").delete(auth, ColumnController.updateCardOrder);
+router.route("/updateCardOrder").put(auth, ColumnController.updateCardOrder);
 
 export const columnRoutes = router;

@@ -143,7 +143,7 @@ const getFullBoard = async (data) => {
       );
 
       const board1 = await refBoard(data?.query?.boardId);
-      console.log("board112312", board);
+      console.log("board112312", board1);
 
       // create cards in column
       board1.columns.forEach((column) => {

@@ -153,7 +153,7 @@ const updateCardOrder = async (data) => {
       .collection(columnCollectionName)
       .findOne({ _id: ObjectId(_id) });
     const isCheckUserBoard = await getDB()
-      .collection(workSpaceCollectionName)
+      .collection(boardCollectionName)
       .findOne({ _id: board?.boardId });
 
     if (isCheckUserBoard?.userId.includes(data?.user.sub)) {
