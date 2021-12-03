@@ -1,4 +1,4 @@
-import { cloud } from "../shares/upLoadImage/cloudinary";
+import { cloud } from "../shares/upLoadImage";
 import cloudinary from "cloudinary";
 const upLoad = async (req, res) => {
   try {

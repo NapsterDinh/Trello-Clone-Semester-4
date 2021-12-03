@@ -16,23 +16,12 @@ import { smallTaskService } from "./smallTask.service";
 
 const createNew = async (data) => {
   try {
-    // const { image, fileName } = data;
-    // const s3Image = await uploadFile(image, fileName);
-
-    // const insertValue = {
-    //   ...validatedValue,
-    //   boardId: ObjectId(validatedValue.boardId),
-    //   columnId: ObjectId(validatedValue.columnId),
-    //   image: s3Image?.Location,
-    // };
-    // console.log("++++123", insertValue);
-
     const isCheckUser = await getDB()
       .collection(boardCollectionName)
       .findOne({ _id: ObjectId(data?.body?.boardId) });
 
-    if (isCheckUser?.userId.includes(data.user.sub)) {
-      const userCreate = data.user.sub; // data.user.sub;
+    if (isCheckUser?.userId.includes(data.query.userCreate)) {
+      const userCreate = data.query.userCreate; // data.user.sub;
       const addData = { ...data.body, ...{ userCreate } };
       const value = await validateSchema(addData);
 
@@ -42,13 +31,6 @@ const createNew = async (data) => {
         columnId: ObjectId(value.columnId),
       };
 
-      // const insertValue = {
-      //   ...validatedValue,
-      //   boardId: ObjectId(validatedValue.boardId),
-      //   columnId: ObjectId(validatedValue.columnId),
-      //   image: s3Image?.Location,
-      // };
-      // console.log("++++123", insertValue);
       const result = await getDB()
         .collection(cardCollectionName)
         .insertOne(insertValue);

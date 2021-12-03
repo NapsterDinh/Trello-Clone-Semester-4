@@ -127,6 +127,7 @@ const deleteColumn = async (data) => {
 
 const pushCardOrder = async (columnId, cardId) => {
   try {
+    console.log("a", columnId, cardId);
     const result = await getDB()
       .collection(columnCollectionName)
       .findOneAndUpdate(
