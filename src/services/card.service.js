@@ -20,8 +20,8 @@ const createNew = async (data) => {
       .collection(boardCollectionName)
       .findOne({ _id: ObjectId(data?.body?.boardId) });
 
-    if (isCheckUser?.userId.includes(data.query.userCreate)) {
-      const userCreate = data.query.userCreate; // data.user.sub;
+    if (isCheckUser?.userId.includes(data.user.sub)) {
+      const userCreate = data.user.sub; // data.user.sub;
       const addData = { ...data.body, ...{ userCreate } };
       const value = await validateSchema(addData);
 

@@ -5,7 +5,7 @@ import { auth } from "../middlewares/auth";
 
 const router = express.Router();
 
-router.route("/create").post(CardController.createNew); //auth
+router.route("/create").post(auth, CardController.createNew); //auth
 //           /v1/cards/create
 // body  {
 //     "columnId":"61a0a9adc8dcb35c40971cd6",
