@@ -3,6 +3,7 @@ import { connectDB, getDB } from "./config/mongodb";
 import cors from "cors";
 import { api } from "./routes/index";
 import { corsOptions } from "./config/cors";
+import fileupload from "express-fileupload";
 
 // require("dotenv").config();
 import dotenv from "dotenv";
@@ -23,6 +24,7 @@ console.log(process.env.PORT);
 
 const bootServer = () => {
   const app = express();
+  app.use(fileupload({ useTempFiles: true }));
   app.use(cors());
   app.use(express.json());
   app.use("/v1", api);

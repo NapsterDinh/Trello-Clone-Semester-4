@@ -29,6 +29,7 @@ const createNew = async (data) => {
       const data1 = {
         ...result,
         ...value,
+        cards: [],
       };
 
       data1._id = data1.insertedId;

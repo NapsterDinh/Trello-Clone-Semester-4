@@ -10,7 +10,7 @@ router
   .post(ColumnValidation.createnew, ColumnController.creatNew);
 
 router.route("/update").put(ColumnValidation.update, ColumnController.update);
-router.route("/detele").delete(ColumnController.deleteColumn);
+router.route("/delete").delete(ColumnController.deleteColumn);
 router.route("/updateCardOrder").delete(auth, ColumnController.updateCardOrder);
 
 export const columnRoutes = router;

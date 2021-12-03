@@ -11,6 +11,8 @@ import { workSpaceTypeRoutes } from "./workSpaceType.route";
 import { bigTaskRoutes } from "./bigTask.route";
 import { smallTaskRoutes } from "./smallTask.route";
 import { tagRoutes } from "./tag.route";
+import { upLoadRoutes } from "./image.router";
+import { uploadFile } from "../shares/s3";
 
 const router = express.Router();
 
@@ -29,5 +31,5 @@ router.use("/workSpaceType", workSpaceTypeRoutes);
 router.use("/bigTask", bigTaskRoutes);
 router.use("/smallTask", smallTaskRoutes);
 router.use("/tag", tagRoutes);
-
+router.use("/image", upLoadRoutes);
 export const api = router;
