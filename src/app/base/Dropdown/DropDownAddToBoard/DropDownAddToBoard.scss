@@ -1,0 +1,147 @@
+@import "scss/__setting.scss";
+
+.invite-board-body
+{
+  padding: 0px 10px;
+  max-height: 276px;
+  overflow-y: auto;
+  margin-right: 10px;
+  //custom scroll-bar
+  &::-webkit-scrollbar{
+    -webkit-appearance: none;
+  }
+  &::-webkit-scrollbar:vertical{
+    width: $width-scrollbar-thumb;
+  }
+  &::-webkit-scrollbar-thumb{
+    background-color: darken($col-bg-color, 15);
+    border-radius: $border-radius;
+  }
+  li
+  {
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    padding-right: 10px;
+    &:first-child
+    {
+      margin-top: 10px;
+    }
+    button.btn-add, .btn-remove
+    {
+      margin-right: 0px!important;
+      &.btn-add
+      {
+        background-color: $app-bar-bg-color!important;
+        color: white;
+        display: block;
+      }
+      &.btn-remove
+      {
+        background-color: $border-color-input!important;
+        
+        display: none;
+      }
+      
+    }
+    span
+    {
+      font-size: 14px;
+      font-weight: 400;
+      display: none;
+    }
+    
+    &.exist
+    {
+      button.btn-add, .btn-remove
+      {
+        &.btn-add
+        {
+          display: none;
+        }
+        &.btn-remove
+        {
+          display: block;
+        }
+      }
+      .body-left
+      {
+        .user-item-netroi
+        {
+          h6
+          {
+            display: none;
+            &:last-child
+            {
+              display: block;
+            }
+          }
+        }
+        img
+        {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+        }
+      }
+    }
+    &.admin
+    {
+      span
+      {
+        display: block;
+      }
+      button.btn-add, .btn-remove
+      {
+        display: none;
+      }
+      .body-left
+      {
+        .user-item-netroi
+        {
+          h6
+          {
+            display: none;
+            &:last-child
+            {
+              display: block;
+            }
+          }
+        }
+        img
+        {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+        }
+      }
+    }
+    .body-left
+    {
+      display: flex;
+      .user-item-netroi
+      {
+        margin-left: 10px;
+        h5
+        {
+          font-size: 14px;
+        }
+        h6
+        {
+          font-size: 12px;
+          font-weight: 400;
+          &:last-child
+          {
+            display: none;
+          }
+        }
+      }
+      img
+      {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+      }
+    }
+  }
+}

@@ -27,7 +27,11 @@
       cursor: pointer;
       .column-title{
         flex: 90%;
-        margin: 10px 0 10px 0;
+        margin: 10px 0 0px 0;
+        input
+        {
+          margin-bottom: 0px;
+        }
       }
       .column-dropdown-actions{
         flex: 10%;
@@ -61,10 +65,11 @@
       border-bottom-left-radius: $border-radius;
       border-bottom-right-radius: $border-radius;
       color: #888;
-      height: 40px;
+      height: 45px;
       .footer-actions{
         border-radius: $border-radius-card;
         cursor: pointer;
+        height: 85%;
         &:hover{
           color: $col-color;
           background-color: rgb(228, 226, 226);

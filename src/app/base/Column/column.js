@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Container, Draggable } from 'react-smooth-dnd'
-import { Dropdown, Form, Button } from 'react-bootstrap'
+import { Dropdown, Form, Button, OverlayTrigger,Tooltip } from 'react-bootstrap'
 import { cloneDeep } from 'lodash'
-
+import { addNewCard, deleteCard } from 'app/core/apis/card'
 import './column.scss'
 
 import Card from '../Card/card'
@@ -15,7 +15,7 @@ import { saveContentAfterPressEnter, selectAllInlineText} from 'utilities/conten
 function Column(prop)
 {
   const { column, onCardDrop, onUpdateColumn} = prop
-  const cards = mapOrder(column.cards, column.cardOrder, 'id')
+  const cards = mapOrder(column.cards, column.cardOrder, '_id')
 
   const newCardInputRef = useRef(null)
 
@@ -30,6 +30,8 @@ function Column(prop)
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleOpenAddCardForm = () => setOpenNewCardForm(!openNewCardForm)
+
+  const [ error, setError ] = useState('')
 
   // useEffect Column Title
   useEffect(() => {
@@ -64,27 +66,77 @@ function Column(prop)
     onUpdateColumn(newColumn)
   }
 
-  const addNewCard = () => {
+  const onUpdateCard = async (newCardUpdated) => {
     if (!newCardTitle)
     {
+      setError('Bạn phải đặt tên cho thẻ này!!!')
       newCardInputRef.current.focus()
       return
     }
-
+    setError('')
+    console.log('here')
     const newCardToAdd = {
-      id: Math.random().toString(36).substr(2, 5), //5 random character, will remove when we implement code api
       boardId: column.boardId,
-      columnId: column.id,
-      title: newCardTitle.trim(),
-      cover: null
+      columnId: column._id,
+      title: newCardTitle.trim()
     }
 
     // let newColumns = [...column]
     // Main purpose is edit state then update new data from state to initial data
     // with let newColumns = [...column], we had edited initial data. That wrongs with main purpose
-    let newColumns = cloneDeep(column)
-    newColumns.cards.push(newCardToAdd)
-    newColumns.cardOrder.push(newCardToAdd.id)
+    let newColumns =  cloneDeep(column)
+    console.log(newColumns)
+
+    if(!newCardUpdated._typeDelete)
+    {
+      //add
+      newColumns.cards.push(newCardToAdd)
+      newColumns.cardOrder.push(newCardToAdd._id)
+    }
+    else
+    {
+      if(newCardUpdated._typeDelete === 'DELETE')
+      {
+        //delete
+        let index = newColumns.cards.findIndex((item) => item._id === newCardUpdated._id)
+        newColumns.cards.splice(index, 1)
+        index = newColumns.cardOrder.findIndex((item) => item === newCardUpdated._id)
+        newColumns.cardOrder.splice(index, 1)
+      }
+      else
+      {
+        //change state to saveInStorage
+      }
+    }
+
+    let res;
+
+    try {
+      if(!newCardUpdated._typeDelete)
+      {
+        //add
+        res = await addNewCard(newCardToAdd)
+      }
+      else
+      {
+        if(newCardUpdated._typeDelete === 'DELETE')
+        {
+          //delete
+          res = await deleteCard(newCardUpdated._id)
+        }
+        else
+        {
+          //change state to saveInStorage
+        }
+      }
+      if(!res.data.result)
+      {
+        console.log(res.data.msg)
+      }
+    } catch (error) {
+      
+      console.log(error.message)
+    }
 
     onUpdateColumn(newColumns)
     setNewCardTitle('')
@@ -127,8 +179,8 @@ function Column(prop)
         <div className ='card-list'>
           <Container
             groupName='col'
-            onDrop={dropResult => onCardDrop(column.id, dropResult)}
-            getChildPayload={index => cards[index]}
+            onDrop={dropResult => onCardDrop(column._id, dropResult)}
+            
             dragclassName='card-ghost'
             dropclassName='card-ghost-drop'
             dropPlaceholder={{
@@ -146,17 +198,24 @@ function Column(prop)
           </Container>
           {
             openNewCardForm &&
-              <div className="add-new-card-area">
+              <div className={!error ? "add-new-card-area input" : "add-new-card-area input error"}>
                 <Form.Control size="sm"
                   as="textarea"
                   rows="3"
                   placeholder="Enter card title..."
                   className="input-enter-new-card add-input"
                   ref={newCardInputRef}
+                  maxLength="100"
                   value={newCardTitle}
                   onChange={onNewCardTitleChange}
-                  onKeyDown={event => (event.key === 'Enter') && addNewCard()}>
+                  onKeyDown={event => (event.key === 'Enter') && onUpdateCard()}>
                 </Form.Control>
+                <OverlayTrigger
+                  placement="right"
+                  overlay={<Tooltip id="button-tooltip-4">{error}</Tooltip>}
+                >
+                  <i className="fa fa-exclamation-circle error" aria-hidden="true"></i>
+                </OverlayTrigger>
               </div>
           }
         </div>
@@ -164,7 +223,7 @@ function Column(prop)
           {
             openNewCardForm &&
                 <div className="column-action">
-                  <Button variant="success" size="sm" className="add-button" onClick={addNewCard}>Add new cards</Button>
+                  <Button variant="success" size="sm" className="add-button" onClick={onUpdateCard}>Add new cards</Button>
                   <i className="fa fa-trash icon" onClick={toggleOpenAddCardForm}></i>
                 </div>
           }

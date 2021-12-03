@@ -8,6 +8,7 @@ import loginReducer from "./loginReducer";
 import getTokenReducer from "./getTokenReducer";
 import userReducer from "./userReducer";
 import mainWorkSpaceReducer from "./mainWorkSpaceReducer";
+import boardReducer from "./boardReducer";
 
 const persistConfig = {
   key: "root",
@@ -18,7 +19,8 @@ const reducers = combineReducers({
     login: loginReducer,
     getToken: getTokenReducer,
     user: userReducer,
-    workSpace: mainWorkSpaceReducer
+    workSpace: mainWorkSpaceReducer,
+    board: boardReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

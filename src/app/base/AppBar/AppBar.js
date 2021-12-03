@@ -14,7 +14,9 @@ function AppBar()
         <header id="header" className="navbar-app">
             <div className="header-padding">
                 <div className="header-logo image-container">
-                    <img className="image" src={logo} alt=""></img>
+                    <a href="/workspace">
+                        <img className="image" src={logo} alt=""></img>
+                    </a> 
                 </div>
                 <DropDownWorkspace/>
                 {/* <DropdownButton className="header-lastest" title="Gần đây">

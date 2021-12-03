@@ -1,10 +1,100 @@
 @import "scss/__setting.scss";
 
 .navbar-board{
-    background-color: $app-bar-bg-color;
     font-size: 1.5rem;
     padding: $gap;
     display: flex;
     align-items: center;
     height: $board-bar-height;
+    color: $col-color;
+    .board-bar-padding
+    {
+      display: flex;
+      padding-top: 10px;
+      justify-content: space-between;
+      width: 100%;
+      .toggle
+      {
+        background-color: #00000014;
+        color: inherit;
+        &:hover
+        {
+          background-color: #ffffff52;
+        }
+      }
+      .btn
+      {
+        height: fit-content;
+        padding: 5px 10px;
+        margin-right: 20px;
+        border: none;
+        color: inherit;
+      }
+      .board-bar-left
+      {
+        display: flex;
+        .enter-new-title-board
+        {
+          margin-right: 20px;
+          input
+          {
+            padding: 5px;
+            padding-left: 10px;
+            min-width: 230px;
+            width: fit-content;
+            font-weight: 600;
+            color: $col-color;
+            font-size: 18px;
+            min-height: 32px;
+            height: 32px;
+            &:not(:focus):hover
+            {
+              background-color: #ffffff52;
+              cursor: pointer;
+            }
+            &:focus
+            {
+              cursor: text;
+              padding-bottom: 0px;
+              padding-top: 0px;
+              min-height: 32px;
+            }
+            &:not(:focus)
+            {
+              border: none;
+              background-color: transparent;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+        .board-bar-setting, .board-bar-invite
+        {
+          button
+          {
+            margin-top: 0px;
+            background-color: #00000014;
+            &:hover
+            {
+              background-color: #ffffff52;
+            }
+          }
+        }
+      }
+      .board-bar-right
+      {
+        display: flex;
+        .board-bar-filter, .board-bar-menu
+        {
+          button
+          {
+            margin-top: 0px;
+            background-color: #00000014;
+            &:hover
+            {
+              background-color: #ffffff52;
+            }
+          }
+        }
+      }
+    }
   }

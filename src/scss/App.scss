@@ -17,7 +17,33 @@ body
 .css-79elbk {
   position: static !important;
 }
-
+i.error
+{
+  color: red;
+  position: absolute;
+}
+.input
+{
+  
+  i.error
+  {
+    display: none;
+  }
+  &.error
+  {
+    input
+    {
+      &.form-control
+      {
+        border: 1px solid red;
+      }
+    }
+    i
+    {
+      display: block;
+    }
+  }
+}
 ._3C1ARRDXoDx7-m
 {
     display: flex;

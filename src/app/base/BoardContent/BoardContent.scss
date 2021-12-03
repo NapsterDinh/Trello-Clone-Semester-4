@@ -4,6 +4,12 @@
     display: flex;
     overflow-x: auto;
     height: $board-content-height;
+    padding-top: $gap;
+    .smooth-dnd-container
+    {
+      min-width: unset;
+      min-height: unset;
+    }
     &::after
     {
       content: '';
@@ -43,6 +49,10 @@
       &:hover{
         background-color: hsla(0, 0%, 100%, 0.34);
       }
+      i
+      {
+        color: white;
+      }
     }
     .enter-new-column
     {
@@ -53,8 +63,15 @@
       margin-left: $gap;
       background-color: $col-bg-color;
       border-radius: $border-radius-card;
+      position: relative;
       input{
         margin: 10px 0px;
+        padding-right: 25px;
+      }
+      i.error
+      {
+        right: 10px;
+        top: 22px;
       }
       button{
         margin-bottom: 5px;
