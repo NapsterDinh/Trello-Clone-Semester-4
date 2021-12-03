@@ -34,6 +34,7 @@ const createNew = async (data) => {
 
       data1._id = data1.insertedId;
       delete data1.insertedId;
+      data1.acknowledged;
 
       return {
         result: true,
