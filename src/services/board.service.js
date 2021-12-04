@@ -239,12 +239,12 @@ const deleteBoard = async (data) => {
     } else {
       const findWorkSpaceId = await getDB()
         .collection(boardCollectionName)
-        .findOne({ _id: ObjectId(data?.body?._id) });
+        .findOne({ _id: ObjectId(data?.query?._id) });
 
       const result = await getDB()
         .collection(boardCollectionName)
         .findOneAndDelete(
-          { _id: ObjectId(data?.body?._id) },
+          { _id: ObjectId(data?.query?._id) },
           { returnOriginal: false }
         );
       if (result) {
@@ -252,7 +252,7 @@ const deleteBoard = async (data) => {
           .collection(workSpaceCollectionName)
           .updateOne(
             { _id: ObjectId(findWorkSpaceId?.workSpaceId) },
-            { $pull: { boardId: { $in: [data?.body?._id] } } }
+            { $pull: { boardId: { $in: [data?.query?._id] } } }
           );
         return { result: true, msg: "Delete board success", data: result };
       } else {
