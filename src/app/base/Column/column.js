@@ -14,7 +14,7 @@ import { saveContentAfterPressEnter, selectAllInlineText} from 'utilities/conten
 
 function Column(prop)
 {
-  const { column, onCardDrop, onUpdateColumn} = prop
+  const { column, onCardDrop, onUpdateColumn, handleColBoardChange, indexCol} = prop
   const cards = mapOrder(column.cards, column.cardOrder, '_id')
 
   const newCardInputRef = useRef(null)
@@ -33,6 +33,9 @@ function Column(prop)
 
   const [ error, setError ] = useState('')
 
+  useEffect(()=> {
+    
+  }, [])
   // useEffect Column Title
   useEffect(() => {
     setColumnTitle(column.title)
@@ -66,7 +69,8 @@ function Column(prop)
     onUpdateColumn(newColumn)
   }
 
-  const onUpdateCard = async (newCardUpdated) => {
+  const onClickaddNewCard = async() => 
+  {
     if (!newCardTitle)
     {
       setError('Bạn phải đặt tên cho thẻ này!!!')
@@ -74,60 +78,64 @@ function Column(prop)
       return
     }
     setError('')
-    console.log('here')
     const newCardToAdd = {
       boardId: column.boardId,
       columnId: column._id,
       title: newCardTitle.trim()
     }
+    // let newColumns = [...column]
+    // Main purpose is edit state then update new data from state to initial data
+    // with let newColumns = [...column], we had edited initial data. That wrongs with main purpose
+    let newColumn =  cloneDeep(column)
 
+    try {
+      //add
+      const res = await addNewCard(newCardToAdd)
+      if(res && res.data.result)
+      {
+         //add
+        newColumn.cards.push(res.data.data.result1)
+        newColumn.cardOrder.push(res.data.data.result1._id)
+        handleColBoardChange(newColumn)
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+
+    //onUpdateColumn(newColumns)
+    setNewCardTitle('')
+    toggleOpenAddCardForm()
+  }
+  const onUpdateCard = async (newCardUpdated) => {
     // let newColumns = [...column]
     // Main purpose is edit state then update new data from state to initial data
     // with let newColumns = [...column], we had edited initial data. That wrongs with main purpose
     let newColumns =  cloneDeep(column)
-    console.log(newColumns)
 
-    if(!newCardUpdated._typeDelete)
+    if(newCardUpdated._typeDelete === 'DELETE')
     {
-      //add
-      newColumns.cards.push(newCardToAdd)
-      newColumns.cardOrder.push(newCardToAdd._id)
+      //delete
+      let index = newColumns.cards.findIndex((item) => item._id === newCardUpdated._id)
+      newColumns.cards.splice(index, 1)
+      index = newColumns.cardOrder.findIndex((item) => item === newCardUpdated._id)
+      newColumns.cardOrder.splice(index, 1)
     }
     else
     {
+      //change state to saveInStorage
+    }
+    
+    let res;
+
+    try {
       if(newCardUpdated._typeDelete === 'DELETE')
       {
         //delete
-        let index = newColumns.cards.findIndex((item) => item._id === newCardUpdated._id)
-        newColumns.cards.splice(index, 1)
-        index = newColumns.cardOrder.findIndex((item) => item === newCardUpdated._id)
-        newColumns.cardOrder.splice(index, 1)
+        res = await deleteCard(newCardUpdated._id)
       }
       else
       {
         //change state to saveInStorage
-      }
-    }
-
-    let res;
-
-    try {
-      if(!newCardUpdated._typeDelete)
-      {
-        //add
-        res = await addNewCard(newCardToAdd)
-      }
-      else
-      {
-        if(newCardUpdated._typeDelete === 'DELETE')
-        {
-          //delete
-          res = await deleteCard(newCardUpdated._id)
-        }
-        else
-        {
-          //change state to saveInStorage
-        }
       }
       if(!res.data.result)
       {
@@ -180,7 +188,7 @@ function Column(prop)
           <Container
             groupName='col'
             onDrop={dropResult => onCardDrop(column._id, dropResult)}
-            
+            getChildPayload={index => cards[index]}
             dragclassName='card-ghost'
             dropclassName='card-ghost-drop'
             dropPlaceholder={{
@@ -192,7 +200,7 @@ function Column(prop)
           >
             {cards.map((card, index) => (
               <Draggable key={index}>
-                <Card card={card} />
+                <Card col={column} indexCard={index} indexCol={indexCol} card={card} />
               </Draggable>
             ))}
           </Container>
@@ -223,7 +231,7 @@ function Column(prop)
           {
             openNewCardForm &&
                 <div className="column-action">
-                  <Button variant="success" size="sm" className="add-button" onClick={onUpdateCard}>Add new cards</Button>
+                  <Button variant="success" size="sm" className="add-button" onClick={onClickaddNewCard}>Add new cards</Button>
                   <i className="fa fa-trash icon" onClick={toggleOpenAddCardForm}></i>
                 </div>
           }

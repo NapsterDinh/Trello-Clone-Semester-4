@@ -42,10 +42,6 @@ export const inviteUser = (data) => {
 };
 
 export const removeUser = (data) => {
-  console.log(_put("/v1/workSpace/removeUser", {
-    _id: data._id,
-    userMail: data.userMail
-  }))
   return _put("/v1/workSpace/removeUser", {
     _id: data._id,
     userMail: data.userMail

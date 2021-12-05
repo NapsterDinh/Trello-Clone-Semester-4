@@ -12,14 +12,13 @@ export const counterSlice = createSlice({
     userReducer: (state, action) => {
       state.user = action.payload;
     },
-    showPanelCart: (state, action) => {
-      state.value = 'show'
-    },
-    hidePanelCart: (state, action) => {
-      state.value = ''
+    clearResults()
+    {
+      // Note that this should be left intentionally empty.
+			// Clearing redux state and localForage happens in rootReducer
     }
   },
 });
-export const { userReducer, showPanelCart, hidePanelCart } = counterSlice.actions;
+export const { userReducer, clearResults } = counterSlice.actions;
 
 export default counterSlice.reducer;

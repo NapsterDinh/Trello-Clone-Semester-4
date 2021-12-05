@@ -1,0 +1,486 @@
+@import "scss/__setting.scss"; 
+
+.modal-card-detail
+{
+    &.show
+    {
+        .modal-dialog
+        {
+            .modal-content
+            {
+                background-color: #f4f5f7;
+                position: relative;
+                width: 900px;
+                .close
+                {
+                    z-index: 9999;
+                    position: absolute;
+                    right: 0;
+                    margin: 10px;
+                    height: 40px;
+                    width: 40px;
+                    border-radius: 50%;
+                    background-color: #00000014;
+                    color: $col-color;
+                    span
+                    {
+                        line-height: 30px;
+                    }
+                    &:hover
+                    {
+                        background-color: #00000029;
+                    }
+                }
+                .modal-header
+                {
+                    display: none;
+                    padding: 0;
+                    height: 130px;
+                    align-items: flex-end;
+                    justify-content: end;
+                    .wall-paper-btn
+                    {
+                        margin: 10px;
+                        background-color: #00000014;
+                        color: $col-color;
+                        border: none;
+                        &:hover
+                        {
+                            background-color: #00000029;
+                        }
+                    }
+                }
+                .modal-body
+                {
+                    .card-header
+                    {
+                        position: relative;
+                        textarea
+                        {
+                            margin-left: 30px;
+                            background-color: #f4f5f7;
+                            width: 90%;
+                            font-weight: 600;
+                            font-size: 18px;
+                            border: none;
+                            margin-bottom: 0px;
+                            &::placeholder
+                            {
+                                font-weight: 400;
+                            }
+                            &:focus
+                            {
+                                background-color: white;
+                                border: 2px solid $text-active;
+                            }
+                        }
+                        span
+                        {
+                            margin-left: 43px;
+                        }
+                    }
+                    .card-body
+                    {
+                        display: flex;
+                        justify-content: space-between;
+                        .card-left
+                        {
+                            .tag-deadline-container
+                            {
+                                display: flex;
+                                margin-left: 40px;
+                                flex-wrap: wrap;
+                                .tag-container
+                                {
+                                    margin-right: 20px;
+                                    span
+                                    {
+                                        font-weight: 600;
+                                    }
+                                    ul
+                                    {
+                                        display: flex;
+                                        margin-right: 20px;
+                                        li
+                                        {
+                                            margin-bottom: 10px;
+                                            border-radius: 5px;
+                                            color: white;
+                                            cursor: pointer;
+                                            margin-right: 5px;
+                                            background-color: #f2d600;
+                                            padding: 0px 10px;
+                                            text-align: center;
+                                            line-height: 35px;
+                                            &:hover
+                                            {
+                                                opacity: 0.8;
+                                            }
+                                        }
+                                        .tag-add-toggle
+                                        {
+                                            background-color: #091e420a;
+                                            padding: 0px;
+                                            &:hover
+                                            {
+                                                background-color: #091e4214;
+                                            }
+                                            i
+                                            {
+                                                margin: 0px;
+                                            }
+                                        }
+                                    }
+                                }
+                                .deadline-container
+                                {
+                                    margin-bottom: 10px;
+                                    span
+                                    {
+                                        font-weight: 600;
+                                    }
+                                    .deadline-check
+                                    {
+                                        display: flex;
+                                        margin-top: 10px;
+                                        .deadline-picker
+                                        {
+                                            button
+                                            {
+                                                background-color: #091e420a;
+                                                color: $col-color;
+                                                &:hover
+                                                {
+                                                    background-color: #091e4214;
+                                                }
+                                            }
+                                        }
+                                        .form-check
+                                        {
+                                            padding-top: 5px;
+                                            input
+                                            {
+                                                cursor: pointer;
+                                            }
+                                        }
+                                        span
+                                        {
+                                            font-weight: 400;
+                                            font-size: 16px;
+                                            letter-spacing: 1px;
+                                            padding: 5px 10px;
+                                            background-color: #091e420a;
+                                            border-radius: 5px;
+                                            
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                            .description-container
+                            {
+                                position: relative;
+                                i
+                                {
+                                    top: 0px;
+                                }
+                                span
+                                {
+                                    font-weight: 600;
+                                    margin-left: 40px;
+                                    font-size: 16px;
+                                }
+                                .ck-editor
+                                {
+                                    margin-top: 20px;
+                                    margin-left: 40px;
+                                    .ck-sticky-panel
+                                    {
+                                        .ck-sticky-panel__content
+                                        {
+                                            margin-right: 10px;
+                                        }
+                                    }
+                                    .ck-editor__main
+                                    {
+                                        margin-right: 10px;
+                                        .ck-editor__editable
+                                        {
+                                            background-color: transparent;
+                                            &.ck-focused
+                                            {
+                                                background-color: white;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .attachments-container
+                            {
+                                margin-top: 20px;
+                                position: relative;
+                                i
+                                {
+                                    top: 0px;
+                                }
+                                span
+                                {
+                                    font-weight: 600;
+                                    margin-left: 40px;
+                                    font-size: 16px;
+                                }
+                                ul
+                                {
+                                    margin-top: 20px;
+                                    margin-left: 40px;
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    li
+                                    {
+                                        width: fit-content;
+                                        padding: 0px;
+                                        margin-right: 10px;
+                                        margin-bottom: 10px;
+                                        color: white;
+                                        cursor: pointer;
+                                        background-color: #f2d600;
+                                        text-align: center;
+                                        line-height: 35px;
+                                        position: relative;
+                                        border-radius: 10px;
+                                        &:hover
+                                        {
+                                            img
+                                            {
+                                                opacity: 0.8;
+                                            }
+                                            button
+                                            {
+                                                display: block;
+                                            }
+                                        }
+                                        img
+                                        {
+                                            height: 100px;
+                                            width: 130px;
+                                            object-fit: cover;
+                                            border-radius: 10px;
+                                        }
+                                        button
+                                        {
+                                            position: absolute;
+                                            display: none;
+                                            right: 10px;
+                                            top: 5px;
+                                            padding: 0px;
+                                            border-radius: 50%;
+                                            background-color: $col-color;
+                                            i
+                                            {
+                                                position: relative;
+                                                font-size: 16px;
+                                                width: 20px;
+                                                height: 20px;
+                                                color: white!important;
+                                                margin: 0;
+                                                padding: 0;
+                                            }
+                                            
+                                        }
+                                        &:last-child
+                                        {
+                                            background-color: transparent;
+                                            cursor: default;
+                                            display: flex;
+                                            align-items: flex-end;
+                                            &:hover
+                                            {
+                                                background-color: transparent;
+                                            }
+                                            button
+                                            {
+                                                position: relative;
+                                                display: block;
+                                                bottom: 0;
+                                                left: 0px;
+                                                background-color: #091e420a;
+                                                color: $col-color;
+                                                border-radius: 5px;
+                                                padding: 5px 10px;
+                                                margin-bottom: 5px;
+                                                &:hover
+                                                {
+                                                    background-color: #091e4214;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                            .task-container
+                            {
+                                margin-top: 20px;
+                                .big-task-item
+                                {
+                                    position: relative;
+                                    i
+                                    {
+                                        font-size: 20px;
+                                        top: 0;
+                                    }
+                                    span
+                                    {
+                                        font-size: 16px;
+                                        font-weight: 600;
+                                        margin-left: 40px;
+                                    }
+                                    .btn
+                                    {
+                                        position: absolute;
+                                        right: 0;
+                                        background-color: #091e420a;
+                                        color: $col-color;
+                                        top: -7px;
+                                        &:hover
+                                        {
+                                            background-color: #091e4214;
+                                        }
+                                    }
+                                    .progress
+                                    {
+                                        margin-top: 20px;
+                                        margin-left: 40px;
+                                    }
+                                    .small-task-list
+                                    {
+                                        .small-task-item
+                                        {
+                                            display: flex;
+                                            padding: 5px 10px;
+                                            cursor: pointer;
+                                            margin-top: 10px;
+                                            &:hover
+                                            {
+                                                background-color: #091e420a;
+                                                i
+                                                {
+                                                    display: flex;
+                                                }
+                                            }
+                                            .checkbox-container
+                                            {
+                                                .form-check
+                                                {
+                                                    display: flex;
+                                                    justify-content: center;
+                                                    align-items: center;
+                                                    margin-bottom: 0px;
+                                                    margin-top: 3px;
+                                                    input
+                                                    {
+                                                        padding-top: 2px;
+                                                    }
+                                                }
+                                            }
+                                            span
+                                            {
+                                                width: 90%;
+                                                line-height: 23px;
+                                                font-size: 14px;
+                                                font-weight: 400;
+                                                padding-top: 4px;
+                                                margin-right: 10px;
+                                                word-wrap: break-word;
+                                                margin-left: 10px;
+                                            }
+                                            i
+                                            {
+                                                font-weight: 400;
+                                                font-size: 16px;
+                                                display: flex;
+                                                align-items: center;
+                                                display: none;
+                                            }
+                                            &:last-child
+                                            {
+                                                background-color: transparent;
+                                                &:hover
+                                                {
+                                                    background-color: transparent;
+                                                }
+                                                button
+                                                {
+                                                    position: relative;
+                                                    margin-left: 30px;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .card-right
+                        {
+                            
+                            li
+                            {
+                                span
+                                {
+                                    color: $col-color;
+                                    font-size: 14px;
+                                    font-weight: 600;
+                                    margin-bottom: 20px;
+                                }
+                                .btn
+                                {
+                                    padding: 0px;
+                                    width: 100%;
+                                    button
+                                    {
+                                        background-color: #091e420a;
+                                        color: $col-color;
+                                        border-radius: 5px;
+                                        padding: 8px 15px;
+                                        margin-bottom: 5px;
+                                        text-align: left;
+                                        &:hover
+                                        {
+                                            background-color: #091e4214;
+                                        }
+                                        &::after
+                                        {
+                                            display: none;
+                                        }
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.active-wallpaper
+        {
+            .modal-header
+            {
+                display: flex!important;
+            }
+        }
+    }
+    i, span, textarea
+    {
+        color: $col-color!important;
+    }
+    i.icon
+    {
+        position: absolute;
+        top: 15px;
+        font-size: 20px;
+    }
+    .flex
+    {
+        display: flex;
+    }
+
+}

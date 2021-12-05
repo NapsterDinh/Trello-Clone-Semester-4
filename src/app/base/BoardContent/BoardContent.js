@@ -1,66 +1,49 @@
 import React, {useState, useEffect, useRef} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { Container as BootstrapContainer, Row, Col, Form, Button, OverlayTrigger,Tooltip } from 'react-bootstrap'
-import { isEmpty } from 'lodash'
-import { useSelector, useDispatch } from 'react-redux'
-import { boardHandleActionReducer } from 'store/boardReducer'
+import { isEmpty, cloneDeep } from 'lodash'
 
 import './BoardContent.scss'
 import Column from '../Column/column'
-import { applyDrag } from 'utilities/dragDrop'
-
-import { mapOrder } from 'utilities/sort'
-
-import { getFullBoard } from 'app/core/apis/board'
-import { getDateOFForm } from 'utilities/format'
+import { applyDragIncol, applyDragTwoCol } from 'utilities/dragDrop'
+import { boardHandleActionReducer } from 'store/boardReducer'
 
 import { addNewColumn as addNewColumn1,
         updateColumn as updateColumn1,
         deleteColumn as deleteColumn1 } from 'app/core/apis/column'
+import { updateCardOrder } from 'app/core/apis/column'
 import { updateColumnOrder } from 'app/core/apis/board'
 
-function BoardContent()
+function BoardContent(props)
 {
-  const [board, setBoard ] = useState({})
-  const [columns, setColumns] = useState([])
+  const board = useSelector(state => state.board.board)
+  const columns = board.columns
+
+  const dispatch = useDispatch()
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
 
   const newColumnInputRef = useRef(null)
-  const dispatch = useDispatch()
-  
+
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const onNewColumnTitleChange = (e) => setNewColumnTitle(e.target.value)
   const [ error, setError ] = useState('')
 
-  const _id = window.location.pathname.split("/");
-  const boardId = _id[2];
-
-
-  const fetchFullBoardById = async () => {
-    try {
-      const res = await getFullBoard(boardId);
-      console.log(res.data)
-      if(res && res.data.result && res.data.data)
-      {
-        setBoard(res.data.data);
-        setColumns(mapOrder(res.data.data.columns, res.data.data.columnOrder, "_id"));
-        dispatch(boardHandleActionReducer({
-          board: {...res.data.data},
-          type: 'SET_BOARD'
-        }))
-      }
-      else
-      {
-        console.log(res.data.msg)
-      }
-    } catch (error) {
-      console.log(error.message)
-    }
-    
+  const setBoard = (boardResult) => 
+  {
+    dispatch(boardHandleActionReducer({
+      type: 'SET_BOARD',
+      board: boardResult
+    }))
   }
-  useEffect(() => {
-    fetchFullBoardById()
-  }, []);
+
+  const setColumns = (columnsResult) => 
+  {
+    dispatch(boardHandleActionReducer({
+      type: 'SET_COLUMNS',
+      columns: columnsResult
+    }))
+  }
 
   useEffect(() => {
     if (newColumnInputRef && newColumnInputRef.current)
@@ -77,7 +60,7 @@ function BoardContent()
   const onColumnDrop = async (dropResult) => {
     // clone array to new array, process col then edit with newCol, finally save
     let newColumns = [...columns]
-    newColumns = applyDrag(newColumns, dropResult)
+    newColumns = applyDragIncol(newColumns, dropResult)
 
     let newBoard = {...board}
     newBoard.columnOrder = newColumns.map(c => c._id)
@@ -89,7 +72,6 @@ function BoardContent()
 
     try {
       const res = await updateColumnOrder(newBoard)
-      console.log(res)
       if(!res.data.result)
       {
         setColumns(columns)
@@ -103,17 +85,56 @@ function BoardContent()
     }
   }
 
-  const onCardDrop = (columnId,dropResult) => {
-    if (dropResult.removeIndex !== null || dropResult.addedIndex !== null)
-    {
-      let newColumns = [...columns]
+  const onCardDrop = async (columnId,dropResult) => {
+   if(dropResult.removedIndex !== null
+      && dropResult.addedIndex !== null
+      && dropResult.removedIndex !== dropResult.addedIndex)
+   {
+     // change item card in col
+     let newColumns = cloneDeep(columns)
 
-      let currentColumn = newColumns.find(c => c._id === columnId)
-      currentColumn.cards = applyDrag(currentColumn.cards, dropResult)
+     let currentColumn = newColumns.find(c => c._id === columnId)
+     currentColumn.cards = applyDragIncol(currentColumn.cards, dropResult)
+     currentColumn.cardOrder = currentColumn.cards.map(c => c._id)
+     currentColumn.isUpdateColId = false
+     setColumns(newColumns)
+     try {
+       const res = await updateCardOrder(currentColumn)
+       if(res && res.data.result)
+       {
+         console.log(res.data.msg)
+       }
+     } catch (error) {
+       console.log(error.message)
+     }
+   }
+   else if(dropResult.removedIndex !== null || dropResult.addedIndex !== null)
+   {
+      // change item card in col
+     let newColumns = cloneDeep(columns)
+
+     let currentColumn = newColumns.find(c => c._id === columnId)
+     const result = applyDragTwoCol(currentColumn.cards, currentColumn._id, dropResult)
+   
+     currentColumn.cards = result.result
       currentColumn.cardOrder = currentColumn.cards.map(c => c._id)
-
-      setColumns(newColumns)
-    }
+      currentColumn.itemToAdd =  result.itemToAdd
+      currentColumn.isUpdateColId = false
+     if(dropResult.addedIndex !== null)
+     {
+        currentColumn.isUpdateColId = true
+     }
+     setColumns(newColumns)
+         try {
+           const res = await updateCardOrder(currentColumn)
+           if(!res || !res.data.result)
+           {
+             console.log(res.data.msg)
+           }
+         } catch (error) {
+           console.log(error.message)
+         }
+   }
   }
 
   const addNewColumn = async () => {
@@ -135,11 +156,9 @@ function BoardContent()
     let newBoard = {...board}
     try {
       const res = await addNewColumn1(newColumnToAdd)
-      console.log(res)
       if(res && res.data.result)
       {
         newColumns.push(res.data.data)
-
         newBoard.columnOrder = newColumns.map(c => c._id)
         newBoard.columns = newColumns
       }
@@ -150,6 +169,8 @@ function BoardContent()
     } catch (error) {
       console.log(error.message)
     }
+
+    console.log('newboard: ',newBoard)
     setColumns(newColumns)
 
     setBoard(newBoard)
@@ -157,15 +178,11 @@ function BoardContent()
     toggleOpenAddColumnForm()
   }
 
-  const onUpdateColumn = async (newColumnToUpdate) => {
-    const columnIdToUpdate = newColumnToUpdate._id
-
-    console.log('_id', columnIdToUpdate)
-
+  const handleColBoardChange = (newColumnToUpdate) => {
     let newColumns = [...columns]
     let newBoard = {...board}
 
-    const columnIndexToUpdate = newColumns.findIndex(c => c._id === columnIdToUpdate)
+    const columnIndexToUpdate = newColumns.findIndex(c => c._id === newColumnToUpdate._id)
     if (newColumnToUpdate._destroy)
     {
       // remove column
@@ -180,10 +197,14 @@ function BoardContent()
 
     newBoard.columnOrder = newColumns.map(c => c._id)
     newBoard.columns = newColumns
-
     setColumns(newColumns)
 
     setBoard(newBoard)
+  }
+
+  const onUpdateColumn = async (newColumnToUpdate) => {
+
+    handleColBoardChange(newColumnToUpdate)
 
     let res;
 
@@ -191,7 +212,7 @@ function BoardContent()
       if (newColumnToUpdate._destroy)
       {
         // remove column
-        res = await deleteColumn1(columnIdToUpdate)
+        res = await deleteColumn1(newColumnToUpdate._id)
       }
       else
       {
@@ -229,7 +250,7 @@ function BoardContent()
       >
         {columns.map((column, index) => (
           <Draggable key={index}>
-            <Column key={index} column={column} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn}/>
+            <Column key={index} column={column} indexCol={index} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn} handleColBoardChange={handleColBoardChange}/>
           </Draggable>
         ))}
       </Container>

@@ -55,7 +55,6 @@ const ModalDeleteWorkSpace = (props) =>
             })
             setShow(false)
             setIsActive(false)
-            console.log(res)
             if(res && res.data.result)
             {
                 showNotification('Loại bỏ người này khỏi không gian làm việc thành công', 'Bạn vừa Loại bỏ người này khỏi 1 không gian làm việc', type.succsess, 3000)

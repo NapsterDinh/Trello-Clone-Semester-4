@@ -10,6 +10,7 @@ import './AppBar.scss'
 function AppBar()
 {
     const user = useSelector(state => state.user.user)
+
     return (
         <header id="header" className="navbar-app">
             <div className="header-padding">

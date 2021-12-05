@@ -3,6 +3,10 @@ import { Dropdown, CloseButton } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { userReducer } from "store/userReducer";
 import { getTokenReducer } from "store/getTokenReducer";
+import { loginReducer } from "store/loginReducer";
+import { mainWorkSpaceReducer } from "store/mainWorkSpaceReducer";
+import { boardHandleActionReducer } from "store/boardReducer";
+import { cardHandleReducer } from "store/cardReducer";
 import { useHistory } from "react-router-dom";
 
 import './CustomDropDropwProfile.scss'
@@ -16,7 +20,17 @@ const CustomDropDropwProfile = (props) => {
 
     const logout = () => {
         dispatch(userReducer(""));
-        dispatch(getTokenReducer(""));  
+        dispatch(getTokenReducer(""));   
+        dispatch(loginReducer(""));  
+        dispatch(mainWorkSpaceReducer({
+            type: 'LOGOUT'
+        }));  
+        dispatch(boardHandleActionReducer({
+            type: 'LOGOUT'
+        }));  
+        dispatch(cardHandleReducer({
+            type: 'LOGOUT'
+        }));  
         history.push("/login")
     }
 

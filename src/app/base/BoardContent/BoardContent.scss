@@ -5,11 +5,7 @@
     overflow-x: auto;
     height: $board-content-height;
     padding-top: $gap;
-    .smooth-dnd-container
-    {
-      min-width: unset;
-      min-height: unset;
-    }
+
     &::after
     {
       content: '';

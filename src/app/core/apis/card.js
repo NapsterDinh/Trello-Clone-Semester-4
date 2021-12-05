@@ -17,11 +17,7 @@ export const addNewCard = (data) => {
 //     "_id":"61a6d6588c55bc3737ad7329"
 // }
 export const updateCard = (data) => {
-    return _put("/v1/cards/updateTitle", 
-    {
-        "title":data.title,
-        "_id":data._id
-    }
+    return _put("/v1/cards/updateTitle", data
     );
 };
 
@@ -31,11 +27,7 @@ export const updateCard = (data) => {
 //     "_id":"61a6e3494648825573b324c3"
 // }
 export const updateDescription = (data) => {
-    return _put("/v1/cards/updateDescription", 
-    {
-        "description":data.description,
-        "_id":data._id
-    });
+    return _put("/v1/cards/updateDescription", data);
 };
 
 //          /v1/cards/updateDate
@@ -44,11 +36,7 @@ export const updateDescription = (data) => {
 //     "_id":"61a6e3494648825573b324c3"
 // }
 export const updateDate = (data) => {
-    return _put("/v1/cards/updateDate", 
-    {
-        "dateTime": data.dateTime,          //Nhớ yyyy-mm--date nha!
-        "_id":data._id
-    });
+    return _put("/v1/cards/updateDate", data);
 };
 
 //          /v1/cards/updateAttachment

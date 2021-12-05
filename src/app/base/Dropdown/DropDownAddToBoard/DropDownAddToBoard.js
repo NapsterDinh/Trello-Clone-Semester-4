@@ -4,7 +4,7 @@ import { Dropdown, Button, DropdownButton } from 'react-bootstrap'
 import ToggleWorkSpace from 'app/base/CustomToggle/ToggleWorkSpace/ToggleWorkSpace';
 import logo from 'app/Images/features/1.jpg'
 import { boardHandleActionReducer } from 'store/boardReducer'
-import { listUserBoard } from 'app/core/apis/board'
+
 import { addUserToBoard, removeUserToBoard } from 'app/core/apis/board';
 
 import './DropDownAddToBoard.scss'
@@ -20,27 +20,6 @@ function DropDownAddToBoard(props)
 
     const _id = window.location.pathname.split("/");
     const boardId = _id[2];
-
-    useEffect(async () => {
-        try {
-            const res = await listUserBoard(boardId)
-            console.log(res)
-            if(res && res.data.result)
-            {
-                dispatch(boardHandleActionReducer({
-                    listUserBoard: res.data.data,
-                    type: "SET_LIST_USER_BOARD"
-                }))
-            }
-            else
-            {
-                console.log(res.data.msg)
-            }
-        } catch (error) {
-            console.log(error.message)
-        }
-        
-    }, [])
 
     const onAddUserToBoard = async (item) => {
         try {

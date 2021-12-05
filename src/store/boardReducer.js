@@ -16,9 +16,11 @@ export const counterSlice = createSlice({
             case 'SET_BOARD':
                 state.board = action.payload.board
                 break;
+            case 'SET_COLUMNS':
+                state.board.columns = action.payload.columns
+                break;
             case "SET_LIST_USER_BOARD":
                 state.listUserBoard = action.payload.listUserBoard
-                console.log(current(state))
                 break;
             case 'ADD_USER_TO_BOARD':
                 state.listUserBoard.listUserBoard.push(action.payload.user)
@@ -32,7 +34,17 @@ export const counterSlice = createSlice({
                     state.listUserBoard.listUserBoard.findIndex(item => item._id === action.payload.user._id), 1
                 )
                 break
+            case 'SET_TITLE_BOARD':
+                state.board.title = action.payload.title
+                break
+            case 'UPDATE_CARD':
+                state.board.columns[action.payload.card.indexCol].cards[action.payload.card.indexCard] = action.payload.card
+                break
             default:
+                state = {
+                    board: '',
+                    listUserBoard: ''
+                }
                 break;
         }
     }

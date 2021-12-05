@@ -13,6 +13,7 @@ import { getWorkSpaceOwerAndGuest } from 'app/core/apis/workSpace'
 import { showNotification, type } from "utilities/component/notification/Notification";
 import { mainWorkSpaceReducer } from 'store/mainWorkSpaceReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import BoardBar from "app/base/BoardBar/BoardBar";
 
 const path = "/workspace/:id/:type(boards||members||highlight||setting)"
 
@@ -37,8 +38,6 @@ const WorkSpacePage = (props) => {
         const res = await getWorkSpaceOwerAndGuest()
         if(res && res.data.result && res.status == 200)
         {
-            console.log( [...res.data.data.workSpaceAndBoardOwer.resultOwer])
-            console.log( [...res.data.data.workSpaceAndBoardGuest.resultGuest])
             dispatch(mainWorkSpaceReducer({
                 resultOwer: [...res.data.data.workSpaceAndBoardOwer.resultOwer],
                 resultGuest: [...res.data.data.workSpaceAndBoardGuest.resultGuest],
@@ -56,8 +55,6 @@ const WorkSpacePage = (props) => {
     useEffect(() => {
         fetchWorkSpaceOwerAndGuest()
     }, [location])
-
-    
 
     return(
         <div className="trello-app workspace-page">

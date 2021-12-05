@@ -53,6 +53,12 @@ export const counterSlice = createSlice({
             state.owerWP[index] = action.payload 
             break;
         default:
+          state = {
+            curWP: "",
+            owerWP: [],
+            guestWP: [],
+            type: ''
+          }
           break;
       }
     },

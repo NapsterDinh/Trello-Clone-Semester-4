@@ -1,0 +1,135 @@
+@import "scss/__setting.scss";
+
+.card-tag-dropdown
+{
+  .tag-choose-body
+  {
+    margin: 10px 15px;
+    ul
+    {
+      li
+      {
+        display: flex;
+        .card-label
+        {
+          margin-bottom: 5px!important;
+          width: 90%;
+          margin-right: 15px;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          background-color: #519839;
+          border-radius: 4px;
+          color: #fff!important;
+          display: block;
+          max-width: 100%;
+          overflow: hidden;
+          padding: 4px 6px;
+          position: relative;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          &.mod-sectable
+          {
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: 700;
+            margin: 0 0 4px;
+            min-height: 20px;
+            padding: 6px 12px;
+            position: relative;
+            transition: padding 85ms,margin 85ms,box-shadow 85ms;
+          }
+          &:hover
+          {
+            margin-left: 4px;
+            box-shadow: -8px 0 #97a0af;
+          }
+        }
+        a
+        {
+          height: 30px;
+          i
+          {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    
+  }
+  &.show
+  {
+    .tag-choose-body
+    {
+      
+    }
+    button
+      {
+        &.btn-confirm
+          {
+            margin-left: 15px;
+            background-color: #091e420a!important;
+            color: $col-color;
+            text-align: center!important;
+            &:hover
+            {
+                background-color: #091e4214!important;
+            }
+          }
+      }
+    .dropdown-header
+    {
+      cursor: default;
+    position: relative;
+    i
+    {
+      cursor: pointer;
+      position: absolute;
+      color: #6B778C!important;
+      top: 5px;
+      left: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .tag-added-body
+  {
+    margin: 10px 15px;
+    span
+    {
+      color: #6B778C!important;
+      font-size: 12px!important;
+    }
+    input
+    {
+      background-color: #fafbfc;
+      color: $col-color;
+    }
+    form
+    {
+      margin-left: 80px;
+      input
+      {
+        height: 60px;
+        width: 80px;
+        cursor: pointer;
+      }
+    }
+  }
+  button
+    {
+      &.btn-add
+        {
+          margin-left: 15px;
+          background-color: #0d6efd!important;
+          color: white!important;
+          text-align: center!important;
+          &:hover
+          {
+            background-color: #0b5ed7!important;
+          }
+        }
+    }
+  }
+  
+  
+}

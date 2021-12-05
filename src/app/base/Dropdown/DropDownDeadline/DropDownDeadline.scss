@@ -1,0 +1,55 @@
+@import "scss/__setting.scss";
+
+.card-deadline-dropdown
+{
+  .deadline-choose-body
+  {
+    margin: 10px 15px;
+    .react-datepicker-wrapper
+    {
+      margin-top: 10px;
+      .react-datepicker__input-container
+      {
+        position: relative;
+        input
+        {
+          border: 1px solid $link-hover;
+        }
+        button
+        {
+          top: -3px;
+          left: 70%;
+          height: 30px;
+        }
+      }
+    }
+  }
+  &.show
+  {
+    button
+    {
+      &.btn-confirm
+      {
+        margin-left: 10px;
+        background-color: #0d6efd!important;
+        color: white!important;
+        text-align: center!important;
+        &:hover
+        {
+          background-color: #0b5ed7!important;
+        }
+      }
+      &.btn-cancel
+      {
+        margin-left: 10px;
+        background-color: #091e420a!important;
+        color: $col-color!important;
+        text-align: center!important;
+        &:hover
+        {
+            background-color: #091e4214!important;
+        }
+      }
+    }
+  }
+}

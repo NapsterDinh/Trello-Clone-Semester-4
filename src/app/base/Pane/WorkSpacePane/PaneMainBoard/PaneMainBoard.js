@@ -79,7 +79,7 @@ const PaneMainBoard =  (props) =>
                                 ))
                             }
                             {
-                                curWP.boardId.length === 0 && 
+                                curWP?.boardId?.length === 0 && 
                                 <div className="_3C1ARRDXoDx7-m">
                                     <img alt="Uh, không có ai ở đây có cái tên đó." className="_15AZHaZB4zq2Gi" src="https://a.trellocdn.com/prgb/dist/images/organization/missing.76c64abe1db1ea0f92df.svg"></img>
                                     <div className="N6pxYXUylS_c1r">

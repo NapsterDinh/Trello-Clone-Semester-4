@@ -11,6 +11,11 @@ export const updateColumn = (data) => {
     return _put("/v1/columns/update",data);
 };
 
+//_id, title (body)
+export const updateCardOrder = (data) => {
+  return _put("/v1/columns/updateCardOrder",data);
+};
+
 //_id (body)
 export const deleteColumn = (data) => {
     return _delete("/v1/columns/delete", {_id: data});

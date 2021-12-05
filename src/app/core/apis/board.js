@@ -15,9 +15,6 @@ export const getFullBoard = (data) => {
 
 // _id, userCreate (query)
 export const listUserBoard = (data) => {
-  console.log(_get("/v1/boards/listUserBoard", {
-    _id: data
-  }))
   return _get("/v1/boards/listUserBoard", {
     _id: data
   });
@@ -25,12 +22,7 @@ export const listUserBoard = (data) => {
 
 //_id, title, userId (body)
 export const updateBoard = (data) => {
-  return _put("/v1/boards/update", 
-    {
-      _id: data._id,
-      title: data.title,
-      userId: data.userId
-    }
+  return _put("/v1/boards/update", data
   );
 };
 
@@ -40,8 +32,8 @@ export const updateColumnOrder = (data) => {
 
 //_id (body)
 export const deleteBoard = (data) => {
-  return delete("/v1/boards/delete", {
-    _id: data._id
+  return _delete("/v1/boards/delete", {
+    _id: data
   });
 };
 
