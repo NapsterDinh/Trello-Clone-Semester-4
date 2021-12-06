@@ -80,10 +80,27 @@ const getListTag = async (req, res) => {
   }
 };
 
+const tagOrder = async (req, res) => {
+  try {
+    const { result, msg, data } = await tagService.tagorder(req);
+
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const tagController = {
   createTag,
   updateName,
   updateColor,
   deleteTag,
   getListTag,
+  tagOrder,
 };

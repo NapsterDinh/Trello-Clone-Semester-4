@@ -178,8 +178,6 @@ const updatePercentage = async (_id, data) => {
         { _id: _id },
         { $set: { percentage: (data * 100).toFixed(0) } }
       );
-
-    console.log("percen", data);
   } catch (error) {
     throw new Error(error);
   }

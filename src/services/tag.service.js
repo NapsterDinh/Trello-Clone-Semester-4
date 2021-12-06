@@ -14,18 +14,11 @@ import { tagCollectionName, validateSchema } from "../models/tag.model";
 
 const createTag = async (data) => {
   try {
-    const { cardId, boardId } = data?.body;
+    const { boardId } = data?.body;
     const value = await validateSchema(data?.body);
 
     const result = await getDB().collection(tagCollectionName).insertOne(value);
     if (result?.acknowledged) {
-      await getDB()
-        .collection(cardCollectionName)
-        .updateOne(
-          { _id: ObjectId(cardId) },
-          { $push: { tagOrder: result.insertedId.toString() } }
-        );
-
       await getDB()
         .collection(boardCollectionName)
         .updateOne(
@@ -110,6 +103,32 @@ const updateColor = async (data) => {
   }
 };
 
+const tagorder = async (data) => {
+  try {
+    const { _id } = data.body;
+
+    await getDB()
+      .collection(cardCollectionName)
+      .updateOne({ _id: ObjectId(cardId) }, { $push: { tagOrder: _id } });
+
+    if (result) {
+      return {
+        result: true,
+        msg: "update done! ",
+        data: result,
+      };
+    } else {
+      return {
+        result: true,
+        msg: "update done! ",
+        data: result,
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const deleteTag = async (data) => {
   try {
     const { _id } = data.query;
@@ -130,12 +149,6 @@ const deleteTag = async (data) => {
           { $pull: { tagOrder: { $in: [_id] } } }
         );
 
-      await getDB()
-        .collection(boardCollectionName)
-        .updateOne(
-          { _id: ObjectId(removeTag?.boardId) },
-          { $pull: { tagOrder: { $in: [_id] } } }
-        );
       return {
         result: false,
         msg: "You  delete task ",
@@ -180,4 +193,5 @@ export const tagService = {
   updateColor,
   deleteTag,
   getListTag,
+  tagorder,
 };
