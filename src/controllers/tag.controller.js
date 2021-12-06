@@ -64,9 +64,26 @@ const deleteTag = async (req, res) => {
   }
 };
 
+const getListTag = async (req, res) => {
+  try {
+    const { result, msg, data } = await tagService.getListTag(req);
+
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const tagController = {
   createTag,
   updateName,
   updateColor,
   deleteTag,
+  getListTag,
 };

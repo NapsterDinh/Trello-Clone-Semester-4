@@ -14,6 +14,7 @@ import { tagCollectionName, validateSchema } from "../models/tag.model";
 
 const createTag = async (data) => {
   try {
+    const { cardId, boardId } = data?.body;
     const value = await validateSchema(data?.body);
 
     const result = await getDB().collection(tagCollectionName).insertOne(value);
@@ -21,14 +22,25 @@ const createTag = async (data) => {
       await getDB()
         .collection(cardCollectionName)
         .updateOne(
-          { _id: ObjectId(data?.body?.cardId) },
+          { _id: ObjectId(cardId) },
           { $push: { tagOrder: result.insertedId.toString() } }
         );
+
+      await getDB()
+        .collection(boardCollectionName)
+        .updateOne(
+          { _id: ObjectId(boardId) },
+          { $push: { tagOrder: result.insertedId.toString() } }
+        );
+
+      const data = { ...result, ...value };
+      delete data.acknowledged;
+      delete data.insertedId;
 
       return {
         result: true,
         msg: "Create tag success",
-        data: { ...result, ...value },
+        data: data,
       };
     } else {
       return {
@@ -102,10 +114,10 @@ const deleteTag = async (data) => {
   try {
     const { _id } = data.query;
 
-    const card = await getDB()
+    const removeTag = await getDB()
       .collection(tagCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("card", card);
+
     const deleteTask = await getDB()
       .collection(tagCollectionName)
       .deleteOne({ _id: ObjectId(_id) });
@@ -114,7 +126,14 @@ const deleteTag = async (data) => {
       await getDB()
         .collection(cardCollectionName)
         .updateOne(
-          { _id: ObjectId(card?.cardId) },
+          { _id: ObjectId(removeTag?.cardId) },
+          { $pull: { tagOrder: { $in: [_id] } } }
+        );
+
+      await getDB()
+        .collection(boardCollectionName)
+        .updateOne(
+          { _id: ObjectId(removeTag?.boardId) },
           { $pull: { tagOrder: { $in: [_id] } } }
         );
       return {
@@ -134,9 +153,31 @@ const deleteTag = async (data) => {
   }
 };
 
+const getListTag = async () => {
+  try {
+    const result = await getDB().collection(tagCollectionName).find().toArray();
+    if (result) {
+      return {
+        result: true,
+        msg: "Get full tag success! ",
+        data: result,
+      };
+    } else {
+      return {
+        result: false,
+        msg: "Fail! ",
+        data: result,
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const tagService = {
   createTag,
   updateName,
   updateColor,
   deleteTag,
+  getListTag,
 };

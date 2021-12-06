@@ -32,4 +32,6 @@ router.route("/deleteTag").delete(tagController.deleteTag);
 //        /v1/tag/deleteTag
 //params  :   _id=61a75f7d7e2ccb95bc48d203
 
+router.route("/listTag").get(tagController.getListTag);
+
 export const tagRoutes = router;

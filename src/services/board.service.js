@@ -8,9 +8,12 @@ import { workSpaceCollectionName } from "../models/workSpace.model";
 import { columnCollectionName } from "../models/column.model";
 import { cardCollectionName } from "../models/card.model";
 import { userCollectionName } from "../models/user.model";
+import { tagCollectionName } from "../models/tag.model";
 import { sendEmailUser } from "../shares/sendMail";
 import { userService } from "./user.service";
 import { CardService } from "./card.service";
+import { bigTaskService } from "./bigTask.service";
+import { tagService } from "./tag.service";
 
 const createNew = async (data) => {
   try {
@@ -105,15 +108,15 @@ const refBoard = async (boardId) => {
 
 const getFullBoard = async (data) => {
   try {
-    const isCheckUser = await getDB()
+    const board = await getDB()
       .collection(boardCollectionName)
       .findOne({ _id: ObjectId(data?.query?.boardId) });
     const isCheckUserCreateWP = await getDB()
       .collection(workSpaceCollectionName)
-      .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
+      .findOne({ _id: ObjectId(board?.workSpaceId) });
 
     if (
-      isCheckUser?.userId.includes(data?.user?.sub) ||
+      board?.userId.includes("61a1a97933d4478e2b2d3092") ||
       isCheckUserCreateWP?.userCreate === data?.user?.sub // data?.user?.sub
     ) {
       const board = await refBoard(data?.query?.boardId);
@@ -143,7 +146,6 @@ const getFullBoard = async (data) => {
       );
 
       const board1 = await refBoard(data?.query?.boardId);
-      console.log("board112312", board1);
 
       // create cards in column
       board1.columns.forEach((column) => {
@@ -151,13 +153,18 @@ const getFullBoard = async (data) => {
           (c) => c.columnId.toString() === column._id.toString()
         );
       });
-      //delete card in board
       delete board1.cards;
+
+      const objectIdArray = board?.tagOrder.map((s) => ObjectId(s));
+      const listTag = await await getDB()
+        .collection(tagCollectionName)
+        .find({ _id: { $in: objectIdArray } })
+        .toArray();
 
       return {
         result: true,
         msg: "Get board success",
-        data: board1,
+        data: { board1, listTag },
       };
     } else {
       return {

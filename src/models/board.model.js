@@ -11,6 +11,7 @@ const boardCollectionSchema = Joi.object({
   workSpaceId: Joi.string(),
   title: Joi.string().required().min(5).max(20).trim(),
   columnOrder: Joi.array().items(Joi.string()).default([]),
+  tagOrder: Joi.array().items(Joi.string()).default([]),
   createAt: Joi.date().timestamp().default(Date.now()),
   updateAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),

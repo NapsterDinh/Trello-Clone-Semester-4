@@ -308,7 +308,6 @@ const updateDate = async (data) => {
 
 const updateExpire = async (_id) => {
   try {
-    console.log("_id", _id);
     await getDB()
       .collection(cardCollectionName)
       .updateOne({ _id: _id }, { $set: { _isExpired: true } });
@@ -517,7 +516,7 @@ const removeUserToCart = async (data) => {
 const getCardById = async (data) => {
   try {
     const { _id, user } = data?.query;
-    console.log("user", data?.query);
+
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });

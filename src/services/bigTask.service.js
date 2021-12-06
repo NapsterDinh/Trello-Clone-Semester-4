@@ -55,11 +55,14 @@ const createBigTask = async (data) => {
 };
 
 const getBigTaskById = async (data) => {
+  const objectIdArray = data.map((s) => ObjectId(s));
+  console.log("bigTask", objectIdArray);
   const resultUser = await getDB()
     .collection(bigTaskCollectionName)
-    .find({ _id: { $in: data } })
+    .find({ _id: { $in: objectIdArray } })
     .toArray();
 
+  console.log("resultUser", resultUser);
   return resultUser;
 };
 
@@ -152,26 +155,26 @@ const deleteBigTask = async (data) => {
   }
 };
 
-const getSmallTaskIntoBigTask = async (id) => {
-  try {
-    const task = await getDB()
-      .collection(bigTaskCollectionName)
-      .findOne({ _id: ObjectId(_id) });
+// const getSmallTaskIntoBigTask = async (id) => {
+//   try {
+//     const task = await getDB()
+//       .collection(bigTaskCollectionName)
+//       .findOne({ _id: ObjectId(_id) });
 
-    const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
-    console.log("abc", objectIdArray);
-    const listBigTAsk = await bigTaskService.getBigTaskById(objectIdArray);
-    console.log("====", listBigTAsk);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+//     const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
+//     console.log("abc", objectIdArray);
+//     const listBigTAsk = await getBigTaskById(objectIdArray);
+//     console.log("====", listBigTAsk);
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 
 const updatePercentage = async (_id, data) => {
   try {
     await getDB()
       .collection(bigTaskCollectionName)
-      .updateOne({ _id: _id }, { $set: { percentage: data } });
+      .updateOne({ _id: _id }, { $set: { percentage: data.toFixed(0) } });
   } catch (error) {
     throw new Error(error);
   }
