@@ -147,6 +147,8 @@ const getFullBoard = async (data) => {
 
       const board1 = await refBoard(data?.query?.boardId);
 
+      console.log("baord", board1);
+
       // create cards in column
       board1.columns.forEach((column) => {
         column.cards = board1.cards.filter(

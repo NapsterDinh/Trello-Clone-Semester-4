@@ -146,6 +146,7 @@ const getSmallTaskById = async (data) => {
     .collection(smallTaskCollectionName)
     .find({ _id: { $in: data } })
     .toArray();
+  console.log("resultUser", resultUser);
   return resultUser;
 };
 

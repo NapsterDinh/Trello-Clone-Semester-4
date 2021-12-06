@@ -517,24 +517,25 @@ const getCardById = async (data) => {
   try {
     const { _id, user } = data?.query;
 
-    const isCheckUser = await getDB()
+    const card = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
 
-    if (isCheckUser?.userId.includes(data?.user?.sub) || user) {
-      //data?.query?.userCreate "61a1a97933d4478e2b2d3092"
-      let smallTask1;
+    if (card?.userId.includes(data?.user?.sub) || user) {
+      // data?.user?.sub
+      //
 
-      const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
+      const objectIdArray = card?.bigTaskOrder.map((s) => ObjectId(s));
       const listBigTAsk = await bigTaskService.getBigTaskById(objectIdArray);
       let totallength = [];
       let total = [];
       const abc = await Promise.all(
         listBigTAsk.map(async (small) => {
-          console.log("----", small.smallStaskOrder);
           let cal = await smallTaskService.getSmallTaskById(
             small.smallStaskOrder.map((s) => ObjectId(s))
           );
+
+          small.smallTask = cal;
           let totalDone = 0;
 
           let C = cal.map(function (e) {
@@ -552,15 +553,21 @@ const getCardById = async (data) => {
           return cal;
         })
       );
-      smallTask1 = abc;
 
       const lengthTask = totallength.reduce((a, b) => a + b, 0);
       const taskDone = total.reduce((a, b) => a + b, 0);
 
+      const newCard = {
+        ...card,
+        listBigTask: listBigTAsk,
+      };
+
+      console.log("card", newCard);
+
       return {
         result: true,
         msg: "Get task into cart ",
-        data: { smallTask1, lengthTask, taskDone },
+        data: { newCard, lengthTask, taskDone },
       };
     }
   } catch (error) {

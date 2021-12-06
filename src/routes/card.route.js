@@ -73,7 +73,7 @@ router.route("/removeUserToCart").put(auth, CardController.removeUserToCart);
 //     "listUser":["18110087@student.hcmute.edu.vn","phancaocuong0000@gmail.com"]
 // }
 
-router.route("/getCard").get(auth, CardController.getCardById);
+router.route("/getCard").get(auth, CardController.getCardById); //auth
 // //          /v1/cards/getCard
 
 export const cardRoutes = router;

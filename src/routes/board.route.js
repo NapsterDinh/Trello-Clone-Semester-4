@@ -8,7 +8,7 @@ const router = express.Router();
 router
   .route("/add")
   .post(BoardValidation.createnew, auth, BoardController.creatNew);
-router.route("/").get(BoardController.getFullBoard);
+router.route("/").get(auth, BoardController.getFullBoard);
 router.route("/listUserBoard").get(auth, BoardController.listUserBoard); //auth,
 router.route("/update").put(auth, BoardController.updateBoard);
 router.route("/updateColumnOrder").put(auth, BoardController.updateColumnOrder);
