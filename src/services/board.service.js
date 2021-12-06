@@ -116,7 +116,7 @@ const getFullBoard = async (data) => {
       .findOne({ _id: ObjectId(board?.workSpaceId) });
 
     if (
-      board?.userId.includes("61a1a97933d4478e2b2d3092") ||
+      board?.userId.includes(data?.user?.sub) ||
       isCheckUserCreateWP?.userCreate === data?.user?.sub // data?.user?.sub
     ) {
       const board = await refBoard(data?.query?.boardId);

@@ -9,7 +9,7 @@ router
   .route("/add")
   .post(BoardValidation.createnew, auth, BoardController.creatNew);
 router.route("/").get(BoardController.getFullBoard);
-router.route("/listUserBoard").get(BoardController.listUserBoard); //auth,
+router.route("/listUserBoard").get(auth, BoardController.listUserBoard); //auth,
 router.route("/update").put(auth, BoardController.updateBoard);
 router.route("/updateColumnOrder").put(auth, BoardController.updateColumnOrder);
 router.route("/delete").delete(auth, BoardController.deteleBoard);
