@@ -1,24 +1,37 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, Button,Tooltip, CloseButton, 
-    DropdownButton, ProgressBar, Form, Dropdown, OverlayTrigger } from "react-bootstrap";
+    DropdownButton, Form, Dropdown, OverlayTrigger } from "react-bootstrap";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import logo from 'app/Images/features/1.jpg'
 import { cardHandleReducer } from "store/cardReducer";
 import { boardHandleActionReducer } from "store/boardReducer";
+import { converDateFormat } from "utilities/convertDate";
+import ConfirmModal from "app/Common/confirmModal";
+import { deleteCard } from "app/core/apis/card";
 
+import { showNotification, type } from "utilities/component/notification/Notification";
+
+import SectionBigTask from 'app/base/Section/SectionBigTask/SectionBigTask'
 import DropDownBigTask from "app/base/Dropdown/DropDownBigTask/DropDownBigTask";
 import DropDownTag from "app/base/Dropdown/DropDownTag/DropDownTag";
 import DropDownDeadline from "app/base/Dropdown/DropDownDeadline/DropDownDeadline";
+import { mapOrderAndReplaceNotExist } from 'utilities/sort'
 
-import { updateDescription, updateCard } from "app/core/apis/card";
+
+import { updateDescription, updateCard, updateStatus } from "app/core/apis/card";
 import './ModalCard.scss'
 
 const ModalCard = (props) => 
 {
     //const curCard = useSelector(state => state.card.card)
-    const { isActive, setIsActive, card, col, setTempCard } = props
+    const { isActive, setIsActive, setColumns, card, col, setTempCard, onUpdateStatus, indexCol } = props
+    console.log(card)
+    const [ showConfirmModal, setShowConfirmModal ] = useState(false)
+    const listTag = useSelector(state => state.board.listTag)
+    const board = useSelector(state => state.board.board)
+    const [ isShowTagDropDown, setIsShowTagDropDown ] = useState(false)
     const dispatch = useDispatch()
 
     const onBlurDescription = async (e, editor) => {
@@ -68,6 +81,7 @@ const ModalCard = (props) =>
             console.log(error.message)
         }
     }
+
     const onHideModal = () => {
         const temp = card;
         dispatch(boardHandleActionReducer({
@@ -81,17 +95,37 @@ const ModalCard = (props) =>
         setIsActive(false)
     }
 
-    const converDateFormat = (data) => {
-        var date = new Date(parseInt(data));
-        var fdate = (date.getMonth() + 1)+'-'+ date.getDate()  +'-'+date.getFullYear()
-        return fdate
+    const onDeleteCard = async () => {
+        try {
+            const res = await deleteCard(card._id)
+            if(res && res.data.result)
+            {
+                let columns = [...board.columns]
+                let curCol = {...columns[indexCol]}
+                columns.splice(indexCol, 1, {
+                    ...columns[indexCol],
+                    cards: columns[indexCol].cards.filter(item => item._id !== card._id ),
+                    cardOrder: columns[indexCol].cardOrder.filter(item => item !== card._id )
+                })
+
+                setColumns([...columns])
+                showNotification('Xóa thẻ thành công', 'Xóa thẻ thành công', type.succsess, 3000)
+            }
+            else
+            {
+                console.log(res.data.msg)
+                showNotification('Xóa thẻ thất bại', res.data.msg, type.danger, 3000)
+            }
+        } catch (error) {
+            console.log(error)
+            showNotification('Xóa thẻ thất bại', error.message, type.danger, 3000)
+        }
+        setShowConfirmModal(false)
     }
     useEffect(() => {
-       console.log( converDateFormat(card.deadline))
         
     }, [])
 
-    
     return(
         <Modal 
             className="modal-card-detail" 
@@ -130,29 +164,40 @@ const ModalCard = (props) =>
                                 <div className="tag-container">
                                     <span>Nhãn</span>
                                     <ul className="tag-list">
-                                        <li className="tag-item">Worker</li>
-                                        <li className="tag-item">Discuss</li>
-                                        <li className="tag-item">Classroom</li>
-                                        <li className="tag-item">Classroom</li>
-                                        <li className="tag-add-toggle">
-                                            <button className="btn">
-                                                <i className="fa fa-plus" aria-hidden="true"></i>
-                                            </button>
-                                        </li>
+                                        {
+                                            mapOrderAndReplaceNotExist(listTag, card.tagOrder, "_id").map(item => (
+                                                <li key={`tagItem-${item._id}`} style={{backgroundColor: item.color}}
+                                                className="tag-item">{item.name}</li>
+                                            ))
+                                        }
                                     </ul>
                                 </div>
                             }
                             {
-                                converDateFormat(card.deadline) === "4-3-2028" &&
+                                converDateFormat(card.deadline) !== "4-3-2028" &&
                                 <div className="deadline-container">
                                     <span>Ngày hết hạn</span>
                                     <div className="deadline-check">
+                                    <div key={card.status === 'done' ? true : false}>
                                         <Form>
-                                            <Form.Check 
-                                                type='checbox'
-                                            />
+                                            <Form.Check type="checkbox" id="checkboxDeadline">
+                                                <Form.Check.Input type="checkbox" 
+                                                onChange={(e) => onUpdateStatus(e)}
+                                                defaultChecked={card.status === 'done' ? true : false}
+                                                />
+                                            </Form.Check>
                                         </Form>
-                                        <span>{converDateFormat(card.deadline)}</span>
+                                    </div>
+                                        <span className="deadline-span">{converDateFormat(card.deadline)}
+                                        {
+                                            card._isExpired && card.status === 'undone' &&
+                                            <span className="expired">Quá hạn</span>
+                                        }
+                                        {
+                                            card.status === 'done' &&
+                                            <span className="done">Hoàn thành</span>
+                                        } 
+                                        </span>
                                     </div>
                                 </div>
                             }
@@ -167,104 +212,41 @@ const ModalCard = (props) =>
                             onBlur={ ( event, editor ) => onBlurDescription(event, editor)}
                             />
                         </div>
-                        <div className="attachments-container">
-                            <i className="fa fa-paperclip icon" aria-hidden="true"></i>
-                            <span>Các tập tin đính kèm</span>
-                            <ul className="attachment-list">
-                                    <OverlayTrigger
-                                        placement="right"
-                                        overlay={
-                                            <Tooltip id={`tooltip-right`}>
-                                                1.jpg
-                                            </Tooltip>
-                                        }
-                                        >
-                                            <li className="attachment-item">
-                                                <img src={logo}></img>
-                                                <button className="btn">
-                                                    <i className="fa fa-close icon"></i>
-                                                </button>
-                                            </li>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger
-                                        placement="right"
-                                        overlay={
-                                            <Tooltip id={`tooltip-right`}>
-                                                1.jpg
-                                            </Tooltip>
-                                        }
-                                        >
-                                            <li className="attachment-item">
-                                                <img src={logo}></img>
-                                                <button className="btn">
-                                                    <i className="fa fa-close icon"></i>
-                                                </button>
-                                            </li>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger
-                                        placement="right"
-                                        overlay={
-                                            <Tooltip id={`tooltip-right`}>
-                                                1.jpg
-                                            </Tooltip>
-                                        }
-                                        >
-                                            <li className="attachment-item">
-                                                <img src={logo}></img>
-                                                <button className="btn">
-                                                    <i className="fa fa-close icon"></i>
-                                                </button>
-                                            </li>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger
-                                        placement="right"
-                                        overlay={
-                                            <Tooltip id={`tooltip-right`}>
-                                                1.jpg
-                                            </Tooltip>
-                                        }
-                                        >
-                                            <li className="attachment-item">
-                                                <img src={logo}></img>
-                                                <button className="btn">
-                                                    <i className="fa fa-close icon"></i>
-                                                </button>
-                                            </li>
-                                    </OverlayTrigger>
-                               
-                                <li className="attachment-item-add">
-                                    <button className="btn">
-                                        Thêm tệp đính kèm
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                        <ul className="task-container">
-                            <li className="big-task-item">
-                                <i className="fa fa-check-square-o icon" aria-hidden="true"></i>
-                                <span>Việc cần làm</span>
-                                <button className="btn">
-                                    Xóa
-                                </button>
-                                <ProgressBar animated now={45} label="60%" />
-                                <ul className="small-task-list">
-                                    <li className="small-task-item">
-                                        <div className="checkbox-container">
-                                            <Form.Check 
-                                                type='checbox'
-                                            />
-                                        </div>
-                                        <span>13131313</span>
-                                        <i className="fa fa-close"></i>
-                                    </li>
-                                    <li className="small-task-item">
+                        {
+                            card.attachment.length !== 0 &&
+                            <div className="attachments-container">
+                                <i className="fa fa-paperclip icon" aria-hidden="true"></i>
+                                <span>Các tập tin đính kèm</span>
+                                <ul className="attachment-list">
+                                    {
+                                        card.attachment.map(item => (
+                                            <OverlayTrigger
+                                                placement="right"
+                                                overlay={
+                                                    <Tooltip id={`tooltip-right`}>
+                                                        {item}
+                                                    </Tooltip>
+                                                }
+                                                >
+                                                    <li className="attachment-item">
+                                                        <img src={item}></img>
+                                                        <button className="btn">
+                                                            <i className="fa fa-close icon"></i>
+                                                        </button>
+                                                    </li>
+                                            </OverlayTrigger>
+                                        ))
+                                    }
+                                    
+                                    <li className="attachment-item-add">
                                         <button className="btn">
-                                            Thêm một mục
+                                            Thêm tệp đính kèm
                                         </button>
                                     </li>
                                 </ul>
-                            </li>
-                        </ul>
+                            </div>
+                        }
+                        <SectionBigTask card={card} setTempCard={setTempCard}/>
                     </div>
                     <div className="card-right col-3">
                         <ul>
@@ -283,13 +265,13 @@ const ModalCard = (props) =>
                                 </DropdownButton>
                             </li>
                             <li>
-                                <DropDownTag card={card}/>
+                                <DropDownTag card={card} setTempCard={setTempCard}/>
                             </li>
                             <li>
-                                <DropDownBigTask />
+                                <DropDownBigTask card={card} isShow={isShowTagDropDown} setIsShow={setIsShowTagDropDown} setTempCard={setTempCard}/>
                             </li>
                             <li>
-                                <DropDownDeadline card={card} deadlineFormatted={converDateFormat(card.deadline)}/>
+                                <DropDownDeadline card={card} deadlineFormatted={converDateFormat(card.deadline)} setTempCard={setTempCard}/>
                             </li>
                             <li>
                                 <DropdownButton title="Đính kèm" className="card-attachments-dropdown btn">
@@ -313,16 +295,24 @@ const ModalCard = (props) =>
                                     <Dropdown.Item>Xóa bảng này</Dropdown.Item>
                                 </DropdownButton>
                             </li>
+                            <li>
+                                <Button 
+                                onClick={()=> setShowConfirmModal(true)}
+                                    variant="danger" 
+                                    type="submit"
+                                >Xóa thẻ này</Button>
+                            </li>
+                            <ConfirmModal
+                            show={showConfirmModal}
+                            onAction={() => onDeleteCard()}
+                            title="Xóa thẻ"
+                            //using html-react-paser to parse string to html code
+                            content={`Bạn có chắc muốn xóa thẻ này. Hành động của bạn sẽ không thể hoàn tác!!!!`}
+                            />
                         </ul>
                     </div>
                 </div>
             </Modal.Body>
-            <Modal.Footer>
-            <Button 
-                    variant="primary" 
-                    type="submit"
-                >Xóa không gian làm việc</Button>
-            </Modal.Footer>
         </Modal>
     )
 }

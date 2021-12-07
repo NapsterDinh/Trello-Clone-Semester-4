@@ -13,9 +13,10 @@ function DropDownAddToBoard(props)
 {
     // const { boardList } = props
     const boardUsers = useSelector(state => state.board.listUserBoard)
+    const notBoardUsers = useSelector(state => state.board.listNotUserBoard)
     const user = useSelector(state => state.user.user)
     const [ allUserBoard, setAllUserBoard ] = 
-                useState(boardUsers.listUserBoard.concat(boardUsers.listNotUserBoard))
+                useState(boardUsers.concat(notBoardUsers))
     const dispatch = useDispatch()
 
     const _id = window.location.pathname.split("/");
@@ -78,7 +79,7 @@ function DropDownAddToBoard(props)
                 {
                     allUserBoard.map(item => (
                         <li key={`userBoard${item._id}`} className={
-                            boardUsers.listUserBoard.findIndex(item1 => item1._id === item._id) === -1 
+                            boardUsers.findIndex(item1 => item1._id === item._id) === -1 
                             ? "item" : (item._id === user._id) ? "item admin" : "item exist" 
                         }>
                             <div className="body-left">

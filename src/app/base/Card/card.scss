@@ -6,6 +6,29 @@
     border-radius: $border-radius-card;
     box-shadow: 0 1px rgba(0,0,0,0.1);
     cursor: pointer;
+    position: relative;
+    padding-bottom: 5px;
+    i.fa-pencil
+    {
+      position: absolute;
+      font-size: 16px;
+      right: 0px;
+      top: 10px;
+      transform: translate(10px, -35px);
+      transition: transform 0.3s ease-in-out;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      &::before{
+        margin-left: 8px;
+        top: 6px;
+        position: absolute;
+      }
+      &:hover
+      {
+        background-color: #091e4214;
+      }
+    }
     &:not(:last-child)
     {
       margin-bottom: $gap;
@@ -13,5 +36,115 @@
     &:hover
     {
       background-color: rgb(248, 247, 247);
+      i.fa-pencil
+      {
+        transform: translate(-3px, -5px);
+      }
+    }
+    .tag-label-container
+    {
+      display: flex;
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+      .tag-label-item
+      {
+        width: 48px;
+        height: 8px;
+        margin: 0 4px 4px 0;
+        border-radius: 10px;
+      }
+    }
+    .option-container
+    {
+      display: flex;
+      margin-top: 5px;
+      .preview-task-process
+      {
+        margin-top: -2px;
+        border-radius: 5px;
+        color: #5e6c84;
+        padding:3px 7px;
+        i
+        {
+          color: #5e6c84;
+          margin-right: 5px;
+          font-size: 15px;
+          margin-left: -5px;
+        }
+        &.done
+        {
+          background-color: #61bd4f;
+          color: white;
+          i
+          {
+            color: white;
+          }
+        }
+      }
+      .preview-deadline
+      {
+        margin-right: 7px;
+        form
+        {
+          padding: 0px 5px;
+          border-radius: 5px;
+          .form-check
+          {
+            input
+            {
+              margin-top: 4px;
+              margin-right: 1px;
+              cursor: pointer;
+              &:focus
+              {
+                box-sizing: none;
+              }
+            }
+            label
+            {
+              cursor: pointer;
+              margin-top: 2px;
+              font-weight: 400;
+              color: #5e6c84;
+            }
+          }
+          &:hover
+          {
+            background-color: #091e4214;
+          }
+          &.expired
+          {
+            background-color: #EC9488;
+            label
+            {
+              color: white!important;
+            }
+          }
+          &.done
+          {
+            background-color: #61bd4f;
+            label
+            {
+              color: white!important;
+            }
+          }
+        }
+      }
+      .preview-desscription
+      {
+        margin-left: 3px;
+        i
+        {
+          margin-top: 5px;
+        }
+      }
+      .preview-attachments
+      {
+        margin-left: 3px;
+        i
+        {
+          margin-top: 5px;
+        }
+      }
     }
 }

@@ -14,6 +14,7 @@ import { showNotification, type } from "utilities/component/notification/Notific
 import { mainWorkSpaceReducer } from 'store/mainWorkSpaceReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import BoardBar from "app/base/BoardBar/BoardBar";
+import { boardHandleActionReducer }from 'store/boardReducer'
 
 const path = "/workspace/:id/:type(boards||members||highlight||setting)"
 
@@ -54,6 +55,10 @@ const WorkSpacePage = (props) => {
 
     useEffect(() => {
         fetchWorkSpaceOwerAndGuest()
+        dispatch(boardHandleActionReducer({
+            board: '',
+            type: 'SET_BOARD'
+          }))
     }, [location])
 
     return(

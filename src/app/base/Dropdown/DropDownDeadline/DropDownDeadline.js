@@ -11,18 +11,27 @@ import './DropDownDeadline.scss'
 
 function DropDownDeadline(props)
 {
-    const { card, deadlineFormatted } = props
-    const [ valueDeadline, setValueDeadline ] = useState(deadlineFormatted !=='' ? new Date(deadlineFormatted) : new Date());
+    const { card, deadlineFormatted, setTempCard } = props
+    const [ valueDeadline, setValueDeadline ] = useState(deadlineFormatted !== '4-3-2028' ? new Date(deadlineFormatted) : new Date());
 
     const onHanldeClickSave = async () => {
         try {
+            let date = new Date(valueDeadline)
+            date.setDate(date.getDate() + 1)
+            const temp = date.toISOString().split('T')[0]
             const res = await updateDate({
-                dateTime: valueDeadline.toISOString().split('T')[0],
+                dateTime: temp,
                 _id: card._id
             })
+            console.log(res)
             if(res && res.data.result)
             {
-                showNotification('Lưu ngày hết hạn thành công', '', type.succsess, 3000)
+                console.log(temp)
+                setTempCard({
+                    ...card,
+                    deadline: res.data.data.deadline
+                })
+                showNotification('Lưu ngày hết hạn thành công', 'Lưu ngày hết hạn thành công', type.succsess, 3000)
             }
             else
             {
@@ -34,8 +43,25 @@ function DropDownDeadline(props)
         }
     }
 
-    const onHanldeClickCancel = () => {
+    const onHanldeClickCancel = async () => {
         //cancel
+        try {
+            const res = await updateDate({
+                dateTime: new Date('4-4-2028').toISOString().split('T')[0],
+                _id: card._id
+            })
+            if(res && res.data.result)
+            {
+                showNotification('Gỡ ngày hết hạn thành công', 'Gỡ ngày hết hạn thành công', type.succsess, 3000)
+            }
+            else
+            {
+                showNotification('Gỡ ngày hết hạn thất bại', res.data.msg, type.danger, 3000)
+            }
+            //thieu upload vao store
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     return (
@@ -49,7 +75,7 @@ function DropDownDeadline(props)
                             onChange={(date) => setValueDeadline(date)} 
                             dateFormat="yyyy/MM/dd"
                             isClearable={true}
-                            minDate={new Date()}
+                            // minDate={new Date()}
                         />
                     </div>
                     <div style={{marginRight: "20px"}}>

@@ -17,7 +17,6 @@ function BoardBar()
     const curWp = useSelector(state =>  state.workSpace.curWP)
 
     const curBoard = useSelector(state =>  state.board.board)
-
     const history = useHistory()
 
     const dispatch = useDispatch()
@@ -72,28 +71,31 @@ function BoardBar()
                 <div className="board-bar-left">
                     <DropDownListBoard/>
                     <Col className="enter-new-title-board input">
-                        <Form.Control size="sm"
-                            maxLength="30"
-                            type="text"
-                            className="input-enter-new-column"
-                            defaultValue={curBoard.title}
-                            onClick={e => e.target.select()}
-                            onKeyDown={event => {
-                                if(event.key === 'Enter') {
-                                    onBlurTitle(event)
-                                    event.target.blur()
-                            }}}
-                            onBlur={(e) => onBlurTitle(e)}
-                            >
-                        </Form.Control>
+                        <div key={curBoard.title}>
+                            <Form.Control size="sm"
+                                maxLength="30"
+                                type="text"
+                                className="input-enter-new-column"
+                                defaultValue={curBoard.title}
+                                onClick={e => e.target.select()}
+                                onKeyDown={event => {
+                                    if(event.key === 'Enter') {
+                                        onBlurTitle(event)
+                                        event.target.blur()
+                                }}}
+                                onBlur={(e) => onBlurTitle(e)}
+                                >
+                            </Form.Control>
+                        </div>
+                        
                     </Col>
                     <DropdownButton title="Cài đặt" className="board-bar-setting">
                         <Dropdown.Header>Cài đặt</Dropdown.Header>
                         <Dropdown.Divider/>
-                        <Dropdown.Item href="#/action-1">Xem thông tin chi tiết</Dropdown.Item>
+                        {/* <Dropdown.Item href="#/action-1">Xem thông tin chi tiết</Dropdown.Item>
                         <Dropdown.Item href="#/action-2">Thay đổi ảnh nền</Dropdown.Item>
                         <Dropdown.Item href="#/action-3">Quản lý nhãn</Dropdown.Item>
-                        <Dropdown.Divider/>
+                        <Dropdown.Divider/> */}
                         <Dropdown.Item onClick={onDeleteBoard}>Xóa bảng này</Dropdown.Item>
                     </DropdownButton>
                     <a href={`/workspace`} className="back-to-workspace toggle btn">Hiển thị trong không gian làm việc</a>

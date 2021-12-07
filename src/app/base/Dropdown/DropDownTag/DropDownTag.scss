@@ -10,6 +10,7 @@
       li
       {
         display: flex;
+        position: relative;
         .card-label
         {
           margin-bottom: 5px!important;
@@ -44,12 +45,27 @@
             box-shadow: -8px 0 #97a0af;
           }
         }
+        i
+        {
+          display: none!important;
+          color: white!important;
+          position: absolute;
+          right: 30px;
+          top: 5px;
+        }
         a
         {
           height: 30px;
           i
           {
             font-size: 14px;
+          }
+        }
+        &.selected
+        {
+          i
+          {
+            display: block!important;
           }
         }
       }
@@ -60,11 +76,36 @@
   {
     .tag-choose-body
     {
-      
+      ul
+      {
+        li
+        {
+          i
+          {
+            &:last-child
+            {
+              right: -10px;
+              color: rgb(23, 43, 77)!important;
+              display: block!important;
+            }
+          }
+        }
+      }
     }
     button
       {
         &.btn-confirm
+          {
+            margin-left: 15px;
+            background-color: #091e420a!important;
+            color: $col-color;
+            text-align: center!important;
+            &:hover
+            {
+                background-color: #091e4214!important;
+            }
+          }
+        &.btn-delete
           {
             margin-left: 15px;
             background-color: #091e420a!important;

@@ -20,21 +20,6 @@ function AppBar()
                     </a> 
                 </div>
                 <DropDownWorkspace/>
-                {/* <DropdownButton className="header-lastest" title="Gần đây">
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                </DropdownButton>
-                <DropdownButton className="header-marked" title="Đã đánh dấu sao">
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                </DropdownButton> */}
-                <DropdownButton title="Tạo mới" className="header-create">
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                </DropdownButton>
                 <div className="header-center">
                     <div style={{display: 'block', width: '100%', position: 'absolute'}}></div>
                 </div>

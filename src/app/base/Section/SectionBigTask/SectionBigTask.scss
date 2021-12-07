@@ -1,0 +1,216 @@
+@import "scss/__setting.scss"; 
+
+.task-container
+{
+    margin-top: 30px;
+    .big-task-item
+    {
+        position: relative;
+        margin-bottom: 10px;
+        i
+        {
+            font-size: 20px;
+            top: 0;
+        }
+        input.text
+        {
+            font-size: 16px;
+            font-weight: 600;
+            margin-left: 40px;
+            background-color: transparent;
+            border: none;
+            color: $col-color;
+            padding: 5px 10px;
+            width: 80%;
+            margin-top: -6px;
+            text-overflow: ellipsis;
+            &:focus
+            {
+                background-color: white;
+                border: 2px solid $text-active;
+            }
+            &:focus-visible
+            {
+                outline: none;
+            }
+        }
+        .btn
+        {
+            position: absolute;
+            right: 0;
+            background-color: #091e420a;
+            color: $col-color;
+            top: -7px;
+            &:hover
+            {
+                background-color: #091e4214;
+            }
+        }
+        .progress
+        {
+            margin-top: 20px;
+            margin-left: 40px;
+        }
+        .small-task-list
+        {
+            .small-task-item
+            {
+                display: flex;
+                padding: 5px 10px;
+                cursor: pointer;
+                border-radius: 5px;
+                position: relative;
+                &:hover
+                {
+                    background-color: #091e420a;
+                    i
+                    {
+                        position: absolute;
+                        right: 10px;
+                        top: 24%;
+                        width: 25px;
+                        height: 25px;
+                        border-radius: 50%;
+                        display: block;
+                        &::before
+                        {
+                            margin-left: 6px;
+                            position: absolute;
+                            top: 4px;
+                        }
+                        &:hover
+                        {
+                            background-color: #091e4214;
+                        }
+                    }
+                }
+                form
+                {
+                    .form-check
+                    {
+                        input
+                        {
+                            margin-top: 12px!important;
+                            width: fit-content;
+                            height: 15px;
+                            margin-top: 10px;
+                            cursor: pointer;
+                            width: 15px;
+                            &:checked
+                            {
+                                background-color: #0d6efd;
+                            }
+                            &:focus, &:focus-visible
+                            {
+                                outline: none;
+                            }
+                        }
+                    }
+                }
+                input.text
+                {
+                    margin-top: 5px;
+                    font-size: 14px;
+                    font-weight: 400;
+                    padding-left: 5px;
+                    margin-left: 15px;
+                    word-wrap: break-word;
+                    width: 90%;
+                    margin-bottom: 5px;
+                }
+                i
+                {
+                    display: none;
+                    font-weight: 400;
+                    font-size: 16px;
+                    align-items: center;
+                }
+                &:last-child
+                {
+                    background-color: transparent;
+                    &:hover
+                    {
+                        background-color: transparent;
+                    }
+                    button
+                    {
+                        position: relative;
+                        margin-left: 30px;
+                    }
+                }
+                &.add
+                {
+                    display: inline;
+                    i
+                    {
+                        position: relative;
+                        margin-left: 20px;
+                        width: 30px;
+                        height: 30px;
+                        right: 10px;
+                        top: 17%;
+                        margin-top: -4px;
+                        &::before
+                        {
+                            margin-left: 9px;
+                            position: absolute;
+                            top: 7px;
+                        }
+                    }
+                    input
+                    {
+                        display: none;
+                        margin-left: 40px;
+                        background-color: white;
+                        border: 2px solid $text-active;
+                        &:focus-visible
+                        {
+                            &:focus-visible
+                            {
+                                outline: none;
+                            }
+                        }
+                    }
+                    .action-container
+                    {
+                        display: none;
+                        margin-left: 20px;
+                        margin-top: 10px;
+                    }
+                    button.primary
+                    {
+                        &.primary
+                        {
+                            color: white!important;
+                            background-color: rgb(0, 108, 224)!important;
+                        }
+                        
+                    }
+                    &.added
+                    {
+                        input
+                        {
+                            display: inline;
+                        }
+                        .action-container
+                        {
+                            display: flex;
+                            button
+                            {
+                                display: block;
+                            }
+                            i
+                            {
+                                display: block;
+                            }
+                        }
+                        button
+                        {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

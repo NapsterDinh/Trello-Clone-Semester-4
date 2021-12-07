@@ -4,7 +4,9 @@ import { mapOrder } from 'utilities/sort'
 // toogle show hide panel cart
 const initialState = {
     board: '',
-    listUserBoard: ''
+    listUserBoard: '',
+    listNotUserBoard: '',
+    listTag: ''
 };
 
 export const counterSlice = createSlice({
@@ -14,13 +16,18 @@ export const counterSlice = createSlice({
     boardHandleActionReducer: (state=initialState, action) => {
         switch (action.payload.type) {
             case 'SET_BOARD':
+                console.log(action)
                 state.board = action.payload.board
+                break;
+            case 'SET_LIST_TAG':
+                state.listTag = action.payload.listTag
                 break;
             case 'SET_COLUMNS':
                 state.board.columns = action.payload.columns
                 break;
             case "SET_LIST_USER_BOARD":
                 state.listUserBoard = action.payload.listUserBoard
+                state.listNotUserBoard = action.payload.listNotUserBoard
                 break;
             case 'ADD_USER_TO_BOARD':
                 state.listUserBoard.listUserBoard.push(action.payload.user)
@@ -39,6 +46,9 @@ export const counterSlice = createSlice({
                 break
             case 'UPDATE_CARD':
                 state.board.columns[action.payload.card.indexCol].cards[action.payload.card.indexCard] = action.payload.card
+                break
+            case 'UPDATE_TAGLIST':
+                state.listTag = action.payload.listTag
                 break
             default:
                 state = {

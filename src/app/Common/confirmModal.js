@@ -9,6 +9,7 @@ function ConfirmModal(props) {
   return (
     <Modal
       show={show}
+      size="sm"
       onHide={() => onAction(MODAL_ACTION_CLOSE)}
       backdrop="static"
       keyboard={false}

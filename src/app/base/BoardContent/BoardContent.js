@@ -18,6 +18,7 @@ import { updateColumnOrder } from 'app/core/apis/board'
 function BoardContent(props)
 {
   const board = useSelector(state => state.board.board)
+  console.log('board store: ', board)
   const columns = board.columns
 
   const dispatch = useDispatch()
@@ -72,6 +73,7 @@ function BoardContent(props)
 
     try {
       const res = await updateColumnOrder(newBoard)
+      console.log(res)
       if(!res.data.result)
       {
         setColumns(columns)
@@ -100,7 +102,7 @@ function BoardContent(props)
      setColumns(newColumns)
      try {
        const res = await updateCardOrder(currentColumn)
-       if(res && res.data.result)
+       if(!res || !res.data.result)
        {
          console.log(res.data.msg)
        }
@@ -116,7 +118,7 @@ function BoardContent(props)
      let currentColumn = newColumns.find(c => c._id === columnId)
      const result = applyDragTwoCol(currentColumn.cards, currentColumn._id, dropResult)
    
-     currentColumn.cards = result.result
+      currentColumn.cards = result.result
       currentColumn.cardOrder = currentColumn.cards.map(c => c._id)
       currentColumn.itemToAdd =  result.itemToAdd
       currentColumn.isUpdateColId = false
@@ -127,6 +129,7 @@ function BoardContent(props)
      setColumns(newColumns)
          try {
            const res = await updateCardOrder(currentColumn)
+           console.log(res)
            if(!res || !res.data.result)
            {
              console.log(res.data.msg)
@@ -250,7 +253,14 @@ function BoardContent(props)
       >
         {columns.map((column, index) => (
           <Draggable key={index}>
-            <Column key={index} column={column} indexCol={index} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn} handleColBoardChange={handleColBoardChange}/>
+            <Column key={index} 
+            setBoard={setBoard}
+            setColumns={setColumns}
+            column={column} 
+            indexCol={index} 
+            onCardDrop={onCardDrop} 
+            onUpdateColumn={onUpdateColumn} 
+            handleColBoardChange={handleColBoardChange}/>
           </Draggable>
         ))}
       </Container>

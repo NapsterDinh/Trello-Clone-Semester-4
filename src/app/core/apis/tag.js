@@ -6,6 +6,12 @@ export const addNewTag = (data) => {
   return _post("/v1/tag/create", data);
 };
 
+//boardId (body)
+export const updateTagOrder = (data) => {
+  return _put("/v1/tag/updateTagOrder", data);
+};
+
+
 //_id, title (body)
 export const updateTagName = (data) => {
     return _put("/v1/tag/updatename",data);

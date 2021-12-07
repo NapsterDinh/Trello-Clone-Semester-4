@@ -14,7 +14,8 @@ import { saveContentAfterPressEnter, selectAllInlineText} from 'utilities/conten
 
 function Column(prop)
 {
-  const { column, onCardDrop, onUpdateColumn, handleColBoardChange, indexCol} = prop
+  const { column, onCardDrop, onUpdateColumn, 
+    handleColBoardChange, indexCol, setColumns, setBoard} = prop
   const cards = mapOrder(column.cards, column.cardOrder, '_id')
 
   const newCardInputRef = useRef(null)
@@ -200,7 +201,11 @@ function Column(prop)
           >
             {cards.map((card, index) => (
               <Draggable key={index}>
-                <Card col={column} indexCard={index} indexCol={indexCol} card={card} />
+                <Card col={column} 
+                indexCard={index} 
+                indexCol={indexCol} 
+                setColumns={setColumns}
+                card={card} />
               </Draggable>
             ))}
           </Container>

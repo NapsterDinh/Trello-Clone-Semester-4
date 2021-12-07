@@ -65,6 +65,10 @@ export const updateColor = (data) => {
     });
 };
 
+export const updateStatus = (data) => {
+    return _put("/v1/cards/updateStatus", data);
+};
+
 //          /v1/cards/updateImage
 // {
 //     "image":"abc",
@@ -108,6 +112,10 @@ export const removeUserToCard = (data) => {
         "listUser":data.listUser
     });
 };
+
+export const getCardById = (data) => {
+    return _get("/v1/cards/getCard", {_id: data})
+}
 
 
 
