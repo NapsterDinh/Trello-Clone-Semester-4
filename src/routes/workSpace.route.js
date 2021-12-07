@@ -26,4 +26,6 @@ router
 //test cho nay
 //test
 
+router.route("/test").get(workSpaceController.test);
+
 export const workSpaceRoutes = router;

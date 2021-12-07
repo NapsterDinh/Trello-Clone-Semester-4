@@ -359,14 +359,18 @@ const updateColor = async (data) => {
 
 const updateStatus = async (_id, status) => {
   try {
-    console.log(_id, status)
+    console.log(_id, status);
     await getDB()
       .collection(cardCollectionName)
       .updateOne({ _id: ObjectId(_id) }, { $set: { status: status } });
     const result = await getDB()
-        .collection(cardCollectionName)
-        .findOne({ _id: ObjectId(_id) });
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    if (Date.now() < u.deadline) {
       if (result.status === status) {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
         return {
           result: true,
           msg: "Update cart success",
@@ -379,6 +383,24 @@ const updateStatus = async (_id, status) => {
           data: [],
         };
       }
+    } else {
+      if (result.status === status) {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: true } });
+        return {
+          result: true,
+          msg: "Update cart success",
+          data: result,
+        };
+      } else {
+        return {
+          result: false,
+          msg: "Update cart fail",
+          data: [],
+        };
+      }
+    }
   } catch (error) {
     throw new Error(error);
   }
@@ -560,12 +582,17 @@ const getCardById = async (data) => {
             }
           });
 
-          await bigTaskService.updatePercentage(
-            small?._id,
-            totalDone / C.length
-          );
+          if (C.length === 0) {
+            await bigTaskService.updatePercentage(small?._id, 0);
+          } else {
+            await bigTaskService.updatePercentage(
+              small?._id,
+              totalDone / C.length
+            );
+          }
           totallength.push(C.length);
           total.push(totalDone);
+
           return cal;
         })
       );

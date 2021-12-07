@@ -174,6 +174,21 @@ const getWorkSpaceById = async (req, res) => {
   }
 };
 
+const test = async (req, res) => {
+  try {
+    const { result, msg, data } = await workSpaceService.test(req);
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const workSpaceController = {
   addWorkSpace,
   getWorkSpace,
@@ -186,4 +201,5 @@ export const workSpaceController = {
   updatePrivacy,
   inviteUser,
   getWorkSpaceById,
+  test,
 };

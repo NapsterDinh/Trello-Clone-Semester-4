@@ -11,6 +11,8 @@ import { sendEmail } from "../shares/sendMail";
 import { BoardService } from "./board.service";
 import { boardCollectionName } from "../models/board.model";
 import { sendEmailUser } from "../shares/sendMail";
+import { columnCollectionName } from "../models/column.model";
+import { cardCollectionName } from "../models/card.model";
 
 //variable
 const { APP_SCHEMA, APP_HOST, APP_PORT } = process.env;
@@ -135,9 +137,27 @@ const deleteWorkSpace = async (data) => {
             { _id: ObjectId(findUserCreateWP?.workspacetypeId) },
             { $pull: { workSpaceId: { $in: [_id] } } }
           );
+
         const boarddelte = await getDB()
           .collection(boardCollectionName)
           .deleteMany({ workSpaceId: _id });
+
+        const findUserCreateWP = await getDB()
+          .collection(boardCollectionName)
+          .find({ workSpaceId: _id })
+          .toArray();
+        console.log("board", findUserCreateWP);
+
+        const a = await findUserCreateWP.filter(async (c) => {
+          //delete column
+          const col = await getDB()
+            .collection(columnCollectionName)
+            .deleteMany({ boardId: c._id });
+          //delete card
+          const car = await getDB()
+            .collection(cardCollectionName)
+            .deleteMany({ boardId: c._id });
+        });
         return {
           result: true,
           msg: "Delete workspace success",
@@ -439,6 +459,32 @@ const getWorkSpaceById = async (data) => {
   }
 };
 
+const test = async (data) => {
+  try {
+    const { _id } = data.query;
+    const findUserCreateWP = await getDB()
+      .collection(boardCollectionName)
+      .find({ workSpaceId: _id })
+      .toArray();
+    console.log("board", findUserCreateWP);
+
+    const a = await findUserCreateWP.filter(async (c) => {
+      const col = await getDB()
+        .collection(columnCollectionName)
+        .find({ boardId: c._id })
+        .toArray();
+      console.log("a", col);
+      const car = await getDB()
+        .collection(cardCollectionName)
+        .find({ boardId: c._id })
+        .toArray();
+      console.log("car", car);
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const workSpaceService = {
   createWorkSpace,
   getWorkSpace,
@@ -451,4 +497,5 @@ export const workSpaceService = {
   updatePrivacy,
   inviteUser,
   getWorkSpaceById,
+  test,
 };
