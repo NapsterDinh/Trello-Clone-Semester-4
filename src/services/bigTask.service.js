@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
 import { bigTaskCollectionName, validateSchema } from "../models/bigTast.model";
 import { cardCollectionName } from "../models/card.model";
+import { smallTaskCollectionName } from "../models/smallTask.model";
 import { CardService } from "./card.service";
 import { smallTaskService } from "./smallTask.service";
 
@@ -132,13 +133,18 @@ const deleteBigTask = async (data) => {
         .collection(bigTaskCollectionName)
         .deleteOne({ _id: ObjectId(_id) });
 
-      await getDB()
-        .collection(cardCollectionName)
-        .updateOne(
-          { _id: ObjectId(card?.cardId) },
-          { $pull: { bigTaskOrder: { $in: [_id] } } }
-        );
       if (deleteTask?.acknowledged) {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne(
+            { _id: ObjectId(card?.cardId) },
+            { $pull: { bigTaskOrder: { $in: [_id] } } }
+          );
+        await getDB()
+          .collection(smallTaskCollectionName)
+          .deleteMany({ bigTaskId: _id });
+
+        await CardService.updatePercentageCard(card.cardId);
         return {
           result: true,
           msg: "Delete cart success",
