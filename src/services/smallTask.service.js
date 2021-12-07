@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 //user component
 import { getDB } from "../config/mongodb";
 import { bigTaskCollectionName } from "../models/bigTast.model";
+import { cardCollectionName } from "../models/card.model";
 import {
   smallTaskCollectionName,
   validateSchema,
@@ -13,8 +14,10 @@ import { bigTaskService } from "./bigTask.service";
 
 const createSmallTask = async (data) => {
   try {
-    const value = await validateSchema(data?.body);
-    console.log("data", value);
+    const value = await validateSchema({
+      title: data?.body.title,
+      bigTaskId: data?.body.bigTaskId
+    });
     const result = await getDB()
       .collection(smallTaskCollectionName)
       .insertOne(value);
@@ -25,13 +28,21 @@ const createSmallTask = async (data) => {
           { _id: ObjectId(data?.body?.bigTaskId) },
           { $push: { smallStaskOrder: result.insertedId.toString() } }
         );
-
+          
       await bigTaskService.updatePercentBigTask(data?.body?.bigTaskId);
+
+      const result1 = await getDB()
+        .collection(cardCollectionName)
+        .findOne({ _id: ObjectId(data?.body.cardId) });
+
+      const result2 = await getDB()
+        .collection(bigTaskCollectionName)
+        .findOne({ _id: ObjectId(data?.body.bigTaskId) });
 
       return {
         result: true,
         msg: "Create task success",
-        data: { ...result, ...value },
+        data: { ...result, ...value, percentageCard: result1.percentage, percentageBigTask: result2.percentage },
       };
     } else {
       return {
@@ -49,7 +60,7 @@ const updateDone = async (data) => {
   try {
     const { _id, ischeck } = data.body;
 
-    if (ischeck === "true") {
+    if (ischeck) {
       await getDB()
         .collection(smallTaskCollectionName)
         .updateOne({ _id: ObjectId(_id) }, { $set: { isDone: true } });
@@ -72,7 +83,7 @@ const updateDone = async (data) => {
         .findOne({ _id: ObjectId(_id) });
       await bigTaskService.updatePercentBigTask(result.bigTaskId);
       return {
-        result: false,
+        result: true,
         msg: "Task undone! ",
         data: result,
       };
@@ -130,10 +141,24 @@ const deleteTask = async (data) => {
           { $pull: { smallStaskOrder: { $in: [_id] } } }
         );
       await bigTaskService.updatePercentBigTask(bigTask?.bigTaskId);
+
+      const result1 = await getDB()
+        .collection(cardCollectionName)
+        .findOne({ _id: ObjectId(data?.query.cardId) });
+
+      const result2 = await getDB()
+        .collection(bigTaskCollectionName)
+        .findOne({ _id: ObjectId(bigTask?.bigTaskId) });
+      
+        console.log('result2', result2)
       return {
-        result: TimestreamQuery,
+        result: true,
         msg: "You  delete task ",
-        data: deleteTask,
+        data: {
+          ...deleteTask,
+          percentageCard: result1.percentage,
+          percentageBigTask: result2.percentage 
+        },
       };
     } else {
       return {
