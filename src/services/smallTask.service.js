@@ -9,6 +9,7 @@ import {
   smallTaskCollectionName,
   validateSchema,
 } from "../models/smallTask.model";
+import { bigTaskService } from "./bigTask.service";
 
 const createSmallTask = async (data) => {
   try {
@@ -24,6 +25,8 @@ const createSmallTask = async (data) => {
           { _id: ObjectId(data?.body?.bigTaskId) },
           { $push: { smallStaskOrder: result.insertedId.toString() } }
         );
+
+      await bigTaskService.updatePercentBigTask(data?.body?.bigTaskId);
 
       return {
         result: true,
@@ -53,6 +56,7 @@ const updateDone = async (data) => {
       const result = await getDB()
         .collection(smallTaskCollectionName)
         .findOne({ _id: ObjectId(_id) });
+      await bigTaskService.updatePercentBigTask(result.bigTaskId);
       return {
         result: true,
         msg: "Task done! ",
@@ -66,6 +70,7 @@ const updateDone = async (data) => {
       const result = await getDB()
         .collection(smallTaskCollectionName)
         .findOne({ _id: ObjectId(_id) });
+      await bigTaskService.updatePercentBigTask(result.bigTaskId);
       return {
         result: false,
         msg: "Task undone! ",
@@ -124,6 +129,7 @@ const deleteTask = async (data) => {
           { _id: ObjectId(bigTask?.bigTaskId) },
           { $pull: { smallStaskOrder: { $in: [_id] } } }
         );
+      await bigTaskService.updatePercentBigTask(bigTask?.bigTaskId);
       return {
         result: TimestreamQuery,
         msg: "You  delete task ",

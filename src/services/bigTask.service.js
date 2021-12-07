@@ -5,6 +5,8 @@ import { ObjectId } from "mongodb";
 import { getDB } from "../config/mongodb";
 import { bigTaskCollectionName, validateSchema } from "../models/bigTast.model";
 import { cardCollectionName } from "../models/card.model";
+import { CardService } from "./card.service";
+import { smallTaskService } from "./smallTask.service";
 
 const createBigTask = async (data) => {
   try {
@@ -114,12 +116,12 @@ const updateTitle = async (data) => {
 const deleteBigTask = async (data) => {
   try {
     const { _id } = data.query;
-    console.log('_id: ', _id)
+    console.log("_id: ", _id);
     const card = await getDB()
       .collection(bigTaskCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    
-    console.log('card search: ', card)
+
+    console.log("card search: ", card);
 
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
@@ -157,20 +159,34 @@ const deleteBigTask = async (data) => {
   }
 };
 
-// const getSmallTaskIntoBigTask = async (id) => {
-//   try {
-//     const task = await getDB()
-//       .collection(bigTaskCollectionName)
-//       .findOne({ _id: ObjectId(_id) });
+const updatePercentBigTask = async (id) => {
+  try {
+    const task = await getDB()
+      .collection(bigTaskCollectionName)
+      .findOne({ _id: ObjectId(id) });
+    console.log("====task", task);
+    const objectIdArray = task?.smallStaskOrder.map((s) => ObjectId(s));
+    console.log("abc", objectIdArray);
+    const listBigTAsk = await smallTaskService.getSmallTaskById(objectIdArray);
+    console.log("====", listBigTAsk);
 
-//     const objectIdArray = isCheckUser?.bigTaskOrder.map((s) => ObjectId(s));
-//     console.log("abc", objectIdArray);
-//     const listBigTAsk = await getBigTaskById(objectIdArray);
-//     console.log("====", listBigTAsk);
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
+    let totalDone = 0;
+
+    const listSmall = listBigTAsk.map(function (e) {
+      if (e.isDone) {
+        totalDone++;
+      }
+    });
+    if (listSmall === 0) {
+      await updatePercentage(ObjectId(id), 0);
+    } else {
+      await updatePercentage(ObjectId(id), totalDone / listSmall.length);
+    }
+    await CardService.updatePercentageCard(task?.cardId);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const updatePercentage = async (_id, data) => {
   try {
@@ -191,4 +207,5 @@ export const bigTaskService = {
   deleteBigTask,
   getBigTaskById,
   updatePercentage,
+  updatePercentBigTask,
 };

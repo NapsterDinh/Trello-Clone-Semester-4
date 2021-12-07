@@ -13,7 +13,7 @@ const cardCollectionSchema = Joi.object({
 
   description: Joi.string().default(""),
   attachment: Joi.array().items(Joi.string()).default([]),
-  deadline: Joi.date().default(1838327107368),
+  deadline: Joi.date().default(2838327107368),
   color: Joi.string().default(""),
   userId: Joi.array().items(Joi.string()).default([]),
   tagOrder: Joi.array().items(Joi.string()).default([]),

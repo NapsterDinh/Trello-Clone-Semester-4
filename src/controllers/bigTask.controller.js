@@ -48,8 +48,26 @@ const deleteBigTask = async (req, res) => {
   }
 };
 
+const updatePercentBigTask = async (req, res) => {
+  try {
+    const { result, msg, data } = await bigTaskService.updatePercentBigTask(
+      req
+    );
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const bigTaskController = {
   createBigTask,
   updateTitle,
   deleteBigTask,
+  updatePercentBigTask,
 };

@@ -406,11 +406,56 @@ const updateStatus = async (_id, status) => {
   }
 };
 
-const updatePercentageCard = async (_id, percentage) => {
+const updatePercentageCard = async (_id) => {
   try {
+    const card = await getDB()
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    const listBigTask = await bigTaskService.getBigTaskById(card.bigTaskOrder);
+
+    console.log("listBigTAsk", listBigTask);
+    let totallength = [];
+    let total = [];
+    const abc = await Promise.all(
+      listBigTask.map(async (small) => {
+        let cal = await smallTaskService.getSmallTaskById(
+          small.smallStaskOrder.map((s) => ObjectId(s))
+        );
+
+        small.smallTask = cal;
+        let totalDone = 0;
+
+        let C = cal.map(function (e) {
+          if (e.isDone) {
+            totalDone++;
+          }
+        });
+
+        if (C.length === 0) {
+          await bigTaskService.updatePercentage(small?._id, 0);
+        } else {
+          await bigTaskService.updatePercentage(
+            small?._id,
+            totalDone / C.length
+          );
+        }
+        totallength.push(C.length);
+        total.push(totalDone);
+
+        return cal;
+      })
+    );
+
+    const lengthTask = totallength.reduce((a, b) => a + b, 0);
+    const taskDone = total.reduce((a, b) => a + b, 0);
+
+    console.log("absd", _id, taskDone, lengthTask);
     await getDB()
       .collection(cardCollectionName)
-      .updateOne({ _id: _id }, { $set: { percentage: percentage } });
+      .updateOne(
+        { _id: ObjectId(_id) },
+        { $set: { percentage: `${taskDone}/${lengthTask}` } }
+      );
   } catch (error) {
     throw new Error(error);
   }
