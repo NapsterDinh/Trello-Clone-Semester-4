@@ -359,10 +359,26 @@ const updateColor = async (data) => {
 
 const updateStatus = async (_id, status) => {
   try {
-    console.log("_id", _id);
+    console.log(_id, status)
     await getDB()
       .collection(cardCollectionName)
-      .updateOne({ _id: _id }, { $set: { status: status } });
+      .updateOne({ _id: ObjectId(_id) }, { $set: { status: status } });
+    const result = await getDB()
+        .collection(cardCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+      if (result.status === status) {
+        return {
+          result: true,
+          msg: "Update cart success",
+          data: result,
+        };
+      } else {
+        return {
+          result: false,
+          msg: "Update cart fail",
+          data: [],
+        };
+      }
   } catch (error) {
     throw new Error(error);
   }

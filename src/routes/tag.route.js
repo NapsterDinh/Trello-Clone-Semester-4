@@ -34,7 +34,7 @@ router.route("/deleteTag").delete(tagController.deleteTag);
 
 router.route("/listTag").get(tagController.getListTag);
 
-router.route("/addTagToCard").post(tagController.tagOrder);
+router.route("/updateTagOrder").put(tagController.tagOrder);
 //   /v1/tag/deleteTag
 
 //body  {_id:3t163t2}

@@ -55,6 +55,13 @@ router.route("/updateColor").put(auth, CardController.updateColor);
 //     "_id":"61a6e3494648825573b324c3"
 // }
 
+router.route("/updateStatus").put(auth, CardController.updateStatus);
+//          /v1/cards/updateDate
+// body {
+//            "color":"ffffff",
+//     "_id":"61a6e3494648825573b324c3"
+// }
+
 router.route("/deleteCart").delete(auth, CardController.deleteCart);
 //          /v1/cards/deleteCart
 // params: _id:13421243

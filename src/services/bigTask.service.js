@@ -114,10 +114,12 @@ const updateTitle = async (data) => {
 const deleteBigTask = async (data) => {
   try {
     const { _id } = data.query;
-
+    console.log('_id: ', _id)
     const card = await getDB()
       .collection(bigTaskCollectionName)
       .findOne({ _id: ObjectId(_id) });
+    
+    console.log('card search: ', card)
 
     const isCheckUser = await getDB()
       .collection(cardCollectionName)

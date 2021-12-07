@@ -93,6 +93,22 @@ const updateDate = async (req, res) => {
   }
 };
 
+const updateStatus = async (req, res) => {
+  try {
+    
+    const { result, msg, data } = await CardService.updateStatus(req.body._id, req.body.status);
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 const updateColor = async (req, res) => {
   try {
     const { result, msg, data } = await CardService.updateColor(req);
@@ -180,4 +196,5 @@ export const CardController = {
   addUserToCart,
   removeUserToCart,
   getCardById,
+  updateStatus
 };
