@@ -9,9 +9,10 @@ import { columnCollectionName } from "../models/column.model";
 import { cardCollectionName } from "../models/card.model";
 import { userCollectionName } from "../models/user.model";
 import { tagCollectionName } from "../models/tag.model";
-import { sendEmailUser } from "../shares/sendMail";
 import { userService } from "./user.service";
 import { CardService } from "./card.service";
+import { sendEmailUser } from "../shares/sendMail";
+import { upLoad } from "../shares/upLoadImage";
 import { bigTaskService } from "./bigTask.service";
 import { tagService } from "./tag.service";
 
@@ -472,6 +473,48 @@ const updateColumnOrder = async (data) => {
   }
 };
 
+const updateImage = async (data) => {
+  try {
+    const { _id } = data.body;
+
+    const isCheckUser = await getDB()
+      .collection(boardCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    const isCheckUserCreateWP = await getDB()
+      .collection(workSpaceCollectionName)
+      .findOne({ _id: ObjectId(isCheckUser?.workSpaceId) });
+
+    if (isCheckUserCreateWP?.userCreate !== data?.user.sub) {
+      return {
+        result: false,
+        msg: "You is not permission update board ",
+        data: [],
+      };
+    } else {
+      const image = await upLoad(data?.Files?.file?.tempFilePath);
+      await getDB()
+        .collection(boardCollectionName)
+        .update(
+          { _id: ObjectId(_id) },
+          {
+            $set: { image: image },
+          }
+        );
+      const result = await getDB()
+        .collection(boardCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+
+      if (result?.image) {
+        return { result: true, msg: "Update image success", data: result };
+      } else {
+        return { result: false, msg: "Update image fail", data: [] };
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const BoardService = {
   createNew,
   getFullBoard,
@@ -484,4 +527,5 @@ export const BoardService = {
   listUserBoard,
   getUserByEmail,
   updateColumnOrder,
+  updateImage,
 };

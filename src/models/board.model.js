@@ -13,6 +13,9 @@ const boardCollectionSchema = Joi.object({
   columnOrder: Joi.array().items(Joi.string()).default([]),
   tagOrder: Joi.array().items(Joi.string()).default([]),
   createAt: Joi.date().timestamp().default(Date.now()),
+  image: Joi.string().default(
+    "https://pbs.twimg.com/profile_images/1361722806694785027/UY7DlO0a_400x400.png"
+  ),
   updateAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),
 });
@@ -20,42 +23,3 @@ const boardCollectionSchema = Joi.object({
 export const validateSchema = async (data) => {
   return await boardCollectionSchema.validateAsync(data, { abortEarly: false });
 };
-
-// const getFullBoard = async (boardId) => {
-//   try {
-//     const result = await getDB()
-//       .collection(boardCollectionName)
-//       .aggregate([
-//         {
-//           $match: {
-//             _id: ObjectId(boardId),
-//           },
-//         },
-//         {
-//           $lookup: {
-//             from: ColumnModel.columnCollectionName, //collection name
-//             localField: "_id",
-//             foreignField: "boardId",
-//             as: "columns",
-//           },
-//         },
-//         {
-//           $lookup: {
-//             from: CardModel.cardCollectionName, //collection name
-//             localField: "_id",
-//             foreignField: "boardId",
-//             as: "cards",
-//           },
-//         },
-//       ])
-//       .toArray();
-
-//     return result[0] || {};
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
-// export const BoardModel = {
-//   getFullBoard,
-// };

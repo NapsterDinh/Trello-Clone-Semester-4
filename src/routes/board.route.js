@@ -15,5 +15,6 @@ router.route("/updateColumnOrder").put(auth, BoardController.updateColumnOrder);
 router.route("/delete").delete(auth, BoardController.deteleBoard);
 router.route("/addUserToBoard").put(auth, BoardController.addUserToBoard);
 router.route("/removeUserToBoard").put(auth, BoardController.removeUserToBoard);
+router.route("/upLoadImage").put(auth, BoardController.upLoadImage);
 
 export const boardRoute = router;

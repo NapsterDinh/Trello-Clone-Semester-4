@@ -116,6 +116,21 @@ const updateColumnOrder = async (req, res) => {
   }
 };
 
+const upLoadImage = async (req, res) => {
+  try {
+    const { result, msg, data } = await BoardService.upLoadImage(req);
+    res.json({
+      result: result,
+      msg: msg,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      errors: error.message,
+    });
+  }
+};
+
 export const BoardController = {
   creatNew,
   getFullBoard,
@@ -125,4 +140,5 @@ export const BoardController = {
   removeUserToBoard,
   listUserBoard,
   updateColumnOrder,
+  upLoadImage,
 };

@@ -17,6 +17,7 @@ router
 router.route("/create").post(auth, workSpaceController.addWorkSpace); //auth,
 router.route("/update").put(auth, workSpaceController.updateWorkSpace); //auth
 router.route("/updatePrivacy").put(auth, workSpaceController.updatePrivacy);
+router.route("/upLoadImage").post(auth, workSpaceController.upLoadImage);
 router.route("/delete").delete(auth, workSpaceController.deleteWorkSpace);
 router.route("/inviteUser").post(auth, workSpaceController.inviteUser); //auth
 router.route("/addUser").get(workSpaceController.addUserToWorkSpace);
@@ -25,7 +26,5 @@ router
   .put(auth, workSpaceController.removeUserToWorkSpace); //auth
 //test cho nay
 //test
-
-router.route("/test").get(workSpaceController.test);
 
 export const workSpaceRoutes = router;

@@ -174,9 +174,9 @@ const getWorkSpaceById = async (req, res) => {
   }
 };
 
-const test = async (req, res) => {
+const upLoadImage = async (req, res) => {
   try {
-    const { result, msg, data } = await workSpaceService.test(req);
+    const { result, msg, data } = await workSpaceService.upLoadImage(req);
     res.json({
       result: result,
       msg: msg,
@@ -201,5 +201,5 @@ export const workSpaceController = {
   updatePrivacy,
   inviteUser,
   getWorkSpaceById,
-  test,
+  upLoadImage,
 };

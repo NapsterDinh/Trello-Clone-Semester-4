@@ -13,6 +13,7 @@ import { boardCollectionName } from "../models/board.model";
 import { sendEmailUser } from "../shares/sendMail";
 import { columnCollectionName } from "../models/column.model";
 import { cardCollectionName } from "../models/card.model";
+import { upLoad } from "../shares/upLoadImage";
 
 //variable
 const { APP_SCHEMA, APP_HOST, APP_PORT } = process.env;
@@ -459,27 +460,40 @@ const getWorkSpaceById = async (data) => {
   }
 };
 
-const test = async (data) => {
+const upLoadImage = async (data) => {
   try {
-    const { _id } = data.query;
+    const { _id } = data.body;
     const findUserCreateWP = await getDB()
-      .collection(boardCollectionName)
-      .find({ workSpaceId: _id })
-      .toArray();
-    console.log("board", findUserCreateWP);
+      .collection(workSpaceCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+    if (findUserCreateWP?.userCreate !== data.user.sub) {
+      //
+      return {
+        result: false,
+        msg: "You is not permission update privacy to workSpace",
+        data: [],
+      };
+    } else {
+      const image = await upLoad(data?.Files?.file?.tempFilePath);
+      await getDB()
+        .collection(workSpaceCollectionName)
+        .updateOne(
+          { _id: ObjectId(_id) },
+          {
+            $set: { image: image },
+          }
+        );
 
-    const a = await findUserCreateWP.filter(async (c) => {
-      const col = await getDB()
-        .collection(columnCollectionName)
-        .find({ boardId: c._id })
-        .toArray();
-      console.log("a", col);
-      const car = await getDB()
-        .collection(cardCollectionName)
-        .find({ boardId: c._id })
-        .toArray();
-      console.log("car", car);
-    });
+      const result = await getDB()
+        .collection(workSpaceCollectionName)
+        .findOne({ _id: ObjectId(_id) });
+
+      if (result) {
+        return { result: true, msg: "Update image success", data: result };
+      } else {
+        return { result: false, msg: "Update image fail", data: [] };
+      }
+    }
   } catch (error) {
     throw new Error(error);
   }
@@ -497,5 +511,5 @@ export const workSpaceService = {
   updatePrivacy,
   inviteUser,
   getWorkSpaceById,
-  test,
+  upLoadImage,
 };
