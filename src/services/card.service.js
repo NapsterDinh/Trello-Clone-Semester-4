@@ -162,6 +162,50 @@ const updateDescription = async (data) => {
   }
 };
 
+const updateDeadline = async (data) => {
+  try {
+    const { _id, deadline } = data.body;
+
+    const isCheckUser = await getDB()
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+
+    if (isCheckUser?.userCreate !== data.user.sub) {
+      return {
+        result: false,
+        msg: "You is not permission update card ",
+        data: [],
+      };
+    } else {
+      if (Date.now() < deadline.getTime()) {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
+      } else {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: true } });
+      }
+
+      if (result) {
+        return {
+          result: true,
+          msg: "Update deadline success",
+          data: result,
+        };
+      } else {
+        return {
+          result: false,
+          msg: "Update deadline fail",
+          data: [],
+        };
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const updateImage = async (data) => {
   try {
     const { _id, image } = data.body;
@@ -359,7 +403,6 @@ const updateColor = async (data) => {
 
 const updateStatus = async (_id, status) => {
   try {
-    console.log("_id,status", _id, status);
     await getDB()
       .collection(cardCollectionName)
       .updateOne({ _id: ObjectId(_id) }, { $set: { status: status } });
@@ -372,7 +415,7 @@ const updateStatus = async (_id, status) => {
         await getDB()
           .collection(cardCollectionName)
           .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
-        console.log("===========");
+
         return {
           result: true,
           msg: "Update cart success",
@@ -415,7 +458,6 @@ const updatePercentageCard = async (_id) => {
       .findOne({ _id: ObjectId(_id) });
     const listBigTask = await bigTaskService.getBigTaskById(card.bigTaskOrder);
 
-    console.log("listBigTAsk", listBigTask);
     let totallength = [];
     let total = [];
     const abc = await Promise.all(
