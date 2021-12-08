@@ -3,10 +3,10 @@ import cloudinary from "cloudinary";
 
 const upLoad = async (req, res) => {
   try {
-    console.log("báe64", req.files);
+    console.log("báe64", req);
 
     // Upload image to cloudinary
-    const result = await cloudinary.uploader.upload(req.body.abc);
+    const result = await cloudinary.uploader.upload(req.files.File.tempFilePath);
 
     // const tmpFolderPath = path.resolve("tmp");
     // fs.rmdir(tmpFolderPath, function (err, data) {
