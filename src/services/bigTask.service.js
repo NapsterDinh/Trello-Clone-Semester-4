@@ -170,11 +170,10 @@ const updatePercentBigTask = async (id) => {
     const task = await getDB()
       .collection(bigTaskCollectionName)
       .findOne({ _id: ObjectId(id) });
-    console.log("====task", task);
+
     const objectIdArray = task?.smallStaskOrder.map((s) => ObjectId(s));
-    console.log("abc", objectIdArray);
+
     const listBigTAsk = await smallTaskService.getSmallTaskById(objectIdArray);
-    console.log("====", listBigTAsk);
 
     let totalDone = 0;
 

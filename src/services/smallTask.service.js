@@ -16,7 +16,7 @@ const createSmallTask = async (data) => {
   try {
     const value = await validateSchema({
       title: data?.body.title,
-      bigTaskId: data?.body.bigTaskId
+      bigTaskId: data?.body.bigTaskId,
     });
     const result = await getDB()
       .collection(smallTaskCollectionName)
@@ -28,21 +28,26 @@ const createSmallTask = async (data) => {
           { _id: ObjectId(data?.body?.bigTaskId) },
           { $push: { smallStaskOrder: result.insertedId.toString() } }
         );
-          
-      await bigTaskService.updatePercentBigTask(data?.body?.bigTaskId);
 
-      const result1 = await getDB()
-        .collection(cardCollectionName)
-        .findOne({ _id: ObjectId(data?.body.cardId) });
+      await bigTaskService.updatePercentBigTask(data?.body?.bigTaskId);
 
       const result2 = await getDB()
         .collection(bigTaskCollectionName)
         .findOne({ _id: ObjectId(data?.body.bigTaskId) });
 
+      const result1 = await getDB()
+        .collection(cardCollectionName)
+        .findOne({ _id: ObjectId(result2?.cardId) });
+
       return {
         result: true,
         msg: "Create task success",
-        data: { ...result, ...value, percentageCard: result1.percentage, percentageBigTask: result2.percentage },
+        data: {
+          ...result,
+          ...value,
+          percentageCard: result1.percentage,
+          percentageBigTask: result2.percentage,
+        },
       };
     } else {
       return {
@@ -149,15 +154,15 @@ const deleteTask = async (data) => {
       const result2 = await getDB()
         .collection(bigTaskCollectionName)
         .findOne({ _id: ObjectId(bigTask?.bigTaskId) });
-      
-        console.log('result2', result2)
+
+      console.log("result2", result2);
       return {
         result: true,
         msg: "You  delete task ",
         data: {
           ...deleteTask,
           percentageCard: result1.percentage,
-          percentageBigTask: result2.percentage 
+          percentageBigTask: result2.percentage,
         },
       };
     } else {

@@ -359,18 +359,20 @@ const updateColor = async (data) => {
 
 const updateStatus = async (_id, status) => {
   try {
-    console.log(_id, status);
+    console.log("_id,status", _id, status);
     await getDB()
       .collection(cardCollectionName)
       .updateOne({ _id: ObjectId(_id) }, { $set: { status: status } });
     const result = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    if (Date.now() < u.deadline) {
+
+    if (Date.now() < result.deadline) {
       if (result.status === status) {
         await getDB()
           .collection(cardCollectionName)
           .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
+        console.log("===========");
         return {
           result: true,
           msg: "Update cart success",
@@ -456,6 +458,14 @@ const updatePercentageCard = async (_id) => {
         { _id: ObjectId(_id) },
         { $set: { percentage: `${taskDone}/${lengthTask}` } }
       );
+
+    if (lengthTask === taskDone) {
+      await updateStatus(_id, "done");
+    } else {
+      await updateStatus(_id, "undone");
+    }
+
+    return { lengthTask, taskDone };
   } catch (error) {
     throw new Error(error);
   }
@@ -486,6 +496,9 @@ const deleteCart = async (data) => {
             { _id: isCheckUser?.columnId },
             { $pull: { cardOrder: { $in: [_id] } } }
           );
+        await getDB()
+          .collection(bigTaskCollectionName)
+          .deleteMany({ cardId: _id });
         return {
           result: true,
           msg: "Delete cart success",
