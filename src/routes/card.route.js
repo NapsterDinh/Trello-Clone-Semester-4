@@ -27,14 +27,14 @@ router.route("/updateDescription").put(auth, CardController.updateDescription);
 //     "_id":"61a6e3494648825573b324c3"
 // }
 
-router.route("/updateImage").put(auth, CardController.updateImage);
+router.route("/updateImage").post(auth, CardController.updateImage);
 //          /v1/cards/updateImage
 // {
 //     "image":"abc",
 //     "_id":"61a6e3494648825573b324c3"
 // }
 
-router.route("/updateAttachment").put(auth, CardController.updateAttachment);
+router.route("/updateAttachment").post(auth, CardController.updateAttachment);
 //          /v1/cards/updateAttachment
 // {
 //         "attachment":["a","b","c","e"],

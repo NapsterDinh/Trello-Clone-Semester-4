@@ -6,6 +6,7 @@ import { getDB } from "../config/mongodb";
 import { cardCollectionName } from "../models/card.model";
 import { columnCollectionName } from "../models/column.model";
 import { boardCollectionName } from "../models/board.model";
+import { bigTaskCollectionName } from "../models/bigTast.model";
 import { validateSchema } from "../models/card.model";
 import { ColumnService } from "./column.service";
 import { BoardService } from "./board.service";
@@ -165,12 +166,12 @@ const updateDescription = async (data) => {
 
 const updateImage = async (data) => {
   try {
-    const { _id } = data.body;
-
+    const { _id, isDelete } = data.body;
+    
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-
+      console.log('data----', data.body)
     if (isCheckUser?.userCreate !== data.user.sub) {
       return {
         result: false,
@@ -178,15 +179,32 @@ const updateImage = async (data) => {
         data: [],
       };
     } else {
-      const image = await upLoad(data?.files?.file?.tempFilePath);
-      await getDB()
-        .collection(cardCollectionName)
-        .updateOne({ _id: ObjectId(_id) }, { $set: { image: image } });
-
+      if(isDelete === 'true')
+      {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { image: '' } });
+      }
+      else
+      {
+        console.log('data----', data?.files)
+        const image = await upLoad(data?.files?.File?.tempFilePath);
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { image: image } });
+      }
       const result = await getDB()
         .collection(cardCollectionName)
         .findOne({ _id: ObjectId(_id) });
       if (result) {
+        if(isDelete === 'false')
+        {
+          return {
+            result: true,
+            msg: "Update cart success",
+            data: result,
+          };
+        }
         return {
           result: true,
           msg: "Update cart success",
@@ -208,7 +226,7 @@ const updateImage = async (data) => {
 const updateAttachment = async (data) => {
   try {
     const { _id } = data.body;
-
+    console.log('data-----------', data)
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
@@ -220,15 +238,16 @@ const updateAttachment = async (data) => {
         data: [],
       };
     } else {
-      if (data?.files.file) {
-        const result = await upLoad(data?.files?.file?.tempFilePath);
+      if (data?.files !== undefined) {
+        console.log('----------------------------------')
+        const result = await upLoad(data?.files?.File?.tempFilePath);
         await getDB()
           .collection(cardCollectionName)
           .updateOne({ _id: ObjectId(_id) }, { $push: { attachment: result } });
         return {
           result: true,
           msg: "Upload image  success",
-          data: { url: result, name: data?.files?.file?.name },
+          data: { url: result},
         };
       } else {
         await getDB()
@@ -237,6 +256,11 @@ const updateAttachment = async (data) => {
             { _id: ObjectId(_id) },
             { $push: { attachment: data?.body?.link } }
           );
+        return {
+            result: true,
+            msg: "Upload image  success",
+            data: { url: data?.body?.link},
+          };
       }
     }
   } catch (error) {
@@ -268,7 +292,7 @@ const deleteAttachment = async (data) => {
       return {
         result: true,
         msg: "Update attachment success",
-        data: { url: result, name: data?.files?.file?.name },
+        data: [],
       };
     }
   } catch (error) {
@@ -496,7 +520,7 @@ const updatePercentageCard = async (_id) => {
 const deleteCart = async (data) => {
   try {
     const { _id } = data.query;
-
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', data)
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
@@ -511,20 +535,22 @@ const deleteCart = async (data) => {
       const result = await getDB()
         .collection(cardCollectionName)
         .findOneAndDelete({ _id: ObjectId(_id) }, { returnOriginal: false });
+      console.log('result', result)
       if (result?.value) {
-        const result = await getDB()
+        const result1 = await getDB()
           .collection(columnCollectionName)
           .updateOne(
             { _id: isCheckUser?.columnId },
             { $pull: { cardOrder: { $in: [_id] } } }
           );
+          console.log('result1', result1)
         await getDB()
           .collection(bigTaskCollectionName)
           .deleteMany({ cardId: _id });
         return {
           result: true,
           msg: "Delete cart success",
-          data: result,
+          data: result1,
         };
       } else {
         return {
