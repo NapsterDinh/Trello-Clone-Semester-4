@@ -3,7 +3,7 @@ import cloudinary from "cloudinary";
 
 const upLoad = async (req, res) => {
   try {
-    // console.log("báe64", req.body.abc);
+    console.log("báe64", req.files);
 
     // Upload image to cloudinary
     const result = await cloudinary.uploader.upload(req.body.abc);

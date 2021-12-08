@@ -24,7 +24,7 @@ console.log(process.env.PORT);
 
 const bootServer = () => {
   const app = express();
-  // app.use(fileupload({ useTempFiles: true }));
+  app.use(fileupload({ useTempFiles: true }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   app.use(express.static("public"));
   app.use(cors());
