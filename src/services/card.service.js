@@ -283,7 +283,7 @@ const updateDate = async (data) => {
           { _id: ObjectId(_id) },
           { $set: { deadline: Date.parse(dateTime) } }
         );
-      if (Date.now() < deadline.getTime()) {
+      if (Date.now() < dateTime.getTime()) {
         await getDB()
           .collection(cardCollectionName)
           .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
