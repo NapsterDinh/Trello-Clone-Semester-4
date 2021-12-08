@@ -130,13 +130,14 @@ function DropDownTag(props)
                 showNotification('Xóa nhãn thất bại', res.data.msg, type.danger, 3000)
             }   
             setIsChooseTag(true)
-            setIsShow(false)
         } catch (error) {
             console.log(error)
         }
     }
-    const loadTagItem = async (_id) => {
+    const loadTagItem = async (_id,item) => {
         await setCurrentId(_id)
+        setColor(item.color)
+        setTitle(item.name)
         setIsChooseTag(false)
     }
 
@@ -202,7 +203,7 @@ function DropDownTag(props)
                                             className="card-label">{item.name}</span>
                                             <i className="fa fa-check" aria-hidden="true"></i>
                                             <i 
-                                            className="fa fa-pencil" aria-hidden="true" onClick={() => loadTagItem(index)}></i>
+                                            className="fa fa-pencil" aria-hidden="true" onClick={() => loadTagItem(index, item)}></i>
                                         </li>
                                     )
                                })

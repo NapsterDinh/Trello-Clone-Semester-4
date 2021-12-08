@@ -47,25 +47,32 @@ const FormForgotPass = (props) => {
   
     const onHandleForgot = async (event) => {
       event.preventDefault();
-      const isValid = validateAll();
-      if (!isValid) return;
-      else {
-        modalLoading(true)
-        setIsDisabled(true)
-        const res = await forgot({ email });
-        if (res && res.data) {
-          modalLoading(false)
-          showNotification("Forgot Pass Successfully",'We have sent to you a verification email. Please check your email to finish reset password',
-          type.succsess, 5000 )
-          setTimeout(() => {
-            history.push('/login')
-          }, 5000);
-        } else {
-          modalLoading(false)
-          showNotification("Forgot Pass failed",res.data.msg,
-          type.danger, 5000 )
-          setIsDisabled(false)
+      try {
+        const isValid = validateAll();
+        if (!isValid) return;
+        else {
+          modalLoading(true)
+          setIsDisabled(true)
+          const res = await forgot({ email });
+          if (res && res.data) {
+            modalLoading(false)
+            showNotification("Forgot Pass Successfully",'We have sent to you a verification email. Please check your email to finish reset password',
+            type.succsess, 5000 )
+            setTimeout(() => {
+              history.push('/login')
+            }, 5000);
+          } else {
+            modalLoading(false)
+            showNotification("Forgot Pass failed",res.data.msg,
+            type.danger, 5000 )
+            setIsDisabled(false)
+          }
         }
+      } catch (error) {
+        modalLoading(false)
+        showNotification("Forgot Pass failed",error.message,
+        type.danger, 5000 )
+        setIsDisabled(false)
       }
     };
 

@@ -55,6 +55,12 @@
         }
         i{
           color: $col-color;
+          &::before
+          {
+            position: absolute;
+            top: 9px;
+            left: 11px;
+          }
         }
       }
     }

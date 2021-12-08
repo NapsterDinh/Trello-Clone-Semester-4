@@ -20,6 +20,7 @@ function BoardPage() {
 
   const dispatch = useDispatch()
   const board = useSelector(state => state.board.board)
+  const listTag = useSelector(state => state.board.listTag)
   
   const fetchFullBoardById = async () => {
     try {
@@ -80,14 +81,26 @@ function BoardPage() {
     }
   }
 
-  useEffect(() => {
-    fetchFullBoardById()
-    fetchLisUserBoard()
+  useEffect(async() => {
+    await dispatch(boardHandleActionReducer({
+      listTag: [],
+      type: "SET_LIST_TAG"
+    }))
+    await dispatch(boardHandleActionReducer({
+      board: '',
+      type: 'SET_BOARD'
+    }))
+    await dispatch(boardHandleActionReducer({
+        listUserBoard: [],
+        listNotUserBoard: [],
+        type: "SET_LIST_USER_BOARD"
+    }))
+    await fetchLisUserBoard()
+    await fetchFullBoardById()
   }, [])
 
   useEffect(() => {
-    board?.title !== undefined && setIsActive(false)
-    console.log('board after save store: ', board)
+    board?.title !== undefined ? setIsActive(false) : setIsActive(true)
   }, [board])
 
 
@@ -103,7 +116,7 @@ function BoardPage() {
         {
           !isActive &&
           <>
-            <BoardBar/>
+            <BoardBar setIsActive={setIsActive}/>
             <BoardContent/>
           </>
         }

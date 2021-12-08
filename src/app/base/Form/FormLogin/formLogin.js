@@ -15,6 +15,7 @@ import { userReducer } from "store/userReducer";
 import { getTokenReducer } from "store/getTokenReducer";
 import { setApiRequestToken } from "utilities/apis/configuration";
 import { useLocation } from "react-router-dom";
+import { showNotification, type } from "utilities/component/notification/Notification";
 
 import { OverlayTrigger,Tooltip } from 'react-bootstrap'
 
@@ -64,59 +65,78 @@ const FormLogin = (props) => {
 
   const onHandleLogin = async (event) => {
     event.preventDefault();
-    const isValid = validateAll();
-    if (!isValid) 
-    {
-      refPass.current.value = ''
-      return;
-    }
-    else {
-      modalLoading(true)
-      const res = await loginApi(user);
-      if (res && res.data.result && res.status == 200) {
-        dispatch(userReducer(res.data.data.user));
-        dispatch(getTokenReducer(res.data.data.token));
-        setApiRequestToken(res.data.data.token.access.token);
-        history.push(location.state? location.state.from.pathname : "/workspace")
-      } else {
-        setErr({...err,
-          email: res.data.msg})
-        modalLoading(false)
+    try {
+      const isValid = validateAll();
+      if (!isValid) 
+      {
+        refPass.current.value = ''
+        return;
       }
+      else {
+        modalLoading(true)
+        const res = await loginApi(user);
+        if (res && res.data.result && res.status == 200) {
+          dispatch(userReducer(res.data.data.user));
+          dispatch(getTokenReducer(res.data.data.token));
+          setApiRequestToken(res.data.data.token.access.token);
+          history.push(location.state? location.state.from.pathname : "/workspace")
+        } else {
+          setErr({...err,
+            email: res.data.msg})
+          modalLoading(false)
+        }
+      }
+    } catch (error) {
+      setErr({...err,
+        email: error.message})
+      modalLoading(false)
     }
+    
   };
   const responseGoogle = async (response) => {
     modalLoading(true)
-    const res = await loginGoogle({
-      tokenId: response.tokenId,
-    });
-    if (res && res.data.result && res.status == 200) {
-      dispatch(userReducer(res.data.data.user));
-      dispatch(getTokenReducer(res.data.data.token));
-      history.push(location.state.from.pathname)
-    } else {
-      setErr(res.data.msg);
+    try {
+      const res = await loginGoogle({
+        tokenId: response.tokenId,
+      });
+      if (res && res.data.result && res.status == 200) {
+        dispatch(userReducer(res.data.data.user));
+        dispatch(getTokenReducer(res.data.data.token));
+        history.push(location.state.from.pathname)
+      } else {
+        setErr(res.data.msg);
+        modalLoading(false)
+      }
+    } catch (error) {
+      showNotification("Đăng nhập bằng google lỗi",error.message,type.danger, 5000 )
       modalLoading(false)
     }
+    
   };
 
   const responseFacebook = async (response) => {
     modalLoading(true)
-    const { accessToken, userID } = response;
-    const res = await loginFaceBook({
-      accessToken,
-      userID,
-    });
+    try {
+      const { accessToken, userID } = response;
+      const res = await loginFaceBook({
+        accessToken,
+        userID,
+      });
 
-    if (res && res.data) {
-      dispatch(userReducer(res.data.data.user));
-      dispatch(getTokenReducer(res.data.data.token));
-      history.push(location.state.from.pathname)
-      modalLoading(false)
-    } else {
-      alert("Login fail");
+      if (res && res.data) {
+        dispatch(userReducer(res.data.data.user));
+        dispatch(getTokenReducer(res.data.data.token));
+        history.push(location.state.from.pathname)
+        modalLoading(false)
+      } else {
+        alert("Login fail");
+        modalLoading(false)
+      }
+    } catch (error) {
+      showNotification("Đăng nhập bằng facebook lỗi",error.message ,type.danger, 5000 )
       modalLoading(false)
     }
+    
   };
 
   return (

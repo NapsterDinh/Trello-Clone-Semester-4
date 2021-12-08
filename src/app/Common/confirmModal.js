@@ -12,6 +12,7 @@ function ConfirmModal(props) {
       size="sm"
       onHide={() => onAction(MODAL_ACTION_CLOSE)}
       backdrop="static"
+      backdropClassName="confirm-modal"
       keyboard={false}
       animation={false} //fix warning
     >

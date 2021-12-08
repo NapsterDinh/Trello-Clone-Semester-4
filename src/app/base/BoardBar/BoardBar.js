@@ -7,15 +7,16 @@ import DropDownListBoard from '../Dropdown/DropDownListBoard/DropDownListBoard'
 import DropDownAddToBoard from '../Dropdown/DropDownAddToBoard/DropDownAddToBoard'
 import { showNotification, type } from 'utilities/component/notification/Notification'
 import { boardHandleActionReducer } from 'store/boardReducer'
+import ModalChangeBGImageColor from 'app/base/Modal/ModalChangeBGImageColor/ModalChangeBGImageColor'
 
 import { deleteBoard, updateBoard } from 'app/core/apis/board'
 
 import './BoardBar.scss'
 
-function BoardBar()
+function BoardBar({ setIsActive })
 {
     const curWp = useSelector(state =>  state.workSpace.curWP)
-
+    const [ isShow, setIsShow ] = useState(false)
     const curBoard = useSelector(state =>  state.board.board)
     const history = useHistory()
 
@@ -28,7 +29,7 @@ function BoardBar()
             if(res && res.data.result)
             {
                 console.log(res)
-                history.push(`/workspace/${curWp._id}/boards`)
+                history.push(`/workspace`)
                 showNotification('Xóa bảng thành công', 'Bảng của bạn đã được xóa', type.succsess, 3000)
             }
             else
@@ -69,7 +70,7 @@ function BoardBar()
         <nav className="navbar-board">
             <div className="board-bar-padding">
                 <div className="board-bar-left">
-                    <DropDownListBoard/>
+                    <DropDownListBoard setIsActive={setIsActive}/>
                     <Col className="enter-new-title-board input">
                         <div key={curBoard.title}>
                             <Form.Control size="sm"
@@ -92,10 +93,13 @@ function BoardBar()
                     <DropdownButton title="Cài đặt" className="board-bar-setting">
                         <Dropdown.Header>Cài đặt</Dropdown.Header>
                         <Dropdown.Divider/>
-                        {/* <Dropdown.Item href="#/action-1">Xem thông tin chi tiết</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">Thay đổi ảnh nền</Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">Quản lý nhãn</Dropdown.Item>
-                        <Dropdown.Divider/> */}
+                        {/* <Dropdown.Item href="#/action-1">Xem thông tin chi tiết</Dropdown.Item> */}
+                        <Dropdown.Item href="#/action-2" onClick={(e) => {
+                            e.preventDefault()
+                            setIsShow(true)
+                        }}>Thay đổi ảnh nền</Dropdown.Item>
+                        {/* <Dropdown.Item href="#/action-3">Quản lý nhãn</Dropdown.Item> */}
+                        <Dropdown.Divider/>
                         <Dropdown.Item onClick={onDeleteBoard}>Xóa bảng này</Dropdown.Item>
                     </DropdownButton>
                     <a href={`/workspace`} className="back-to-workspace toggle btn">Hiển thị trong không gian làm việc</a>
@@ -107,12 +111,8 @@ function BoardBar()
                         <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
                         <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
                     </DropdownButton>
-                    <DropdownButton title="Hiện Menu" className="board-bar-menu">
-                        <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                    </DropdownButton>
                 </div>
+                <ModalChangeBGImageColor isShow={isShow} setIsShow={setIsShow} />
                 
             </div>
         </nav>

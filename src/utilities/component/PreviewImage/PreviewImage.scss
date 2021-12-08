@@ -1,0 +1,40 @@
+.modal-preview-image
+{
+    .modal-content
+    {
+        width: fit-content!important;
+        .modal-header
+        {
+            padding: 0;
+            img
+            {
+                height: 93vh;
+                width: 100%;
+            }
+            button
+            {
+                width: 33px;
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                border-radius: 50%;
+                span
+                {
+                    &:first-child
+                    {
+                        line-height: 30px;
+                    }
+                }
+            }
+        }
+    }
+    
+}
+.modal-preview-image-backdrop
+{
+    &.show
+    {
+        opacity: 0.8;
+        z-index: 1055;
+    }
+}

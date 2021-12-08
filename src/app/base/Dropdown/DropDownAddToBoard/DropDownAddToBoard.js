@@ -4,6 +4,7 @@ import { Dropdown, Button, DropdownButton } from 'react-bootstrap'
 import ToggleWorkSpace from 'app/base/CustomToggle/ToggleWorkSpace/ToggleWorkSpace';
 import logo from 'app/Images/features/1.jpg'
 import { boardHandleActionReducer } from 'store/boardReducer'
+import { showNotification, type } from 'utilities/component/notification/Notification';
 
 import { addUserToBoard, removeUserToBoard } from 'app/core/apis/board';
 
@@ -36,13 +37,17 @@ function DropDownAddToBoard(props)
                         user: item
                     }
                 ))
+                showNotification('Thêm thành viên vào bảng thành công', 'Thêm thành viên vào bảng thành công', type.succsess, 3000)
+            
             }
             else
             {
+                showNotification('Thêm thành viên vào bảng thất bại', res.data.msg , type.danger, 3000)
                 console.log(res.data.msg)
             }
         } catch (error) {
             console.log(error.message)
+            showNotification('Thêm thành viên vào bảng thất bại', error.message, type.succsess, 3000)
         }
     }
 
@@ -60,12 +65,15 @@ function DropDownAddToBoard(props)
                         user: item
                     }
                 ))
+                showNotification('Gỡ thành viên vào bảng thành công', 'Gỡ thành viên vào bảng thành công', type.succsess, 3000)
             }
             else
             {
                 console.log(res.data.msg)
+                showNotification('Gỡ thành viên vào bảng thất bại', res.data.msg , type.danger, 3000)
             }
         } catch (error) {
+            showNotification('Gỡ thành viên vào bảng thất bại', error.message, type.succsess, 3000)
             console.log(error.message)
         }
     }

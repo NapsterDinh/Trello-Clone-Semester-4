@@ -65,43 +65,50 @@ const FormRegister = (props) => {
 
   const onHandleSignUp = async (event) => {
     event.preventDefault();
-    const isValid = validateAll();
-    if (!isValid) {
-      return;
-    } else {
-      modalLoading(true);
-      setIsDisabled(true);
-      const res = await signup({ name, email, password });
-      if (res && res.data.result && res.status == 200) {
-        // dispatch(getTokenReducer(res.data.data.token));
-        // setApiRequestToken(res.data.data.token.access.token);
-        modalLoading(false);
-        showNotification(
-          "Register sucessfully",
-          "We have sent to you a verification email. Please check your email to finish register!!!",
-          type.succsess,
-          5000
-        );
-        setTimeout(() => {
-          history.push("/login");
-        }, 5000);
+    try {
+      const isValid = validateAll();
+      if (!isValid) {
+        return;
       } else {
-        modalLoading(false);
-        switch (res.data.msg) {
-          case "Email is already taken":
-            setValidationMsg({
-              ...validationMsg,
-              email: res.data.msg,
-            });
-            break;
+        modalLoading(true);
+        setIsDisabled(true);
+        const res = await signup({ name, email, password });
+        if (res && res.data.result && res.status == 200) {
+          // dispatch(getTokenReducer(res.data.data.token));
+          // setApiRequestToken(res.data.data.token.access.token);
+          modalLoading(false);
+          showNotification(
+            "Register sucessfully",
+            "We have sent to you a verification email. Please check your email to finish register!!!",
+            type.succsess,
+            5000
+          );
+          setTimeout(() => {
+            history.push("/login");
+          }, 5000);
+        } else {
+          modalLoading(false);
+          switch (res.data.msg) {
+            case "Email is already taken":
+              setValidationMsg({
+                ...validationMsg,
+                email: res.data.msg,
+              });
+              break;
 
-          default:
-            showNotification("Register error", res.data.msg, type.danger, 5000);
-            break;
+            default:
+              showNotification("Register error", res.data.msg, type.danger, 5000);
+              break;
+          }
+          setIsDisabled(false);
         }
-        setIsDisabled(false);
       }
+    } catch (error) {
+      modalLoading(false);
+      showNotification("Register error", error.message, type.danger, 5000);
+          setIsDisabled(false);
     }
+    
   };
 
   return (

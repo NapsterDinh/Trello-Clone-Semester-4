@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, Button,Tooltip, CloseButton, 
+import { Modal, Button,Tooltip, CloseButton,FormControl, 
     DropdownButton, Form, Dropdown, OverlayTrigger } from "react-bootstrap";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -9,7 +9,8 @@ import { cardHandleReducer } from "store/cardReducer";
 import { boardHandleActionReducer } from "store/boardReducer";
 import { converDateFormat } from "utilities/convertDate";
 import ConfirmModal from "app/Common/confirmModal";
-import { deleteCard } from "app/core/apis/card";
+import { deleteCard, updateImage, updateAttachment, deleteAttachment } from "app/core/apis/card";
+import PreviewImage from "utilities/component/PreviewImage/PreviewImage";
 
 import { showNotification, type } from "utilities/component/notification/Notification";
 
@@ -17,8 +18,10 @@ import SectionBigTask from 'app/base/Section/SectionBigTask/SectionBigTask'
 import DropDownBigTask from "app/base/Dropdown/DropDownBigTask/DropDownBigTask";
 import DropDownTag from "app/base/Dropdown/DropDownTag/DropDownTag";
 import DropDownDeadline from "app/base/Dropdown/DropDownDeadline/DropDownDeadline";
+import DropDownWPaperCard from "app/base/Dropdown/DropDownWPaperCard/DropDownWPaperCard";
+import DropDownAttachment from 'app/base/Dropdown/DropDownAttachment/DropDownAttachment'
 import { mapOrderAndReplaceNotExist } from 'utilities/sort'
-
+import { MODAL_ACTION_CLOSE, MODAL_ACTION_CONFIRM } from 'utilities/constants'
 
 import { updateDescription, updateCard, updateStatus } from "app/core/apis/card";
 import './ModalCard.scss'
@@ -32,6 +35,9 @@ const ModalCard = (props) =>
     const listTag = useSelector(state => state.board.listTag)
     const board = useSelector(state => state.board.board)
     const [ isShowTagDropDown, setIsShowTagDropDown ] = useState(false)
+    
+    const [ isPreviewImage, setIsPreviewImage ] = useState(false)
+    const [ curImagePreview, setCurImagePreview ] = useState('')
     const dispatch = useDispatch()
 
     const onBlurDescription = async (e, editor) => {
@@ -94,32 +100,63 @@ const ModalCard = (props) =>
         // }))
         setIsActive(false)
     }
-
-    const onDeleteCard = async () => {
+    
+    const onDeleteAttachment = async (index) => {
+        const cloneCard = {...card}
         try {
-            const res = await deleteCard(card._id)
-            if(res && res.data.result)
+            const temp = [...card.attachment]
+            temp.splice(index, 1)
+            setTempCard({
+                ...card,
+                attachment: temp
+            })
+            const res = await deleteAttachment({
+                _id: card._id,
+                attachment: temp
+            })
+            if(!res || !res.data.result)
             {
-                let columns = [...board.columns]
-                let curCol = {...columns[indexCol]}
-                columns.splice(indexCol, 1, {
-                    ...columns[indexCol],
-                    cards: columns[indexCol].cards.filter(item => item._id !== card._id ),
-                    cardOrder: columns[indexCol].cardOrder.filter(item => item !== card._id )
-                })
-
-                setColumns([...columns])
-                showNotification('Xóa thẻ thành công', 'Xóa thẻ thành công', type.succsess, 3000)
-            }
-            else
-            {
+                setTempCard(cloneCard)
+                showNotification('Cập nhật tệp đính kèm thất bại', 'Cập nhật tệp đính kèm thất bại', type.danger, 3000)
                 console.log(res.data.msg)
-                showNotification('Xóa thẻ thất bại', res.data.msg, type.danger, 3000)
             }
+
         } catch (error) {
+            setTempCard(cloneCard)
+            showNotification('Cập nhật tệp đính kèm thất bại', error.message, type.danger, 3000)
             console.log(error)
-            showNotification('Xóa thẻ thất bại', error.message, type.danger, 3000)
         }
+    }
+
+    const onDeleteCard = async (type1) => {
+        if(type1 === MODAL_ACTION_CONFIRM)
+        {
+            try {
+                const res = await deleteCard(card._id)
+                if(res && res.data.result)
+                {
+                    let columns = [...board.columns]
+                    let curCol = {...columns[indexCol]}
+                    columns.splice(indexCol, 1, {
+                        ...columns[indexCol],
+                        cards: columns[indexCol].cards.filter(item => item._id !== card._id ),
+                        cardOrder: columns[indexCol].cardOrder.filter(item => item !== card._id )
+                    })
+    
+                    setColumns([...columns])
+                    showNotification('Xóa thẻ thành công', 'Xóa thẻ thành công', type.succsess, 3000)
+                }
+                else
+                {
+                    console.log(res.data.msg)
+                    showNotification('Xóa thẻ thất bại', res.data.msg, type.danger, 3000)
+                }
+            } catch (error) {
+                console.log(error)
+                showNotification('Xóa thẻ thất bại', error.message, type.danger, 3000)
+            }
+        }
+        await setIsActive(false)
         setShowConfirmModal(false)
     }
     useEffect(() => {
@@ -128,7 +165,7 @@ const ModalCard = (props) =>
 
     return(
         <Modal 
-            className="modal-card-detail" 
+            className={card.image === '' ? "modal-card-detail" : "modal-card-detail active-wallpaper"}
             show={isActive} 
             onHide={() => onHideModal()}
             size="sm"
@@ -137,11 +174,10 @@ const ModalCard = (props) =>
             >
             <CloseButton onClick={() => onHideModal()} />
             <Modal.Header>
-                <Button 
-                    variant="primary" 
-                    type="submit"
-                    className="wall-paper-btn"
-                >Ảnh bìa</Button>
+                <div className="card-wallpaper">
+                    <img src={card.image}></img>
+                </div>
+                <DropDownWPaperCard card={card} setTempCard={setTempCard}/>
             </Modal.Header>
             <Modal.Body>
                 <div className="card-header">
@@ -174,7 +210,7 @@ const ModalCard = (props) =>
                                 </div>
                             }
                             {
-                                converDateFormat(card.deadline) !== "4-3-2028" &&
+                                converDateFormat(card.deadline) !== "12-31-2030" &&
                                 <div className="deadline-container">
                                     <span>Ngày hết hạn</span>
                                     <div className="deadline-check">
@@ -219,7 +255,7 @@ const ModalCard = (props) =>
                                 <span>Các tập tin đính kèm</span>
                                 <ul className="attachment-list">
                                     {
-                                        card.attachment.map(item => (
+                                        card.attachment.map((item, index) => (
                                             <OverlayTrigger
                                                 placement="right"
                                                 overlay={
@@ -228,9 +264,15 @@ const ModalCard = (props) =>
                                                     </Tooltip>
                                                 }
                                                 >
-                                                    <li className="attachment-item">
-                                                        <img src={item}></img>
-                                                        <button className="btn">
+                                                    <li 
+                                                    className="attachment-item">
+                                                        <img 
+                                                        onClick={() => {
+                                                            setCurImagePreview(item)
+                                                            setIsPreviewImage(true)
+                                                        }}
+                                                        src={item}></img>
+                                                        <button className="btn" onClick={() => onDeleteAttachment(index)}>
                                                             <i className="fa fa-close icon"></i>
                                                         </button>
                                                     </li>
@@ -238,7 +280,7 @@ const ModalCard = (props) =>
                                         ))
                                     }
                                     
-                                    <li className="attachment-item-add">
+                                    <li className="attachment-item-add" style={{display: 'none'}}>
                                         <button className="btn">
                                             Thêm tệp đính kèm
                                         </button>
@@ -274,27 +316,12 @@ const ModalCard = (props) =>
                                 <DropDownDeadline card={card} deadlineFormatted={converDateFormat(card.deadline)} setTempCard={setTempCard}/>
                             </li>
                             <li>
-                                <DropdownButton title="Đính kèm" className="card-attachments-dropdown btn">
-                                    <Dropdown.Header>Đính kèm</Dropdown.Header>
-                                    <Dropdown.Divider/>
-                                    <Dropdown.Item href="#/action-1">Xem thông tin chi tiết</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Thay đổi ảnh nền</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Quản lý nhãn</Dropdown.Item>
-                                    <Dropdown.Divider/>
-                                    <Dropdown.Item>Xóa bảng này</Dropdown.Item>
-                                </DropdownButton>
+                                <DropDownAttachment card={card} setTempCard={setTempCard}/>
                             </li>
-                            <li>
-                                <DropdownButton title="Ảnh bìa" className="card-wallpaper-dropdown btn">
-                                    <Dropdown.Header>Ảnh bìa</Dropdown.Header>
-                                    <Dropdown.Divider/>
-                                    <Dropdown.Item href="#/action-1">Xem thông tin chi tiết</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Thay đổi ảnh nền</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Quản lý nhãn</Dropdown.Item>
-                                    <Dropdown.Divider/>
-                                    <Dropdown.Item>Xóa bảng này</Dropdown.Item>
-                                </DropdownButton>
-                            </li>
+                            {
+                                card.image === '' &&
+                                <li><DropDownWPaperCard card={card} setTempCard={setTempCard}/></li>
+                            }
                             <li>
                                 <Button 
                                 onClick={()=> setShowConfirmModal(true)}
@@ -304,7 +331,7 @@ const ModalCard = (props) =>
                             </li>
                             <ConfirmModal
                             show={showConfirmModal}
-                            onAction={() => onDeleteCard()}
+                            onAction={onDeleteCard}
                             title="Xóa thẻ"
                             //using html-react-paser to parse string to html code
                             content={`Bạn có chắc muốn xóa thẻ này. Hành động của bạn sẽ không thể hoàn tác!!!!`}
@@ -313,6 +340,10 @@ const ModalCard = (props) =>
                     </div>
                 </div>
             </Modal.Body>
+            {
+                curImagePreview !== '' &&
+                <PreviewImage show={isPreviewImage} setShow={setIsPreviewImage} image={curImagePreview} />
+            }
         </Modal>
     )
 }

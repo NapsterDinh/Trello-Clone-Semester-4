@@ -220,12 +220,28 @@ const SectionBigTask = (props) => {
         listBigTaskTemp.splice(indexBigTask, 1, temperory)
 
         const percentArr = card.percentage.split('/')
-
-        const temp = {
-            ...card,
-            listBigTask: listBigTaskTemp,
-            percentage: isdone ? ((parseInt(percentArr[0])+1)+"/"+percentArr[1]) : ((percentArr[0]-1)+"/"+percentArr[1])
+        const tempCardPercentage = isdone ? ((parseInt(percentArr[0])+1)+"/"+percentArr[1]) : ((percentArr[0]-1)+"/"+percentArr[1])
+        
+        let temp =''
+        if(!e.target.checked)
+        {
+            temp = {
+                ...card,
+                listBigTask: listBigTaskTemp,
+                percentage: tempCardPercentage,
+                status: 'undone'
+            }
         }
+        else
+        {
+            temp = {
+                ...card,
+                listBigTask: listBigTaskTemp,
+                percentage: tempCardPercentage,
+                status: tempCardPercentage.split('/')[0] == tempCardPercentage.split('/')[0] ? 'done' : 'undone'
+            }
+        }
+        
         setTempCard(temp)
         try {
             const res = await updateDoneSmallTask({

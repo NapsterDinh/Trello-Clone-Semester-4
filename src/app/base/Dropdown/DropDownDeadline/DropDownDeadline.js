@@ -12,7 +12,7 @@ import './DropDownDeadline.scss'
 function DropDownDeadline(props)
 {
     const { card, deadlineFormatted, setTempCard } = props
-    const [ valueDeadline, setValueDeadline ] = useState(deadlineFormatted !== '4-3-2028' ? new Date(deadlineFormatted) : new Date());
+    const [ valueDeadline, setValueDeadline ] = useState(deadlineFormatted !== '12-31-2030' ? new Date(deadlineFormatted) : new Date());
 
     const onHanldeClickSave = async () => {
         try {
@@ -23,13 +23,12 @@ function DropDownDeadline(props)
                 dateTime: temp,
                 _id: card._id
             })
-            console.log(res)
             if(res && res.data.result)
             {
-                console.log(temp)
                 setTempCard({
                     ...card,
-                    deadline: res.data.data.deadline
+                    deadline: res.data.data.deadline,
+                    _isExpired: res.data.data._isExpired
                 })
                 showNotification('Lưu ngày hết hạn thành công', 'Lưu ngày hết hạn thành công', type.succsess, 3000)
             }
@@ -47,11 +46,16 @@ function DropDownDeadline(props)
         //cancel
         try {
             const res = await updateDate({
-                dateTime: new Date('4-4-2028').toISOString().split('T')[0],
+                dateTime: new Date('1-1-2031').toISOString().split('T')[0],
                 _id: card._id
             })
             if(res && res.data.result)
             {
+                setTempCard({
+                    ...card,
+                    deadline: res.data.data.deadline,
+                    _isExpired: res.data.data._isExpired
+                })
                 showNotification('Gỡ ngày hết hạn thành công', 'Gỡ ngày hết hạn thành công', type.succsess, 3000)
             }
             else
@@ -82,7 +86,7 @@ function DropDownDeadline(props)
                         <Button 
                         onClick={() => onHanldeClickSave()}
                         className="btn-confirm"
-                        variant="primary">{deadlineFormatted === '4-3-2028' ? 'Thêm' : 'Lưu'}</Button>
+                        variant="primary">{deadlineFormatted === '12-31-2030' ? 'Thêm' : 'Lưu'}</Button>
                         <Button 
                         onClick={() => onHanldeClickCancel()}
                         className="btn-cancel"

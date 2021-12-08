@@ -2,13 +2,17 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { Dropdown } from 'react-bootstrap'
 import ToggleWorkSpace from 'app/base/CustomToggle/ToggleWorkSpace/ToggleWorkSpace';
+import { useHistory } from 'react-router';
 
 import './DropDownListBoard.scss'
 
 function DropDownListBoard(props)
 {
-    // const { boardList } = props
+    const { setIsActive } = props
+    const history = useHistory()
+
     const curWP = useSelector(state => state.workSpace.curWP.boardId)
+
     return (
         <Dropdown className="board-bar-list-board">
                     <Dropdown.Toggle className="board-list-toggle toggle" variant="success">
@@ -23,7 +27,7 @@ function DropDownListBoard(props)
                             <div className="menu-body">
                                 {
                                     curWP.map((item,index) => (
-                                        <Dropdown.Item key={`board${index}`} eventKey={`board${index}`} href={`/board/${item._id}`}>
+                                        <Dropdown.Item key={`board${index}`} eventKey={`board${index}`} href={`/board/${item._id}`} >
                                             <ToggleWorkSpace
                                                 key={item._id}
                                                 className="board-list-item"

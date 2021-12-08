@@ -45,13 +45,12 @@ export const updateDate = (data) => {
 //     "_id":"61a6e3494648825573b324c3"
 // }
 export const updateAttachment = (data) => {
-    return _put("/v1/cards/updateAttachment", 
-    {
-        "attachment":data.attachment, //array
-        "_id":data._id
-    });
+    return _post("/v1/cards/updateAttachment",data);
 };
 
+export const deleteAttachment = (data) => {
+    return _put("/v1/cards/deleteAttachment", data);
+}
 //          /v1/cards/updateColor
 // body {
 //            "color":"ffffff",
@@ -75,18 +74,15 @@ export const updateStatus = (data) => {
 //     "_id":"61a6e3494648825573b324c3"
 // }
 export const updateImage = (data) => {
-    return _put("/v1/cards/updateImage", 
-    {
-        "image":data.image,
-        "_id":data._id
-    });
+    return _post("/v1/cards/updateImage", data);
 };
 
 //          /v1/cards/deleteCart
 // params: _id:13421243
 export const deleteCard = (data) => {
-    return delete("/v1/cards/delete", {_id: data});
+    return _delete("/v1/cards/deleteCart", {_id: data});
 };
+
 
 // //          /v1/cards/addUserToCard
 // body {

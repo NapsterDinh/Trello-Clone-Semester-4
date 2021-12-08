@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import { Form } from 'react-bootstrap'
 import { useSelector, useDispatch } from "react-redux";
 import { cardHandleReducer } from "store/cardReducer";
@@ -17,6 +17,7 @@ function Card(props)
 {
   const { card, col, indexCard, indexCol,setColumns } = props
   const [ isActive, setIsActive ] = useState(false)
+  const deadlineCheckbox = useRef(null)
 
   const listTag = useSelector(state => state.board.listTag)
 
@@ -59,6 +60,11 @@ function Card(props)
     if(!e.target.checked)
     {
         status = 'undone'
+        deadlineCheckbox.current.checked = false
+    }
+    else
+    {
+      deadlineCheckbox.current.checked = true
     }
 
     setTempCard({
@@ -86,10 +92,10 @@ function Card(props)
 
   return (
     <>
-      <div className="card-item">
+      <div className="card-item" onClick={()=> handleOnClick()}>
       < i class="fa fa-pencil" aria-hidden="true" onClick={()=> handleOnClick()}></i>
         {
-          card.cover && <img className="card-cover" src={card.cover} alt="trello-clone" draggable="false"></img>
+          card.image !== '' && <img className="card-cover" src={card.image} alt="trello-clone" draggable="false"></img>
         }
         {
           card.tagOrder.length !== 0 &&
@@ -107,22 +113,23 @@ function Card(props)
         {card.title}
         <div className="option-container">
           {
-            card.percentage !== "" && card.percentage != "0/0" &&
-            <div className="preview-task-process">
+            card.percentage !== "" && card.percentage != "0/0" && converDateFormat(card.deadline) === "12-31-2030" &&
+            <div className={card.status === 'done' ? "preview-task-process done" : "preview-task-process"}>
                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                 {card.percentage}
             </div>
           }
           {
-            converDateFormat(card.deadline) !== "4-3-2028" &&
+            converDateFormat(card.deadline) !== "12-31-2030" &&
             <div className="preview-deadline">
               <Form className={card.status === 'done' ? 'done' : (card._isExpired) ? 'expired' : ''}>
                   <Form.Check type="checkbox" id="checkboxDeadline">
-                      <Form.Check.Input type="checkbox" 
-                      // onChange={(e) => onUpdateStatus(e)}
-                      // defaultChecked={card.status === 'done' ? true : false}
-                      />
-                      <Form.Check.Label>04-07-2021</Form.Check.Label>
+                      {/* <Form.Check.Input type="checkbox" 
+                      checked={card.status === 'done' ? true : false}
+                      ref={deadlineCheckbox}
+                      defaultChecked={card.status === 'done' ? true : false}
+                      /> */}
+                      <Form.Check.Label>{converDateFormat(card.deadline)}</Form.Check.Label>
                   </Form.Check>
               </Form>
             </div>

@@ -1,0 +1,54 @@
+@import "scss/__setting.scss";
+
+.card-wallpaper-dropdown
+{
+      .input-wallpaper-container
+      {
+          text-align: right;
+          .custom-file-input
+          {
+              font-size: 12px;
+              color: $col-color;
+              margin-right: 45px;
+              &::-webkit-file-upload-button {
+                  color: $col-color;
+                  font-size: 14px;
+                  padding: 5px 10px;
+                  border: none;
+                  background-color: #091e420a;
+                  cursor: pointer;
+                  border-radius: 5px;
+              }
+              &:hover
+              {
+                  &::-webkit-file-upload-button {
+                      background-color: #091e4214;
+                  }
+              }
+              
+          }
+          .btn
+          {
+            &.add
+            {
+              margin-right: 20px;
+              width: fit-content;
+              background-color: #0d6efd !important;
+              color: white!important;
+              &:hover
+              {
+                  background-color: #0b5ed7 !important;
+              }
+            }
+            &.cancel
+            {
+              background-color: #00000014!important;
+              margin-right: 20px;
+              &:hover
+              {
+                background-color: #091e4214!important;
+              }
+            }
+          }
+      }
+  }

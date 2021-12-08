@@ -58,27 +58,35 @@ const FormResetPass = (props) => {
   
     const onHandleReset = async (event) => {
       event.preventDefault();
-      const isValid = validateAll();
-      if (!isValid) return;
-      else {
-        setIsDisabled(true)
-        modalLoading(true)
-        setApiRequestToken(token);
-        const res = await resetPass({ password });
-        if (res && res.data.result && res.status == 200) {
-          modalLoading(false)
-          showNotification("Reset Password Successfully",'Now you can log in with new password!!!',
-          type.succsess, 5000 )
-          setTimeout(() => {
-            history.push('/login')
-          }, 5000);
-        } else {
-          modalLoading(false)
-          showNotification("Reset Pass failed",res.data.msg,
-          type.danger, 5000 )
-          setIsDisabled(false)
+      try {
+        const isValid = validateAll();
+        if (!isValid) return;
+        else {
+          setIsDisabled(true)
+          modalLoading(true)
+          setApiRequestToken(token);
+          const res = await resetPass({ password });
+          if (res && res.data.result && res.status == 200) {
+            modalLoading(false)
+            showNotification("Reset Password Successfully",'Now you can log in with new password!!!',
+            type.succsess, 5000 )
+            setTimeout(() => {
+              history.push('/login')
+            }, 5000);
+          } else {
+            modalLoading(false)
+            showNotification("Reset Pass failed",res.data.msg,
+            type.danger, 5000 )
+            setIsDisabled(false)
+          }
         }
+      } catch (error) {
+        modalLoading(false)
+        showNotification("Reset Pass failed",error.message,
+        type.danger, 5000 )
+        setIsDisabled(false)
       }
+      
     };
 
   return (

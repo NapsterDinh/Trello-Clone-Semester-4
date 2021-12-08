@@ -30,16 +30,18 @@ export const counterSlice = createSlice({
                 state.listNotUserBoard = action.payload.listNotUserBoard
                 break;
             case 'ADD_USER_TO_BOARD':
-                state.listUserBoard.listUserBoard.push(action.payload.user)
-                state.listUserBoard.listNotUserBoard.splice(
-                    state.listUserBoard.listNotUserBoard.findIndex(item => item._id === action.payload.user._id), 1
+                state.listUserBoard.push(action.payload.user)
+                state.listNotUserBoard.splice(
+                    state.listNotUserBoard.findIndex(item => item._id === action.payload.user._id), 1
                 )
                 break
             case 'REMOVE_USER_FROM_BOARD':
-                state.listUserBoard.listNotUserBoard.push(action.payload.user)
-                state.listUserBoard.listUserBoard.splice(
-                    state.listUserBoard.listUserBoard.findIndex(item => item._id === action.payload.user._id), 1
+                console.log(action)
+                state.listNotUserBoard.push(action.payload.user)
+                state.listUserBoard.splice(
+                    state.listUserBoard.findIndex(item => item._id === action.payload.user._id), 1
                 )
+                console.log(current(state))
                 break
             case 'SET_TITLE_BOARD':
                 state.board.title = action.payload.title
