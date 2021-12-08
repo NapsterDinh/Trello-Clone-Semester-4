@@ -162,50 +162,6 @@ const updateDescription = async (data) => {
   }
 };
 
-const updateDeadline = async (data) => {
-  try {
-    const { _id, deadline } = data.body;
-
-    const isCheckUser = await getDB()
-      .collection(cardCollectionName)
-      .findOne({ _id: ObjectId(_id) });
-
-    if (isCheckUser?.userCreate !== data.user.sub) {
-      return {
-        result: false,
-        msg: "You is not permission update card ",
-        data: [],
-      };
-    } else {
-      if (Date.now() < deadline.getTime()) {
-        await getDB()
-          .collection(cardCollectionName)
-          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
-      } else {
-        await getDB()
-          .collection(cardCollectionName)
-          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: true } });
-      }
-
-      if (result) {
-        return {
-          result: true,
-          msg: "Update deadline success",
-          data: result,
-        };
-      } else {
-        return {
-          result: false,
-          msg: "Update deadline fail",
-          data: [],
-        };
-      }
-    }
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
 const updateImage = async (data) => {
   try {
     const { _id, image } = data.body;
@@ -327,6 +283,15 @@ const updateDate = async (data) => {
           { _id: ObjectId(_id) },
           { $set: { deadline: Date.parse(dateTime) } }
         );
+      if (Date.now() < deadline.getTime()) {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
+      } else {
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: true } });
+      }
 
       const result = await getDB()
         .collection(cardCollectionName)
@@ -728,6 +693,7 @@ export const CardService = {
   updateExpire,
   updateColor,
   updateStatus,
+
   deleteCart,
   addUserToCart,
   removeUserToCart,

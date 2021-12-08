@@ -95,8 +95,10 @@ const updateDate = async (req, res) => {
 
 const updateStatus = async (req, res) => {
   try {
-    
-    const { result, msg, data } = await CardService.updateStatus(req.body._id, req.body.status);
+    const { result, msg, data } = await CardService.updateStatus(
+      req.body._id,
+      req.body.status
+    );
     res.json({
       result: result,
       msg: msg,
@@ -196,5 +198,5 @@ export const CardController = {
   addUserToCart,
   removeUserToCart,
   getCardById,
-  updateStatus
+  updateStatus,
 };
