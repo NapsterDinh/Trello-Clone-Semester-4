@@ -9,10 +9,10 @@ import { boardCollectionName } from "../models/board.model";
 import { validateSchema } from "../models/card.model";
 import { ColumnService } from "./column.service";
 import { BoardService } from "./board.service";
-import { sendEmailUser } from "../shares/sendMail";
-import { uploadFile, getFileStream } from "../shares/s3";
 import { bigTaskService } from "./bigTask.service";
 import { smallTaskService } from "./smallTask.service";
+import { sendEmailUser } from "../shares/sendMail";
+import { upLoad } from "../shares/upLoadImage";
 
 const createNew = async (data) => {
   try {
@@ -80,12 +80,12 @@ const createNew = async (data) => {
 const updateTitle = async (data) => {
   try {
     const { _id, title } = data.body;
-    
+
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log('isCheckUser', isCheckUser)
-    console.log('data?.user.sub', data?.user.sub)
+    console.log("isCheckUser", isCheckUser);
+    console.log("data?.user.sub", data?.user.sub);
     if (isCheckUser?.userCreate !== data?.user.sub) {
       return {
         result: false,
@@ -165,7 +165,7 @@ const updateDescription = async (data) => {
 
 const updateImage = async (data) => {
   try {
-    const { _id, image } = data.body;
+    const { _id } = data.body;
 
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
@@ -178,6 +178,7 @@ const updateImage = async (data) => {
         data: [],
       };
     } else {
+      const image = await upLoad(data?.files?.file?.tempFilePath);
       await getDB()
         .collection(cardCollectionName)
         .updateOne({ _id: ObjectId(_id) }, { $set: { image: image } });
@@ -206,7 +207,7 @@ const updateImage = async (data) => {
 
 const updateAttachment = async (data) => {
   try {
-    const { _id, attachment } = data.body;
+    const { _id } = data.body;
 
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
@@ -219,43 +220,23 @@ const updateAttachment = async (data) => {
         data: [],
       };
     } else {
-      const removeItem = await getDB()
-        .collection(cardCollectionName)
-        .findOne({ _id: ObjectId(_id) });
-
-      const removeAttachment = removeItem?.attachment.splice(
-        0,
-        removeItem?.attachment.length
-      );
-
-      await getDB()
-        .collection(cardCollectionName)
-        .updateOne(
-          { _id: ObjectId(_id) },
-          { $pull: { attachment: { $in: removeAttachment } } }
-        );
-      await getDB()
-        .collection(cardCollectionName)
-        .updateOne(
-          { _id: ObjectId(_id) },
-          { $push: { attachment: { $each: attachment } } }
-        );
-
-      const result = await getDB()
-        .collection(cardCollectionName)
-        .findOne({ _id: ObjectId(_id) });
-      if (result) {
+      if (data?.files.file) {
+        const result = await upLoad(data?.files?.file?.tempFilePath);
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne({ _id: ObjectId(_id) }, { $push: { attachment: result } });
         return {
           result: true,
-          msg: "Update cart success",
-          data: result,
+          msg: "Upload image  success",
+          data: { url: result, name: data?.files?.file?.name },
         };
       } else {
-        return {
-          result: false,
-          msg: "Update cart fail",
-          data: [],
-        };
+        await getDB()
+          .collection(cardCollectionName)
+          .updateOne(
+            { _id: ObjectId(_id) },
+            { $push: { attachment: data?.body?.link } }
+          );
       }
     }
   } catch (error) {
@@ -284,7 +265,7 @@ const updateDate = async (data) => {
           { _id: ObjectId(_id) },
           { $set: { deadline: Date.parse(dateTime) } }
         );
-      const test = new Date(dateTime)
+      const test = new Date(dateTime);
       if (Date.now() < test.getTime()) {
         await getDB()
           .collection(cardCollectionName)
