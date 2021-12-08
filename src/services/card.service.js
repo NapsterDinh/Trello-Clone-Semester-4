@@ -244,6 +244,38 @@ const updateAttachment = async (data) => {
   }
 };
 
+const deleteAttachment = async (data) => {
+  try {
+    const { _id, attachment } = data.body;
+
+    const isCheckUser = await getDB()
+      .collection(cardCollectionName)
+      .findOne({ _id: ObjectId(_id) });
+
+    if (isCheckUser?.userCreate !== data.user.sub) {
+      return {
+        result: false,
+        msg: "You is not permission update card ",
+        data: [],
+      };
+    } else {
+      await getDB()
+        .collection(cardCollectionName)
+        .updateOne(
+          { _id: ObjectId(_id) },
+          { $set: { attachment: attachment } }
+        );
+      return {
+        result: true,
+        msg: "Update attachment success",
+        data: { url: result, name: data?.files?.file?.name },
+      };
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const updateDate = async (data) => {
   try {
     const { _id, dateTime } = data.body;
@@ -682,4 +714,5 @@ export const CardService = {
   removeUserToCart,
   getCardById,
   updatePercentageCard,
+  deleteAttachment,
 };

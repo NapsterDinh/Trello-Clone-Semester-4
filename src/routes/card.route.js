@@ -13,7 +13,7 @@ router.route("/create").post(auth, CardController.createNew); //auth
 //     "boardId":"61a5ce10c7674ec14e6a8889"
 // }
 
-router.route("/updateTitle").put(auth,CardController.updateTitle);
+router.route("/updateTitle").put(auth, CardController.updateTitle);
 //          /v1/cards/updateTitle
 // body  {
 //     "title":"cart 2",
@@ -79,6 +79,8 @@ router.route("/removeUserToCart").put(auth, CardController.removeUserToCart);
 //     "_id":"61a6e35a4648825573b324c4",
 //     "listUser":["18110087@student.hcmute.edu.vn","phancaocuong0000@gmail.com"]
 // }
+
+router.route("/deleteAttachment").put(auth, CardController.deleteAttachment);
 
 router.route("/getCard").get(auth, CardController.getCardById); //auth
 // //          /v1/cards/getCard
