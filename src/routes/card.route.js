@@ -13,7 +13,7 @@ router.route("/create").post(auth, CardController.createNew); //auth
 //     "boardId":"61a5ce10c7674ec14e6a8889"
 // }
 
-router.route("/updateTitle").put(CardController.updateTitle);
+router.route("/updateTitle").put(auth,CardController.updateTitle);
 //          /v1/cards/updateTitle
 // body  {
 //     "title":"cart 2",

@@ -80,12 +80,13 @@ const createNew = async (data) => {
 const updateTitle = async (data) => {
   try {
     const { _id, title } = data.body;
-
+    
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-
-    if (isCheckUser?.userCreate !== data.user.sub) {
+    console.log('isCheckUser', isCheckUser)
+    console.log('data?.user.sub', data?.user.sub)
+    if (isCheckUser?.userCreate !== data?.user.sub) {
       return {
         result: false,
         msg: "You is not permission update card ",
@@ -283,7 +284,8 @@ const updateDate = async (data) => {
           { _id: ObjectId(_id) },
           { $set: { deadline: Date.parse(dateTime) } }
         );
-      if (Date.now() < dateTime.getTime()) {
+      const test = new Date(dateTime)
+      if (Date.now() < test.getTime()) {
         await getDB()
           .collection(cardCollectionName)
           .updateOne({ _id: ObjectId(_id) }, { $set: { _isExpired: false } });
