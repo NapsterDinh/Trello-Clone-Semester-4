@@ -491,7 +491,7 @@ const updateImage = async (data) => {
         data: [],
       };
     } else {
-      const image = await upLoad(data?.Files?.file?.tempFilePath);
+      const image = await upLoad(data?.Files?.File?.tempFilePath);
       await getDB()
         .collection(boardCollectionName)
         .update(

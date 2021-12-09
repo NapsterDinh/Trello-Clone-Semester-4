@@ -61,7 +61,23 @@ const forgotPassword = async (req, res, next) => {
 
 const resetPassword = async (req, res, next) => {
   const condition = Joi.object({
-    password: Joi.string().required().min(6).trim(),
+    password: Joi.string().required(),
+    codeVerify: Joi.number().required(),
+  });
+
+  try {
+    await condition.validateAsync(req.body, { abortEarly: false });
+    next();
+  } catch (error) {
+    res.status(500).json({
+      errors: new Error(error).message,
+    });
+  }
+};
+
+const updatePassword = async (req, res, next) => {
+  const condition = Joi.object({
+    password: Joi.string().required(),
   });
 
   try {
@@ -93,6 +109,7 @@ export const UserValidation = {
   createnewUser,
   login,
   forgotPassword,
+  updatePassword,
   resetPassword,
   updateUser,
 };

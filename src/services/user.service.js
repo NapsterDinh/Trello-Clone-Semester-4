@@ -11,6 +11,7 @@ import { userCollectionName } from "../models/user.model";
 import { getDB } from "../config/mongodb";
 import { tokenService } from "./token.service";
 import { sendEmail } from "../shares/sendMail";
+import { sendEmailUser } from "../shares/sendMail";
 
 //variable
 const { APP_SCHEMA, APP_HOST, APP_PORT, CLIENT_PORT } = process.env;
@@ -126,6 +127,7 @@ const login = async (data) => {
   };
 };
 
+var randomNumber = Math.floor(100000 + Math.random() * 900000);
 const forgotPassword = async (data) => {
   const { email } = data;
   const user = await getDB().collection(userCollectionName).findOne({ email });
@@ -137,9 +139,8 @@ const forgotPassword = async (data) => {
     };
   }
 
-  const token = await tokenService.generateAuthTokens(user);
-  const url = `${APP_SCHEMA}://${APP_HOST}:${CLIENT_PORT}/reset/${token.access.token}`;
-  sendEmail(email, url, "Verify your email address");
+  const url = `Code verify: ${randomNumber}`;
+  sendEmailUser(email, url);
 
   return {
     result: true,
@@ -147,6 +148,33 @@ const forgotPassword = async (data) => {
 };
 
 const resetPassword = async (data) => {
+  const { password, codeVerify } = data.body;
+  console.log("codeVerify", codeVerify);
+  console.log("randomNumber", randomNumber);
+  if (codeVerify !== randomNumber) {
+    return {
+      result: false,
+      msg: "Code verify incorrect ",
+    };
+  } else {
+    const hashPassword = await bcrypt.hash(password, 10);
+    await getDB()
+      .collection(userCollectionName)
+      .findOneAndUpdate(
+        { _id: ObjectId(data.user.sub) },
+        {
+          $set: { password: hashPassword },
+        },
+        { returnOriginal: false }
+      );
+    return {
+      result: true,
+      msg: "Password update success ",
+    };
+  }
+};
+
+const updatePassword = async (data) => {
   const { password } = data.body;
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -159,6 +187,11 @@ const resetPassword = async (data) => {
       },
       { returnOriginal: false }
     );
+
+  return {
+    result: true,
+    msg: "Password update success ",
+  };
 };
 
 const updateUser = async (data) => {
@@ -288,6 +321,7 @@ export const userService = {
   login,
   forgotPassword,
   resetPassword,
+  updatePassword,
   updateUser,
   googleLogin,
   facebookLogin,

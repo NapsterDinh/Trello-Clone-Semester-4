@@ -51,10 +51,10 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   try {
-    await userService.resetPassword(req);
+    const { result, msg } = await userService.resetPassword(req);
     res.json({
-      result: true,
-      msg: apiMessage.resetPasswordSuccess,
+      result: result,
+      msg: msg,
     });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -77,7 +77,6 @@ const updateUser = async (req, res) => {
 const googleLogin = async (req, res) => {
   try {
     const { result, msg, data } = await userService.googleLogin(req.body);
-
 
     res.json({
       result: result,

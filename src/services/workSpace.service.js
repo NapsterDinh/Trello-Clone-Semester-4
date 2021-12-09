@@ -424,7 +424,7 @@ const getWorkSpaceById = async (data) => {
         msg: "Not found!",
         data: [],
       };
-    } else if (findeWP?.priority === "Public") {
+    } else if (findeWP?.priority === "public") {
       const showBoard = await getDB()
         .collection(workSpaceCollectionName)
         .find({ workSpaceId: _id })
@@ -474,7 +474,7 @@ const upLoadImage = async (data) => {
         data: [],
       };
     } else {
-      const image = await upLoad(data?.Files?.file?.tempFilePath);
+      const image = await upLoad(data?.Files?.File?.tempFilePath);
       await getDB()
         .collection(workSpaceCollectionName)
         .updateOne(

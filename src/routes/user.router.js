@@ -12,14 +12,19 @@ router.route("/verify-email").get(UserController.verifyEmail);
 
 router.route("/login").post(UserValidation.login, UserController.login);
 router
-  .route("/forgot_passsword")
+  .route("/forgotPassword")
   .post(UserValidation.forgotPassword, UserController.forgotPassword);
 router
   .route("/reset")
-  .post(UserValidation.resetPassword, auth, UserController.resetPassword);
+  .put(UserValidation.resetPassword, auth, UserController.resetPassword);
+
+router
+  .route("/updatePassWord")
+  .put(UserValidation.updatePassword, auth, UserController.resetPassword);
+
 router
   .route("/update")
-  .post(UserValidation.updateUser, auth, UserController.updateUser);
+  .put(UserValidation.updateUser, auth, UserController.updateUser);
 
 //social
 router.route("/google_login").post(UserController.googleLogin);
