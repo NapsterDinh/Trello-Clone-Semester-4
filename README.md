@@ -20,7 +20,7 @@ npm install
 npm start
 ##Clone Back-end
 git clone https://github.com/NapsterDinh/Trello-Clone-Semester-4.git
-switch to BE branch
+switch to cuong branch
 cd to project
 npm install 
 npm start
