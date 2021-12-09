@@ -16,8 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.15.4",
-    "aws-sdk": "^2.1036.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.23.0",
     "cors": "^2.8.5",
@@ -26,13 +24,11 @@
     "express-fileupload": "^1.2.1",
     "fs": "^0.0.1-security",
     "googleapis": "^89.0.0",
-    "http-status": "^1.5.0",
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongodb": "^4.1.2",
-    "nodemailer": "^6.7.0",
-    "path": "^0.12.7"
+    "nodemailer": "^6.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
@@ -41,6 +37,7 @@
     "@babel/node": "^7.16.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.6",
+    "@babel/runtime": "^7.15.4",
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^7.32.0",
     "nodemon": "^2.0.13"

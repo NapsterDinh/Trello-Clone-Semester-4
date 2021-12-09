@@ -12,7 +12,6 @@ import { bigTaskRoutes } from "./bigTask.route";
 import { smallTaskRoutes } from "./smallTask.route";
 import { tagRoutes } from "./tag.route";
 import { upLoadRoutes } from "./image.router";
-import { uploadFile } from "../shares/s3";
 
 const router = express.Router();
 

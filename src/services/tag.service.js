@@ -3,12 +3,7 @@ import { ObjectId } from "mongodb";
 
 //user component
 import { getDB } from "../config/mongodb";
-import { bigTaskCollectionName } from "../models/bigTast.model";
-import { columnCollectionName } from "../models/column.model";
 import { boardCollectionName } from "../models/board.model";
-import { ColumnService } from "./column.service";
-import { BoardService } from "./board.service";
-import { uploadFile, getFileStream } from "../shares/s3";
 import { cardCollectionName } from "../models/card.model";
 import { tagCollectionName, validateSchema } from "../models/tag.model";
 
@@ -106,14 +101,14 @@ const updateColor = async (data) => {
 const tagorder = async (data) => {
   try {
     const { _id, tagOrder } = data.body;
-    console.log('123123123',data.body)
+    console.log("123123123", data.body);
     await getDB()
       .collection(cardCollectionName)
       .updateOne({ _id: ObjectId(_id) }, { $set: { tagOrder: tagOrder } });
     const result = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log('result',result)
+    console.log("result", result);
     if (result.tagOrder.length === tagOrder.length) {
       return {
         result: true,

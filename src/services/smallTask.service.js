@@ -1,5 +1,4 @@
 //library component
-import { TimestreamQuery } from "aws-sdk";
 import { ObjectId } from "mongodb";
 
 //user component
