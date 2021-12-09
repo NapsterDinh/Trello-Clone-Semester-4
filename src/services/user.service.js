@@ -266,14 +266,16 @@ const googleLogin = async (data) => {
 
 const facebookLogin = async (body) => {
   const { accessToken, userID } = body;
-
+  console.log('body', body)
   const URL = `https://graph.facebook.com/v2.9/${userID}/?fields=id,name,email,picture&access_token=${accessToken}`;
+
   const resFb = await fetch(URL)
     .then((res) => res.json())
     .then((res) => {
       return res;
     });
 
+  console.log('resFB', resFb)
   const { email, name, picture } = resFb;
   const password = email + process.env.FACEBOOK_SECRET;
 
