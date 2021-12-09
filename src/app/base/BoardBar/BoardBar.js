@@ -112,7 +112,7 @@ function BoardBar({ setIsActive })
                         <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
                     </DropdownButton>
                 </div>
-                <ModalChangeBGImageColor isShow={isShow} setIsShow={setIsShow} />
+                <ModalChangeBGImageColor isShow={isShow} setIsShow={setIsShow}  />
                 
             </div>
         </nav>

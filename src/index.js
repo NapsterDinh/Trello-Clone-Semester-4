@@ -19,15 +19,13 @@ import {translationMessages} from './LanguageProvider/i18n';
 let persistor = persistStore(store);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <LanguageProvider messages={translationMessages} language={'vi'}>
           <App />
         </LanguageProvider>
       </PersistGate>
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
   document.getElementById('root')
 );
 

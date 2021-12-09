@@ -170,6 +170,8 @@ i.error
 {
   height: 100vh;
   background-color: $board-bg-color;
+  background-repeat: no-repeat;
+  background-size: cover;
   overflow: hidden;
   color: $col-color;
   &.workspace-page

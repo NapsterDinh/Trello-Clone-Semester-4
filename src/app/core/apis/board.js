@@ -30,6 +30,10 @@ export const updateColumnOrder = (data) => {
   return _put("/v1/boards/updateColumnOrder", data);
 };
 
+export const upLoadImage = (data) => {
+  return _put("/v1/boards/upLoadImage", data);
+};
+
 //_id (body)
 export const deleteBoard = (data) => {
   return _delete("/v1/boards/delete", {

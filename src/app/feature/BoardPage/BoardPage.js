@@ -105,7 +105,7 @@ function BoardPage() {
 
 
   return (
-      <div className="trello-app">
+      <div className="trello-app" style={{backgroundImage: `url(${board.image})`}}>
         <AppBar/>
           <LoadingOverlay
             active={isActive}

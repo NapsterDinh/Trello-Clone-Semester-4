@@ -60,11 +60,6 @@ function Card(props)
     if(!e.target.checked)
     {
         status = 'undone'
-        deadlineCheckbox.current.checked = false
-    }
-    else
-    {
-      deadlineCheckbox.current.checked = true
     }
 
     setTempCard({

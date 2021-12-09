@@ -99,10 +99,12 @@ const FormLogin = (props) => {
       const res = await loginGoogle({
         tokenId: response.tokenId,
       });
+      console.log('res', res)
       if (res && res.data.result && res.status == 200) {
         dispatch(userReducer(res.data.data.user));
         dispatch(getTokenReducer(res.data.data.token));
-        history.push(location.state.from.pathname)
+        setApiRequestToken(res.data.data.token.access.token);
+        history.push(location.state?.from !== undefined ? location.state.from.pathname : '/workspace')
       } else {
         setErr(res.data.msg);
         modalLoading(false)
@@ -118,6 +120,7 @@ const FormLogin = (props) => {
     modalLoading(true)
     try {
       const { accessToken, userID } = response;
+      console.log('access', accessToken, userID)
       const res = await loginFaceBook({
         accessToken,
         userID,
@@ -126,7 +129,8 @@ const FormLogin = (props) => {
       if (res && res.data) {
         dispatch(userReducer(res.data.data.user));
         dispatch(getTokenReducer(res.data.data.token));
-        history.push(location.state.from.pathname)
+        setApiRequestToken(res.data.data.token.access.token);
+        history.push(location.state?.from !== undefined ? location.state.from.pathname : '/workspace')
         modalLoading(false)
       } else {
         alert("Login fail");
