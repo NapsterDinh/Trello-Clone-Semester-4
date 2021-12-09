@@ -154,7 +154,6 @@ const deleteTask = async (data) => {
         .collection(bigTaskCollectionName)
         .findOne({ _id: ObjectId(bigTask?.bigTaskId) });
 
-      console.log("result2", result2);
       return {
         result: true,
         msg: "You  delete task ",
@@ -181,7 +180,7 @@ const getSmallTaskById = async (data) => {
     .collection(smallTaskCollectionName)
     .find({ _id: { $in: data } })
     .toArray();
-  console.log("resultUser", resultUser);
+
   return resultUser;
 };
 

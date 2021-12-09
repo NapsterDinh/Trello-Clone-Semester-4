@@ -101,14 +101,14 @@ const updateColor = async (data) => {
 const tagorder = async (data) => {
   try {
     const { _id, tagOrder } = data.body;
-    console.log("123123123", data.body);
+
     await getDB()
       .collection(cardCollectionName)
       .updateOne({ _id: ObjectId(_id) }, { $set: { tagOrder: tagOrder } });
     const result = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("result", result);
+
     if (result.tagOrder.length === tagOrder.length) {
       return {
         result: true,

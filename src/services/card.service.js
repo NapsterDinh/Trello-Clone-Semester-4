@@ -85,8 +85,7 @@ const updateTitle = async (data) => {
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-    console.log("isCheckUser", isCheckUser);
-    console.log("data?.user.sub", data?.user.sub);
+
     if (isCheckUser?.userCreate !== data?.user.sub) {
       return {
         result: false,
@@ -167,11 +166,11 @@ const updateDescription = async (data) => {
 const updateImage = async (data) => {
   try {
     const { _id, isDelete } = data.body;
-    
+
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
-      console.log('data----', data.body)
+
     if (isCheckUser?.userCreate !== data.user.sub) {
       return {
         result: false,
@@ -179,15 +178,11 @@ const updateImage = async (data) => {
         data: [],
       };
     } else {
-      if(isDelete === 'true')
-      {
+      if (isDelete === "true") {
         await getDB()
           .collection(cardCollectionName)
-          .updateOne({ _id: ObjectId(_id) }, { $set: { image: '' } });
-      }
-      else
-      {
-        console.log('data----', data?.files)
+          .updateOne({ _id: ObjectId(_id) }, { $set: { image: "" } });
+      } else {
         const image = await upLoad(data?.files?.File?.tempFilePath);
         await getDB()
           .collection(cardCollectionName)
@@ -197,8 +192,7 @@ const updateImage = async (data) => {
         .collection(cardCollectionName)
         .findOne({ _id: ObjectId(_id) });
       if (result) {
-        if(isDelete === 'false')
-        {
+        if (isDelete === "false") {
           return {
             result: true,
             msg: "Update cart success",
@@ -226,7 +220,7 @@ const updateImage = async (data) => {
 const updateAttachment = async (data) => {
   try {
     const { _id } = data.body;
-    console.log('data-----------', data)
+
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
@@ -239,7 +233,6 @@ const updateAttachment = async (data) => {
       };
     } else {
       if (data?.files !== undefined) {
-        console.log('----------------------------------')
         const result = await upLoad(data?.files?.File?.tempFilePath);
         await getDB()
           .collection(cardCollectionName)
@@ -247,7 +240,7 @@ const updateAttachment = async (data) => {
         return {
           result: true,
           msg: "Upload image  success",
-          data: { url: result},
+          data: { url: result },
         };
       } else {
         await getDB()
@@ -257,10 +250,10 @@ const updateAttachment = async (data) => {
             { $push: { attachment: data?.body?.link } }
           );
         return {
-            result: true,
-            msg: "Upload image  success",
-            data: { url: data?.body?.link},
-          };
+          result: true,
+          msg: "Upload image  success",
+          data: { url: data?.body?.link },
+        };
       }
     }
   } catch (error) {
@@ -497,7 +490,6 @@ const updatePercentageCard = async (_id) => {
     const lengthTask = totallength.reduce((a, b) => a + b, 0);
     const taskDone = total.reduce((a, b) => a + b, 0);
 
-    console.log("absd", _id, taskDone, lengthTask);
     await getDB()
       .collection(cardCollectionName)
       .updateOne(
@@ -520,7 +512,7 @@ const updatePercentageCard = async (_id) => {
 const deleteCart = async (data) => {
   try {
     const { _id } = data.query;
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', data)
+
     const isCheckUser = await getDB()
       .collection(cardCollectionName)
       .findOne({ _id: ObjectId(_id) });
@@ -535,7 +527,7 @@ const deleteCart = async (data) => {
       const result = await getDB()
         .collection(cardCollectionName)
         .findOneAndDelete({ _id: ObjectId(_id) }, { returnOriginal: false });
-      console.log('result', result)
+
       if (result?.value) {
         const result1 = await getDB()
           .collection(columnCollectionName)
@@ -543,7 +535,7 @@ const deleteCart = async (data) => {
             { _id: isCheckUser?.columnId },
             { $pull: { cardOrder: { $in: [_id] } } }
           );
-          console.log('result1', result1)
+
         await getDB()
           .collection(bigTaskCollectionName)
           .deleteMany({ cardId: _id });
@@ -593,7 +585,7 @@ const addUserToCart = async (data) => {
           },
           { returnOriginal: false }
         );
-      console.log("result", result);
+
       if (result?.value) {
         const mess = `You have been add ${result.value.title}`;
         listUser.map((e) => sendEmailUser(e, mess));
@@ -639,7 +631,7 @@ const removeUserToCart = async (data) => {
           },
           { returnOriginal: false }
         );
-      console.log("result", result);
+
       if (result?.value) {
         const mess = `You have been remove ${result.value.title}`;
         listUser.map((e) => sendEmailUser(e, mess));
@@ -710,8 +702,6 @@ const getCardById = async (data) => {
         ...card,
         listBigTask: listBigTAsk,
       };
-
-      console.log("card", newCard);
 
       return {
         result: true,

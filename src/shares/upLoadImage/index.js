@@ -10,16 +10,15 @@ export const cloud = cloudinary.config({
 export const upLoad = async (data) => {
   try {
     const result = await cloudinary.uploader.upload(data);
-    console.log('result', result )
-    console.log('data', data )
-    // const dir = "tmp";
 
-    // // delete directory recursively
-    // fs.rmdir(dir, { recursive: true }, (err) => {
-    //   if (err) {
-    //     console.log(err);
-    //   }
-    // });
+    const dir = "tmp";
+
+    // delete directory recursively
+    fs.rmdir(dir, { recursive: true }, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
     return result?.url;
   } catch (err) {
     console.log(err);

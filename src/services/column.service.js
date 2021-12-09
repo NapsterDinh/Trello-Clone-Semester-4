@@ -128,7 +128,6 @@ const deleteColumn = async (data) => {
 
 const pushCardOrder = async (columnId, cardId) => {
   try {
-    console.log("a", columnId, cardId);
     const result = await getDB()
       .collection(columnCollectionName)
       .findOneAndUpdate(
@@ -149,7 +148,7 @@ const pushCardOrder = async (columnId, cardId) => {
 const updateCardOrder = async (data) => {
   try {
     const { _id, cardOrder, isUpdateColId, itemToAdd } = data.body;
-    
+
     const board = await getDB()
       .collection(columnCollectionName)
       .findOne({ _id: ObjectId(_id) });
@@ -157,12 +156,14 @@ const updateCardOrder = async (data) => {
       .collection(boardCollectionName)
       .findOne({ _id: board?.boardId });
 
-    if(isUpdateColId)
-    {
+    if (isUpdateColId) {
       //khac cot
       await getDB()
         .collection(cardCollectionName)
-        .update({ _id: ObjectId(itemToAdd._id)}, { $set: { columnId: itemToAdd.columnId } });
+        .update(
+          { _id: ObjectId(itemToAdd._id) },
+          { $set: { columnId: itemToAdd.columnId } }
+        );
     }
 
     if (isCheckUserBoard?.userId.includes(data?.user.sub)) {

@@ -129,26 +129,7 @@ const getFullBoard = async (data) => {
         })
       );
 
-      // const card = await Promise.all(
-      //   board?.cards.map(async (c) => {
-      //     let cal = await CardService.getCardById({
-      //       query: { _id: c._id.toString(), user: data?.user?.sub },
-      //     });
-      //     if (cal?.data?.lengthTask > 0) {
-      //       if (cal?.data?.lengthTask === cal?.data.taskDone) {
-      //         await CardService.updateStatus(c._id, "done");
-      //       }
-      //       await CardService.updatePercentageCard(
-      //         c._id,
-      //         `${cal?.data?.taskDone}/${cal?.data?.lengthTask}`
-      //       );
-      //     }
-      //   })
-      // );
-
       const board1 = await refBoard(data?.query?.boardId);
-
-      console.log("baord", board1);
 
       // create cards in column
       board1.columns.forEach((column) => {

@@ -18,10 +18,9 @@ const createBigTask = async (data) => {
     if (isCheckUser?.userId.includes(data.user?.sub)) {
       //data?.user?.sub
 
-      console.log("data", data.body);
       const dataa = data?.body;
       const value = await validateSchema(dataa);
-      console.log("data", value);
+
       const result = await getDB()
         .collection(bigTaskCollectionName)
         .insertOne(value);
@@ -59,13 +58,12 @@ const createBigTask = async (data) => {
 
 const getBigTaskById = async (data) => {
   const objectIdArray = data.map((s) => ObjectId(s));
-  console.log("bigTask", objectIdArray);
+
   const resultUser = await getDB()
     .collection(bigTaskCollectionName)
     .find({ _id: { $in: objectIdArray } })
     .toArray();
 
-  console.log("resultUser", resultUser);
   return resultUser;
 };
 
@@ -117,12 +115,10 @@ const updateTitle = async (data) => {
 const deleteBigTask = async (data) => {
   try {
     const { _id } = data.query;
-    console.log("_id: ", _id);
+
     const card = await getDB()
       .collection(bigTaskCollectionName)
       .findOne({ _id: ObjectId(_id) });
-
-    console.log("card search: ", card);
 
     const isCheckUser = await getDB()
       .collection(cardCollectionName)

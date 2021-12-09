@@ -11,7 +11,6 @@ import { userCollectionName } from "../models/user.model";
 import { getDB } from "../config/mongodb";
 import { tokenService } from "./token.service";
 import { sendEmail } from "../shares/sendMail";
-import { sendEmailUser } from "../shares/sendMail";
 
 //variable
 const { APP_SCHEMA, APP_HOST, APP_PORT, CLIENT_PORT } = process.env;
@@ -79,7 +78,7 @@ const getUserById = async (data) => {
     .collection(userCollectionName)
     .find({ _id: { $in: data } })
     .toArray();
-  console.log("data", resultUser);
+
   return resultUser;
 };
 
@@ -127,7 +126,6 @@ const login = async (data) => {
   };
 };
 
-var randomNumber = Math.floor(100000 + Math.random() * 900000);
 const forgotPassword = async (data) => {
   const { email } = data;
   const user = await getDB().collection(userCollectionName).findOne({ email });
@@ -138,41 +136,35 @@ const forgotPassword = async (data) => {
       msg: "Email is not found ",
     };
   } else {
-    const url = `Code verify: ${randomNumber}`;
-    sendEmailUser(email, url);
+    const token = await tokenService.generateAuthTokens(user);
 
+    const url = `${APP_SCHEMA}://${APP_HOST}:${CLIENT_PORT}/reset/${token.access.token}`;
+
+    sendEmail(email, url, "Verify your email address");
     return {
       result: true,
-      msg: "Check email see code verify ",
+      msg: "Check email reset password ",
     };
   }
 };
 
 const resetPassword = async (data) => {
-  const { password, codeVerify } = data.body;
-  console.log("codeVerify", codeVerify);
-  console.log("randomNumber", randomNumber);
-  if (codeVerify !== randomNumber) {
-    return {
-      result: false,
-      msg: "Code verify incorrect ",
-    };
-  } else {
-    const hashPassword = await bcrypt.hash(password, 10);
-    await getDB()
-      .collection(userCollectionName)
-      .findOneAndUpdate(
-        { _id: ObjectId("61b17fe8560c427153b7d33b") }, //  data.user.sub
-        {
-          $set: { password: hashPassword },
-        },
-        { returnOriginal: false }
-      );
-    return {
-      result: true,
-      msg: "Password update success ",
-    };
-  }
+  const { password } = data.body;
+
+  const hashPassword = await bcrypt.hash(password, 10);
+  await getDB()
+    .collection(userCollectionName)
+    .findOneAndUpdate(
+      { _id: ObjectId(data.user.sub) }, //  data.user.sub
+      {
+        $set: { password: hashPassword },
+      },
+      { returnOriginal: false }
+    );
+  return {
+    result: true,
+    msg: "Password update success ",
+  };
 };
 
 const updatePassword = async (data) => {
@@ -256,7 +248,7 @@ const googleLogin = async (data) => {
     };
 
     user = await UserModel.creatNewUser(newUser);
-    const token = await generateAuthTokens(user);
+    const token = await tokenService.generateAuthTokens(user);
     return {
       result: true,
       data: { user, token },
@@ -266,7 +258,7 @@ const googleLogin = async (data) => {
 
 const facebookLogin = async (body) => {
   const { accessToken, userID } = body;
-  console.log('body', body)
+
   const URL = `https://graph.facebook.com/v2.9/${userID}/?fields=id,name,email,picture&access_token=${accessToken}`;
 
   const resFb = await fetch(URL)
@@ -275,7 +267,6 @@ const facebookLogin = async (body) => {
       return res;
     });
 
-  console.log('resFB', resFb)
   const { email, name, picture } = resFb;
   const password = email + process.env.FACEBOOK_SECRET;
 
