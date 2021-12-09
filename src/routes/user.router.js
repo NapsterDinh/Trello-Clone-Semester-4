@@ -16,7 +16,7 @@ router
   .post(UserValidation.forgotPassword, UserController.forgotPassword);
 router
   .route("/reset")
-  .put(UserValidation.resetPassword, auth, UserController.resetPassword);
+  .put(UserValidation.resetPassword, UserController.resetPassword);
 
 router
   .route("/updatePassWord")

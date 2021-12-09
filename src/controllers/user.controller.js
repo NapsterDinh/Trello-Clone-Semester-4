@@ -42,7 +42,7 @@ const forgotPassword = async (req, res) => {
     const { result, msg } = await userService.forgotPassword(req.body);
     res.json({
       result: result,
-      msg: msg || apiMessage.sendMailForgotPassword,
+      msg: msg,
     });
   } catch (err) {
     return res.status(500).json({ msg: err.message });

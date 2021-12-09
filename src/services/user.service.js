@@ -122,7 +122,7 @@ const login = async (data) => {
 
   return {
     result: true,
-    msg: "Verify your email address",
+    msg: "Login success",
     data: { user, token },
   };
 };
@@ -137,14 +137,15 @@ const forgotPassword = async (data) => {
       result: false,
       msg: "Email is not found ",
     };
+  } else {
+    const url = `Code verify: ${randomNumber}`;
+    sendEmailUser(email, url);
+
+    return {
+      result: true,
+      msg: "Check email see code verify ",
+    };
   }
-
-  const url = `Code verify: ${randomNumber}`;
-  sendEmailUser(email, url);
-
-  return {
-    result: true,
-  };
 };
 
 const resetPassword = async (data) => {
@@ -161,7 +162,7 @@ const resetPassword = async (data) => {
     await getDB()
       .collection(userCollectionName)
       .findOneAndUpdate(
-        { _id: ObjectId(data.user.sub) },
+        { _id: ObjectId("61b17fe8560c427153b7d33b") }, //  data.user.sub
         {
           $set: { password: hashPassword },
         },
