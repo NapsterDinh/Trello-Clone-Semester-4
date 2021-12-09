@@ -62,7 +62,6 @@ const forgotPassword = async (req, res, next) => {
 const resetPassword = async (req, res, next) => {
   const condition = Joi.object({
     password: Joi.string().required(),
-    codeVerify: Joi.number().required(),
   });
 
   try {

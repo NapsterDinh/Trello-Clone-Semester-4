@@ -118,7 +118,7 @@ const updateColumnOrder = async (req, res) => {
 
 const upLoadImage = async (req, res) => {
   try {
-    const { result, msg, data } = await BoardService.upLoadImage(req);
+    const { result, msg, data } = await BoardService.updateImage(req);
     res.json({
       result: result,
       msg: msg,

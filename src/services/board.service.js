@@ -456,8 +456,8 @@ const updateColumnOrder = async (data) => {
 
 const updateImage = async (data) => {
   try {
-    const { _id } = data.body;
-
+    const { _id, link } = data.body;
+    console.log('id, link', data.body)
     const isCheckUser = await getDB()
       .collection(boardCollectionName)
       .findOne({ _id: ObjectId(_id) });
@@ -472,13 +472,12 @@ const updateImage = async (data) => {
         data: [],
       };
     } else {
-      const image = await upLoad(data?.Files?.File?.tempFilePath);
       await getDB()
         .collection(boardCollectionName)
         .update(
           { _id: ObjectId(_id) },
           {
-            $set: { image: image },
+            $set: { image: link },
           }
         );
       const result = await getDB()

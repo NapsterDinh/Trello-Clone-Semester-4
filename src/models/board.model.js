@@ -14,7 +14,7 @@ const boardCollectionSchema = Joi.object({
   tagOrder: Joi.array().items(Joi.string()).default([]),
   createAt: Joi.date().timestamp().default(Date.now()),
   image: Joi.string().default(
-    "https://images.unsplash.com/photo-1632042704576-7ae3ef405c78?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=Mnw3MDY2fDB8MXxjb2xsZWN0aW9ufDF8MzE3MDk5fHx8fHwyfHwxNjM4OTk1MDMy&ixlib=rb-1.2.1&q=80&w=200"
+    "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/bf776ffa2e906f248ea123ad04dc7493/photo-1632042704576-7ae3ef405c78.jpg"
   ),
   updateAt: Joi.date().timestamp().default(null),
   _destroy: Joi.boolean().default(false),
