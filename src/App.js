@@ -85,7 +85,7 @@ function App() {
         <PublicRoute path="/forgot_password" component={LoginPage} />
         <PublicRoute path="/reset/:token" component={LoginPage} />
         <PrivateRoute path="/workspace" component={WorkSpacePage} />
-        <Route path="/board" component={BoardPage} />
+        <PrivateRoute path="/board" component={BoardPage} />
         {/* <Route path="/workspace" component={WorkSpacePage} /> */}
       </Switch>
     </BrowserRouter>
