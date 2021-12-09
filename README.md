@@ -13,10 +13,18 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ```
 create a folder where you want this project place
 cd to this location
+##Clone Front-end
 git clone https://github.com/NapsterDinh/Trello-Clone-Semester-4.git
 cd to project
 npm install 
 npm start
+##Clone Back-end
+git clone https://github.com/NapsterDinh/Trello-Clone-Semester-4.git
+switch to BE branch
+cd to project
+npm install 
+npm start
+
 ```
 
 ## Guide for this repository here
