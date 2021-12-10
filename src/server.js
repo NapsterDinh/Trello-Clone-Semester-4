@@ -9,8 +9,8 @@ import fileupload from "express-fileupload";
 import dotenv from "dotenv";
 dotenv.config();
 
-const hostname = "localhost";
-const port = 8011;
+const hostname = process.env.APP_HOST;
+const port = process.env.APP_PORT;
 
 connectDB()
   .then(() => console.log("Connect success"))
